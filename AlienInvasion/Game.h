@@ -15,7 +15,6 @@ class Game
 public:
 
 	void StartSimulation();
-
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
 };

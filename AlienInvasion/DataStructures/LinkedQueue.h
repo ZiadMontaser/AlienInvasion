@@ -12,10 +12,11 @@ using namespace std;
 template <typename T>
 class LinkedQueue:public QueueADT<T>
 {
-private :
-	
+
+public :
 	Node<T>* backPtr;
 	Node<T>* frontPtr;
+
 public :
 	LinkedQueue();	
 	bool isEmpty() const ;

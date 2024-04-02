@@ -6,6 +6,19 @@
 #ifndef QUEUE_ADT_
 #define QUEUE_ADT_
 
+
+
+
+
+///  Why tho?
+
+
+
+
+
+
+
+
 template<class ItemType>
 class QueueADT
 {

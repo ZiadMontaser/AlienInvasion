@@ -2,5 +2,5 @@
 
 void main() {
 	Game game;
-	
+
 }
