@@ -18,9 +18,14 @@ class UnitGenerator
 	int AlienHealthUpper,   AlienHealthLower;
 	int AlienCapacityUpper, AlienCapacityLower;
 
+	int LastIDearth = 0;
+	int LastIDaliens = 2000;
+
+	int numberGEN(int min, int max);
 public:
 	UnitGenerator(Game* game);
-	void ReadParameters(std::string input);
-	void GenerateUnits();
+	void ReadParameters();
+	void GenerateEarth();
+	void GenerateAlien();
 };
 

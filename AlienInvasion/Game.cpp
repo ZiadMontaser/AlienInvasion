@@ -9,13 +9,13 @@ EarthArmy* Game::GetEarthArmy() { return &earthArmy; }
 void Game::StartSimulation() {
 
 	UnitGenerator generator(this);
-	generator.ReadParameters("./input.txt");
+	generator.ReadParameters();
 
 	while (true)
 	{
 		earthArmy.Attack();
 		alienArmy.Attack();
-		generator.GenerateUnits();
+		generator.GenerateEarth();
 
 		Sleep(1000 * 3); // 3 seconds
 

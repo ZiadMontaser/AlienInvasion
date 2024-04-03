@@ -2,5 +2,6 @@
 
 void main() {
 	Game game;
+	game.StartSimulation();
 
 }
