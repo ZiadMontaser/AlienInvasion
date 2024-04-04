@@ -8,10 +8,10 @@ class AlienSoldier :
 {
 
 public:
-    AlienSoldier(Game* game,int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :
-        Unit(game, id, health, type, joinTime, attackPower, attackCapacity) {}
+    AlienSoldier(Game* game,int id, double health, int joinTime, double attackPower, int attackCapacity) :
+        Unit(game, id, health, ALIEN_SOLDIER, joinTime, attackPower, attackCapacity) {}
 
     void Attack();
 };
 
-#endif // !ALIEN_SOLDIER_H
+#endif 

@@ -1,11 +1,11 @@
 #pragma once
 #ifndef UNIT_H
 #define UNIT_H
-
+#include <cmath>
 //#include "../Game.h"
 class Game;
 
-enum class UnitType
+enum UnitType
 {
 	EARTH_SOLDIER,
 	TANK,
@@ -28,12 +28,24 @@ protected:
 
 
 public:
-	Unit(Game* game ,int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity);
+	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) {
+
+		pGame = game;
+		this->id = id;
+		this->health = health;
+		this->type = type;
+		this->joinTime = joinTime;
+		this->attackPower = attackPower;
+		this->attackCapacity = attackCapacity;
+
+	}
 
 	virtual void Attack() = 0;
 
-	void Damage(double attackPower) {
-		health -= attackPower;
+	void Damage(double attackerHealth , double attackerPower) {
+		double Thedamage = (attackerPower * (attackerHealth / 100)) / sqrt(health);
+
+		health -= Thedamage;
 
 		if (health <= 0) {
 			//TODO: Game->ReportDeadPlayer();

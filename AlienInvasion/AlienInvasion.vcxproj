@@ -145,6 +145,8 @@
     <ClInclude Include="DataStructures\ArrayStack.h" />
     <ClInclude Include="Armys\EarthArmy.h" />
     <ClInclude Include="DataStructures\DoublyEndedQueue.h" />
+    <ClInclude Include="Units\Drones.h" />
+    <ClInclude Include="Units\EarthGunnery.h" />
     <ClInclude Include="Units\EarthSoldier.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="DataStructures\LinkedQueue.h" />
@@ -153,6 +155,8 @@
     <ClInclude Include="DataStructures\PriorityQueue.h" />
     <ClInclude Include="DataStructures\QueueADT.h" />
     <ClInclude Include="DataStructures\StackADT.h" />
+    <ClInclude Include="Units\EarthTank.h" />
+    <ClInclude Include="Units\Monester.h" />
     <ClInclude Include="Units\Unit.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +167,7 @@
     <ClCompile Include="Units\EarthSoldier.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Units\EarthTank.cpp" />
     <ClCompile Include="Units\Unit.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

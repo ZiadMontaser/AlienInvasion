@@ -16,6 +16,7 @@ void Game::StartSimulation() {
 		earthArmy.Attack();
 		alienArmy.Attack();
 		generator.GenerateEarth();
+		generator.GenerateAlien();
 
 		Sleep(1000 * 3); // 3 seconds
 

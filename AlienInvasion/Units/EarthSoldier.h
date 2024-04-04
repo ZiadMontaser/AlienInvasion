@@ -8,8 +8,8 @@ class EarthSoldier :
 {
 
 public:
-    EarthSoldier(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity):
-        Unit(game, id, health, type, joinTime, attackPower, attackCapacity) {}
+    EarthSoldier(Game* game, int id, double health, int joinTime, double attackPower, int attackCapacity):
+        Unit(game, id, health, EARTH_SOLDIER, joinTime, attackPower, attackCapacity) {}
 
     void Attack();
 };

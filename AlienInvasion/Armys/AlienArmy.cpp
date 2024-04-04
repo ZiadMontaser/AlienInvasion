@@ -10,6 +10,18 @@ AlienSoldier* AlienArmy::GetSoldier() {
 
 void AlienArmy::AddSoldier(AlienSoldier* soldiers) {
 	Soldiers.enqueue(soldiers);
+	//Cap_Soliders++;
+}
+
+void AlienArmy::AddMonester(Monester* M){
+	Monesters[Cap_Monesters++] = M;
+
+}
+
+void AlienArmy::AddDrone(Drone* D)
+{
+	Drones.enqueue(D);
+	//Cap_Drones++;
 }
 
 void AlienArmy::Attack() {

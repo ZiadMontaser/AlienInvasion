@@ -9,7 +9,7 @@ void EarthSoldier::Attack() {
 	for (int i = 0; i < attackCapacity; i++) {
 
 		AlienSoldier* soldier = pGame->GetAlienArmy()->GetSoldier();
-		if (soldier) soldier->Damage(attackPower);
+		if (soldier) soldier->Damage(health , attackPower);
 	}
 
 }

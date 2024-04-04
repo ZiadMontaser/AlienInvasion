@@ -13,7 +13,9 @@ int UnitGenerator::numberGEN(int min, int max)
 
 	int random = time(0);
 	srand(random);
-	return min +(rand()% (max - min +1) );
+	int num = (rand() % (max - min + 1)) + min;
+
+	return  num ;
 }
 
 UnitGenerator::UnitGenerator(Game* game) {
@@ -86,23 +88,45 @@ void UnitGenerator::GenerateEarth()
 
 	if (canadd <= Prob) {
 		int added = 0;
-		int numtoadd = numberGEN(1, 1000000);
+		
 
-		while (added < numtoadd) {
+		while (added < numberOfUnits) {
 			int unittoadd = numberGEN(1, 100);
 
 			if (unittoadd <= ES) {
 
 				/// add solider
 
+
+				pGame->GetEarthArmy()->AddSoldier(new EarthSoldier(
+					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(EarthPowerLower, EarthPowerUpper),
+					numberGEN(EarthCapacityLower, EarthCapacityUpper))
+				);
+
 			}
 			else if (unittoadd <= ES + ET) {
 
 				/// add tank
+
+				pGame->GetEarthArmy()->AddTank(new EarthTank(
+					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(EarthPowerLower, EarthPowerUpper),
+					numberGEN(EarthCapacityLower, EarthCapacityUpper))
+				);
 			}
 			else {
 
 				/// add gunnery
+
+				pGame->GetEarthArmy()->AddGunnery(new EarthGunnery(
+					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(EarthPowerLower, EarthPowerUpper),
+					numberGEN(EarthCapacityLower, EarthCapacityUpper))
+				);
 			}
 			LastIDearth++;
 			added++;
@@ -119,24 +143,41 @@ void UnitGenerator::GenerateAlien()
 
 	if (canadd <= Prob) {
 		int added = 0;
-		int numtoadd = numberGEN(1, 100000);
+		
 
-		while (added < numtoadd) {
+		while (added < numberOfUnits) {
 
 			int unittoadd = numberGEN(1, 100);
 
 			if (unittoadd <= AS) {
 
 				/// add solider
+				pGame->GetAlienArmy()->AddSoldier(new AlienSoldier(
+					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(AlienPowerLower, AlienPowerUpper),
+					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+				);
 
 			}
 			else if (unittoadd <= AS + AM) {
-
 				/// add monester
+
+				pGame->GetAlienArmy()->AddMonester(new Monester(
+					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(AlienPowerLower, AlienPowerUpper),
+					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+				);
 			}
 			else {
 
-				/// add drone
+				pGame->GetAlienArmy()->AddDrone(new Drone(
+					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
+					0, /// this is the jointime for now 
+					numberGEN(AlienPowerLower, AlienPowerUpper),
+					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+				);
 			}
 			LastIDaliens++;
 			added++;
