@@ -42,17 +42,7 @@ public:
 
 	virtual void Attack() = 0;
 
-	void Damage(double attackerHealth , double attackerPower) {
-		double Thedamage = (attackerPower * (attackerHealth / 100)) / sqrt(health);
-
-		health -= Thedamage;
-
-		if (health <= 0) {
-
-			/// error here 
-			//pGame->ReportDeadPlayer(this);
-		}
-	}
+	void Damage(double attackerHealth, double attackerPower);
 
 	UnitType GetType() { return type; };
 	double GetHealth() { return health; };
