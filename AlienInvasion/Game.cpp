@@ -4,6 +4,11 @@
 AlienArmy* Game::GetAlienArmy() { return &alienArmy; }
 EarthArmy* Game::GetEarthArmy() { return &earthArmy; }
 
+void Game::ReportDeadPlayer(Unit* dead)
+{
+	KilledList.enqueue(dead);
+}
+
 
 
 void Game::StartSimulation() {

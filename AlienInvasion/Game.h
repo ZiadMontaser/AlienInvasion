@@ -11,12 +11,14 @@ class Game
 {
 	AlienArmy alienArmy;
 	EarthArmy earthArmy;
+	LinkedQueue<Unit* > KilledList;
 
 public:
 
 	void StartSimulation();
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
+	void ReportDeadPlayer(Unit*);
 };
 
 #endif // !GAME_H=

@@ -34,6 +34,11 @@ public:
 	void AddSoldier(EarthSoldier* Him);
 	void AddTank(EarthTank* T);
 	void AddGunnery(EarthGunnery* G);
+
+	EarthSoldier* GetSolider();
+	EarthTank* GetTank();
+	EarthGunnery* GetGunnery();
+
 	EarthSoldier* GetSoldier();
 
 

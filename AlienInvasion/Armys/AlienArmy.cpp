@@ -1,11 +1,48 @@
 #include "AlienArmy.h"
 #include "../DataStructures/LinkedQueue.h"
+#include <cstdlib>
+#include <time.h>
 
 AlienSoldier* AlienArmy::GetSoldier() {
 	AlienSoldier* value;
-	Soldiers.dequeue(value);
+	if (Soldiers.dequeue(value)) {
 	ArenaList.push(value);
 	return value;
+}
+	return NULL;
+}
+
+Monester* AlienArmy::GetMonester()
+{
+	if (Count_Monesters == 0)
+		return nullptr;
+
+	srand(time(NULL));
+	int index = (rand() % (Count_Monesters + 1));
+	
+	Monester* Chosen = Monesters[index];
+	Count_Monesters--;
+
+
+	return Chosen;
+}
+
+Drone* AlienArmy::GetdroneFront()
+{
+	Drone* Chosen;
+	if (Drones.dequeue(Chosen))
+	return Chosen;
+	return NULL;
+
+	
+}
+
+Drone* AlienArmy::GetdroneBack()
+{
+	Drone* Chosen;
+	if (Drones.dequeueback(Chosen))
+	return Chosen;
+	return NULL;
 }
 
 void AlienArmy::AddSoldier(AlienSoldier* soldiers) {
@@ -14,7 +51,7 @@ void AlienArmy::AddSoldier(AlienSoldier* soldiers) {
 }
 
 void AlienArmy::AddMonester(Monester* M){
-	Monesters[Cap_Monesters++] = M;
+	Monesters[Count_Monesters++] = M;
 
 }
 

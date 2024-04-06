@@ -48,7 +48,9 @@ public:
 		health -= Thedamage;
 
 		if (health <= 0) {
-			//TODO: Game->ReportDeadPlayer();
+
+			/// error here 
+			//pGame->ReportDeadPlayer(this);
 		}
 	}
 

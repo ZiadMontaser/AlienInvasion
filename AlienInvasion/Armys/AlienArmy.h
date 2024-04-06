@@ -14,19 +14,27 @@
 class AlienArmy
 {
 	LinkedQueue<AlienSoldier*> Soldiers;
-	Monester* Monesters[10000];
+	Monester* Monesters[1000];
 	DoublyEndedQueue<Drone*> Drones;
 
 	ArrayStack<Unit*> ArenaList;
 
-	int Cap_Monesters = 0;
+	int Count_Monesters = 0;
 	/// if needed
-	//int Cap_Soliders = 0;
-	//int Cap_Drones = 0;
+	//int Count_Soliders = 0;
+	//int Count_Drones = 0;
 	
 
 public:
+	AlienArmy() {
+		for (int i = 0; i < 1000; i++)
+			Monesters[i] = NULL;
+	}
 	AlienSoldier* GetSoldier();
+	Monester* GetMonester();
+	Drone* GetdroneFront();
+	Drone* GetdroneBack();
+
 	void AddSoldier(AlienSoldier* soldiers);
 	void AddMonester(Monester* M);
 	void AddDrone(Drone* D);

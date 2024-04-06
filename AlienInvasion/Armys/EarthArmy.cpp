@@ -24,6 +24,34 @@ void EarthArmy::AddGunnery(EarthGunnery* G)
 	Gunnery.enqueue(G, G->GetPower() + G->GetHealth());
 }
 
+EarthSoldier* EarthArmy::GetSolider()
+{
+	EarthSoldier* Chosen;
+	if (Soldiers.dequeue(Chosen))
+	return Chosen;
+
+	return NULL;
+}
+
+EarthTank* EarthArmy::GetTank()
+{
+	EarthTank* Chosen;
+	if (Tanks.pop(Chosen))
+	return Chosen;
+
+	return NULL;
+}
+
+EarthGunnery* EarthArmy::GetGunnery()
+{
+	EarthGunnery* Chosen;
+	int dummy;    /// may need it ?
+	if (Gunnery.dequeue(Chosen , dummy))
+		return Chosen;
+
+	return NULL;
+}
+
 
 EarthSoldier* EarthArmy::GetSoldier() {
 	EarthSoldier* value;
