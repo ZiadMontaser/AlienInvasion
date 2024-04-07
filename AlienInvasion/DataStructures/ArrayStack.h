@@ -8,6 +8,7 @@
 #ifndef ARRAY_STACK_
 #define ARRAY_STACK_
 
+#include <iostream>
 #include "StackADT.h"
 
 //Unless spesificed by the stack user, the default size is 100
@@ -56,6 +57,20 @@ public:
 		TopEntry = items[top];		 
 		return true;
 	}  // end peek
+
+	int getCount() const {
+		return top + 1;
+	}
+
+	void print() const {
+		cout << "[";
+		for (int i = 0; i <= top; i++) {
+			cout << items[i];
+			if (i != top)
+				cout << ", ";
+		}
+		cout << "]" << endl;
+	}
 
 }; // end ArrayStack
 

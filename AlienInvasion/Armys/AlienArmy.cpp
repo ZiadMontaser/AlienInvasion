@@ -4,7 +4,7 @@
 #include <time.h>
 
 AlienSoldier* AlienArmy::GetSoldier() {
-	AlienSoldier* value;
+	AlienSoldier* value = nullptr;
 	if (Soldiers.dequeue(value)) {
 	ArenaList.push(value);
 	return value;
@@ -29,7 +29,7 @@ Monester* AlienArmy::GetMonester()
 
 Drone* AlienArmy::GetdroneFront()
 {
-	Drone* Chosen;
+	Drone* Chosen = nullptr;
 	if (Drones.dequeue(Chosen))
 	return Chosen;
 	return NULL;
@@ -39,24 +39,30 @@ Drone* AlienArmy::GetdroneFront()
 
 Drone* AlienArmy::GetdroneBack()
 {
-	Drone* Chosen;
+	Drone* Chosen = nullptr;
 	if (Drones.dequeueback(Chosen))
 	return Chosen;
 	return NULL;
 }
 
 void AlienArmy::AddSoldier(AlienSoldier* soldiers) {
+	if (!soldiers) return;
+
 	Soldiers.enqueue(soldiers);
 	//Cap_Soliders++;
 }
 
 void AlienArmy::AddMonester(Monester* M){
+	if (!M) return;
+
 	Monesters[Count_Monesters++] = M;
 
 }
 
 void AlienArmy::AddDrone(Drone* D)
 {
+	if (!D) return;
+	std::cout << "Added Drone" << endl;
 	Drones.enqueue(D);
 	//Cap_Drones++;
 }
@@ -65,7 +71,11 @@ void AlienArmy::Attack() {
 
 }
 
-void AlienArmy::RestoreAliveUnitsFromArena() {
+int AlienArmy::GetSoldiersCount() const {
+	return Soldiers.getCount();
+}
+
+void AlienArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
 		Unit* unit;
 		ArenaList.pop(unit);
@@ -96,4 +106,24 @@ void AlienArmy::RestoreAliveUnitsFromArena() {
 			break;
 		}
 	}
+}
+
+void AlienArmy::Print() const {
+	cout << "===========" << "Alien Army Alive Units" << "===========" << endl;
+
+	cout << Soldiers.getCount() << " AS ";
+	Soldiers.print();
+
+	cout << Count_Monesters << " AM [";
+	for (int i = 0; i < Count_Monesters; i++) {
+		cout << Monesters[i];
+		if (i != Count_Monesters - 1)
+			cout << ", ";
+	}
+	cout << "]" << endl;
+
+	cout << Drones.getCount() << " AD ";
+	Drones.print();
+
+	cout << endl;
 }

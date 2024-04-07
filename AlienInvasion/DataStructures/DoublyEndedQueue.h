@@ -11,11 +11,13 @@ public:
 
 	using LinkedQueue<T>::frontPtr;
 	using LinkedQueue<T>::backPtr;
+	using LinkedQueue<T>::count;
 
 	template<typename T>
 	inline bool dequeueback(T& backentry)
 	{
-		
+		if (LinkedQueue<T>::isEmpty()) return false;
+
 		Node <T>* Todelete = backPtr;
 
 		if (Todelete != NULL) {
@@ -23,8 +25,9 @@ public:
 			backPtr = Todelete->getPrev();
 
 			if (Todelete == frontPtr)	 // Special case: last node in the queue
-				frontPtr = nullptr;
+				backPtr = frontPtr = nullptr;
 			delete Todelete;
+			count--;
 			return true;
 		}
 
@@ -49,7 +52,7 @@ public:
 		frontPtr->setPrev(ToAdd);
 		frontPtr = ToAdd;
 
-
+		count++;
 		return true;
 	}
 };

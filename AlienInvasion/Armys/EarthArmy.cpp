@@ -1,5 +1,5 @@
 #include "EarthArmy.h"
-//#include "../DataStructures/LinkedQueue.h"
+#include <iostream>
 
 
 void EarthArmy::Attack()
@@ -10,23 +10,25 @@ void EarthArmy::Attack()
 
 void EarthArmy::AddSoldier(EarthSoldier* Him)
 {
+	if (!Him) return;
 	Soldiers.enqueue(Him);
 	Cap_Soliders++;
 }
 
 void EarthArmy::AddTank(EarthTank* T){
-
+	if (!T) return;
 Tanks.push(T);
 }
 
 void EarthArmy::AddGunnery(EarthGunnery* G)
 {
+	if (!G) return;
 	Gunnery.enqueue(G, G->GetPower() + G->GetHealth());
 }
 
-EarthSoldier* EarthArmy::GetSolider()
+EarthSoldier* EarthArmy::GetSoldier()
 {
-	EarthSoldier* Chosen;
+	EarthSoldier* Chosen = nullptr;
 	if (Soldiers.dequeue(Chosen))
 	return Chosen;
 
@@ -35,7 +37,7 @@ EarthSoldier* EarthArmy::GetSolider()
 
 EarthTank* EarthArmy::GetTank()
 {
-	EarthTank* Chosen;
+	EarthTank* Chosen = nullptr;
 	if (Tanks.pop(Chosen))
 	return Chosen;
 
@@ -44,7 +46,7 @@ EarthTank* EarthArmy::GetTank()
 
 EarthGunnery* EarthArmy::GetGunnery()
 {
-	EarthGunnery* Chosen;
+	EarthGunnery* Chosen = nullptr;
 	int dummy;    /// may need it ?
 	if (Gunnery.dequeue(Chosen , dummy))
 		return Chosen;
@@ -53,14 +55,15 @@ EarthGunnery* EarthArmy::GetGunnery()
 }
 
 
-EarthSoldier* EarthArmy::GetSoldier() {
-	EarthSoldier* value;
-	Soldiers.dequeue(value);
-	ArenaList.push(value);
-	return value;
+int EarthArmy::GetSoldiersCount() const {
+	return Soldiers.getCount();
 }
 
-void EarthArmy::RestoreAliveUnitsFromArena() {
+int EarthArmy::IsLowSoldiersMode() const {
+	return isLowSoldiersMode;
+}
+
+void EarthArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
 		Unit* unit;
 		ArenaList.pop(unit);
@@ -89,6 +92,22 @@ void EarthArmy::RestoreAliveUnitsFromArena() {
 			break;
 		}
 	}
+}
+
+
+void EarthArmy::Print() const {
+	cout << "===========" << "Earth Army Alive Units" << "===========" << endl;
+
+	cout << Soldiers.getCount() << " ES ";
+	Soldiers.print();
+
+	cout << Tanks.getCount() << " ET ";
+	Tanks.print();
+
+	cout << Gunnery.getCount() << " EG ";
+	Gunnery.print();
+
+	cout << endl;
 }
 
 

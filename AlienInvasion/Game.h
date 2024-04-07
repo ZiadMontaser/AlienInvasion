@@ -13,12 +13,16 @@ class Game
 	EarthArmy earthArmy;
 	LinkedQueue<Unit* > KilledList;
 
+	int currentTimeStep = 0;
+
 public:
 
 	void StartSimulation();
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
-	void ReportDeadPlayer(Unit*);
+	void ReportDeadUnit(Unit*);
+
+	void Print() const;
 };
 
 #endif // !GAME_H=

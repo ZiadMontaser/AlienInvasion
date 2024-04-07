@@ -13,6 +13,7 @@
 
 class AlienArmy
 {
+public:
 	LinkedQueue<AlienSoldier*> Soldiers;
 	Monester* Monesters[1000];
 	DoublyEndedQueue<Drone*> Drones;
@@ -39,9 +40,13 @@ public:
 	void AddMonester(Monester* M);
 	void AddDrone(Drone* D);
 
+	int GetSoldiersCount() const;
+
 	void Attack();
 
-	void RestoreAliveUnitsFromArena();
+	void RestoreAliveUnits();
+
+	void Print() const;
 };
 
 #endif // !ALIEN_ARMY_H

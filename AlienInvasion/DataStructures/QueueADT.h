@@ -46,6 +46,10 @@ public:
        queue is unchanged.
     @return  The front of the queue. */
    virtual bool peek(ItemType& FrontEntry) const = 0;
+
+   virtual int getCount() const = 0;
+
+   virtual void print() const = 0;
    
    /** Destroys this queue and frees its memory. */
    virtual ~QueueADT() { }

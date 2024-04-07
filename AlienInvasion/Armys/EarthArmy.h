@@ -13,7 +13,7 @@
 
 class EarthArmy
 {
-private:
+public:
 	LinkedQueue<EarthSoldier*> Soldiers;
 	ArrayStack<EarthTank*> Tanks;
 	PriorityQueue<EarthGunnery*> Gunnery;
@@ -25,7 +25,7 @@ private:
 	//int Cap_Tanks = 0;     
 	//int Cap_Gunnery = 0;
 
-
+	bool isLowSoldiersMode = false;
     
 
 public:
@@ -35,13 +35,14 @@ public:
 	void AddTank(EarthTank* T);
 	void AddGunnery(EarthGunnery* G);
 
-	EarthSoldier* GetSolider();
+	EarthSoldier* GetSoldier();
 	EarthTank* GetTank();
 	EarthGunnery* GetGunnery();
 
-	EarthSoldier* GetSoldier();
+	int GetSoldiersCount() const;
+	int IsLowSoldiersMode() const;
 
-
-	void RestoreAliveUnitsFromArena();
+	void RestoreAliveUnits();
+	void Print() const;
 };
 #endif // !EARTH_ARMY_H

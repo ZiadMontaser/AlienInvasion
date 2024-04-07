@@ -1,5 +1,7 @@
+#include <iostream>
 #include "Unit.h"
 #include "../Game.h"
+
 void Unit::Damage(double attackerHealth, double attackerPower)
 
 {
@@ -9,7 +11,12 @@ void Unit::Damage(double attackerHealth, double attackerPower)
 
 	if (health <= 0) {
 
-		pGame->ReportDeadPlayer(this);
+		pGame->ReportDeadUnit(this);
 	}
 }
 
+std::ostream& operator<<(std::ostream& out, Unit* unit) {
+	if(unit)
+		cout << unit->GetID();
+	return out;
+}

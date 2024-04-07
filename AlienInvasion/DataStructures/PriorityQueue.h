@@ -1,6 +1,6 @@
 #pragma once
 #include "PriorityNode.h"
-
+#include <iostream>
 
 //This class impelements the priority queue as a sorted list (Linked List)
 //The item with highest priority is at the front of the queue
@@ -8,6 +8,7 @@ template <typename T>
 class PriorityQueue
 {
     PriorityNode<T>* head;
+    int count = 0;
 public:
     PriorityQueue() : head(nullptr) {}
 
@@ -25,6 +26,7 @@ public:
             
             newNode->setNext(head);
             head = newNode;
+            count++;
             return;
         }
        
@@ -33,7 +35,8 @@ public:
             current = current->getNext();
         }
         newNode->setNext( current->getNext());
-        current->setNext( newNode);        
+        current->setNext( newNode);    
+        count++;
     }
 
     bool dequeue(T& topEntry, int& pri) {
@@ -44,6 +47,7 @@ public:
         PriorityNode<T>* temp = head;
         head = head->getNext();
         delete temp;
+        count--;
         return true;
     }
 
@@ -54,6 +58,22 @@ public:
         topEntry = head->getItem();
         pri = head->getPri();
         return true;
+    }
+
+    int getCount() const { return count; }
+
+    void print() const {
+        cout << "[";
+        PriorityNode<T>* temp = head;
+        while (temp) {
+            int pri;
+            cout << temp->getItem(pri);
+            temp = temp->getNext();
+            if (temp) {
+                cout << ", ";
+            }
+        }
+        cout << "]" << endl;
     }
 
     bool isEmpty() const {

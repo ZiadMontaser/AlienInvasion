@@ -10,9 +10,6 @@ using namespace std;
 
 int UnitGenerator::numberGEN(int min, int max)
 {
-
-	int random = time(0);
-	srand(random);
 	int num = (rand() % (max - min + 1)) + min;
 
 	return  num ;
@@ -20,13 +17,19 @@ int UnitGenerator::numberGEN(int min, int max)
 
 UnitGenerator::UnitGenerator(Game* game) {
 	pGame = game;
+
+	int random = time(0);
+	srand(random);
 }
 
 void UnitGenerator::ReadParameters() 
 {
-	string Filename;
+	string Filename = "testfile.txt";
+
+#ifndef _DEBUG
 	cout << "Please enter the file name you would like to use for unit Generation: ";
 	cin >> Filename;
+#endif // DEBUG
 
 	fstream inputfile ;
 	
@@ -106,7 +109,7 @@ void UnitGenerator::GenerateEarth()
 				);
 
 			}
-			else if (unittoadd <= ES + ET) {
+			else if (unittoadd <= (ES + ET)) {
 
 				/// add tank
 

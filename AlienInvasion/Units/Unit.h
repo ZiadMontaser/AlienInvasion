@@ -2,6 +2,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 #include <cmath>
+#include <iostream>
 //#include "../Game.h"
 class Game;
 
@@ -45,9 +46,12 @@ public:
 	void Damage(double attackerHealth, double attackerPower);
 
 	UnitType GetType() { return type; };
+	int GetID() { return id; };
 	double GetHealth() { return health; };
 	double GetPower() { return attackPower; };
 	int GetCapacity() { return attackCapacity; };
 };
+
+std::ostream& operator<<(std::ostream& out, Unit* unit);
 
 #endif // !UNIT_H
