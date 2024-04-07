@@ -10,10 +10,11 @@
 #include "../Units/EarthGunnery.h"
 #include "../Units/EarthTank.h"
 
-
 class EarthArmy
 {
-public:
+//public:
+	Game* pGame;
+
 	LinkedQueue<EarthSoldier*> Soldiers;
 	ArrayStack<EarthTank*> Tanks;
 	PriorityQueue<EarthGunnery*> Gunnery;
@@ -29,6 +30,8 @@ public:
     
 
 public:
+	EarthArmy(Game* game):pGame(game){}
+
 	void Attack();
 
 	void AddSoldier(EarthSoldier* Him);
@@ -44,5 +47,7 @@ public:
 
 	void RestoreAliveUnits();
 	void Print() const;
+	void PrintArenaList() const { ArenaList.print(); };
+
 };
 #endif // !EARTH_ARMY_H

@@ -12,4 +12,8 @@ void EarthSoldier::Attack() {
 		if (soldier) soldier->Damage(health , attackPower);
 	}
 
+	cout << "ES " << GetID();
+	pGame->GetAlienArmy()->PrintArenaList();
+	pGame->GetAlienArmy()->RestoreAliveUnits();
+
 }

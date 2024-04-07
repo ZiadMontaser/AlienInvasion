@@ -50,6 +50,8 @@ public:
 	double GetHealth() { return health; };
 	double GetPower() { return attackPower; };
 	int GetCapacity() { return attackCapacity; };
+
+	bool IsDead() { return health <= 0; }
 };
 
 std::ostream& operator<<(std::ostream& out, Unit* unit);

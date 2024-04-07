@@ -9,13 +9,14 @@
 
 class Game
 {
-	AlienArmy alienArmy;
-	EarthArmy earthArmy;
+	AlienArmy* alienArmy;
+	EarthArmy* earthArmy;
 	LinkedQueue<Unit* > KilledList;
 
 	int currentTimeStep = 0;
 
 public:
+	Game();
 
 	void StartSimulation();
 	AlienArmy* GetAlienArmy();

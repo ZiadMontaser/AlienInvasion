@@ -1,19 +1,30 @@
 #include "EarthTank.h"
+
+#include <cmath>
 #include "../Game.h"
 #include "Monester.h"
+#include "AlienSoldier.h"
+
 void EarthTank::Attack()
 {
-	for (int i = 0; i < attackCapacity; i++) {
-		//TODO
-		//Monester* unit = pGame->GetAlienArmy()->GetMonsters();
-		//unit->Damage(health, attackPower);
+	double capacity = attackCapacity;
+	if (pGame->GetEarthArmy()->IsLowSoldiersMode()) capacity /= 2;
+
+	for (int i = 0; i < floor(capacity); i++) {
+		Monester* unit = pGame->GetAlienArmy()->GetMonester();
+		if (unit)
+			unit->Damage(health, attackPower);
 	}
 
 	if (pGame->GetEarthArmy()->IsLowSoldiersMode()) {
-		for (int i = 0; i < attackCapacity; i++) {
-			//TODO
-			//EarthSoldier* unit = pGame->GetAlienArmy()->GetSoldier();
-			//unit->Damage(health, attackPower);
+		for (int i = 0; i < ceil(capacity); i++) {
+			AlienSoldier* unit = pGame->GetAlienArmy()->GetSoldier();
+			if (unit)
+				unit->Damage(health, attackPower);
 		}
 	}
+
+	cout << "ET " << GetID();
+	pGame->GetAlienArmy()->PrintArenaList();
+	pGame->GetAlienArmy()->RestoreAliveUnits();
 }

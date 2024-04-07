@@ -6,9 +6,9 @@
 AlienSoldier* AlienArmy::GetSoldier() {
 	AlienSoldier* value = nullptr;
 	if (Soldiers.dequeue(value)) {
-	ArenaList.push(value);
-	return value;
-}
+		ArenaList.push(value);
+		return value;
+	}
 	return NULL;
 }
 
@@ -21,6 +21,7 @@ Monester* AlienArmy::GetMonester()
 	int index = (rand() % (Count_Monesters + 1));
 	
 	Monester* Chosen = Monesters[index];
+	if(Chosen) ArenaList.push(Chosen);
 	Count_Monesters--;
 
 
@@ -30,8 +31,10 @@ Monester* AlienArmy::GetMonester()
 Drone* AlienArmy::GetdroneFront()
 {
 	Drone* Chosen = nullptr;
-	if (Drones.dequeue(Chosen))
-	return Chosen;
+	if (Drones.dequeue(Chosen)) {
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
 	return NULL;
 
 	
@@ -40,8 +43,10 @@ Drone* AlienArmy::GetdroneFront()
 Drone* AlienArmy::GetdroneBack()
 {
 	Drone* Chosen = nullptr;
-	if (Drones.dequeueback(Chosen))
-	return Chosen;
+	if (Drones.dequeueback(Chosen)) {
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
 	return NULL;
 }
 
@@ -62,8 +67,8 @@ void AlienArmy::AddMonester(Monester* M){
 void AlienArmy::AddDrone(Drone* D)
 {
 	if (!D) return;
-	std::cout << "Added Drone" << endl;
 	Drones.enqueue(D);
+
 	//Cap_Drones++;
 }
 
@@ -77,31 +82,22 @@ int AlienArmy::GetSoldiersCount() const {
 
 void AlienArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
-		Unit* unit;
+		Unit* unit = nullptr;
 		ArenaList.pop(unit);
 
-		if (unit->GetHealth() <= 0) continue;
+		if (unit->IsDead()) continue;
 
 		switch (unit->GetType())
 		{
-		case UnitType::ALIEN_SOLDIER:{ //O(n)
-				LinkedQueue<AlienSoldier*> temp;
-				while (!Soldiers.isEmpty()) {
-					AlienSoldier* value;
-					Soldiers.dequeue(value);
-					temp.enqueue(value);
-				}
-
-				Soldiers.enqueue((AlienSoldier*)unit);
-
-				while (!temp.isEmpty()) {
-					AlienSoldier* value;
-					temp.dequeue(value);
-					Soldiers.enqueue(value);
-				}
-
-				break;
-			}
+		case UnitType::ALIEN_SOLDIER:
+			Soldiers.enqueue((AlienSoldier*)unit);
+			break;
+		case UnitType::MONSTER:
+			AddMonester((Monester*)unit);
+			break;
+		case UnitType::DRONE:
+			AddDrone((Drone*)unit);
+			
 		default:
 			break;
 		}

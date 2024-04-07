@@ -1,10 +1,39 @@
 #include "EarthArmy.h"
 #include <iostream>
 
+#include "../Game.h"
+
 
 void EarthArmy::Attack()
 {
+	if (isLowSoldiersMode) { //Mode enabled
+		if ((float(GetSoldiersCount()) / pGame->GetAlienArmy()->GetSoldiersCount()) >= 0.8) {
+			isLowSoldiersMode = false;
+		}
+	}
+	else {
+		if ((float(GetSoldiersCount()) / pGame->GetAlienArmy()->GetSoldiersCount()) <= 0.3) {
+			isLowSoldiersMode = true;
+		}
+	}
 
+	EarthSoldier* soldier = nullptr;
+	Soldiers.peek(soldier);
+	if (soldier) {
+		soldier->Attack();
+	}
+
+	EarthTank* tank = nullptr;
+	Tanks.peek(tank);
+	if (tank) {
+		tank->Attack();
+	}
+
+	EarthGunnery* gunnery = nullptr; int pri;
+	Gunnery.peek(gunnery, pri);
+	if (gunnery) {
+		gunnery->Attack();
+	}
 }
 
 
