@@ -24,7 +24,7 @@ class UnitGenerator
 	int numberGEN(int min, int max);
 public:
 	UnitGenerator(Game* game);
-	void ReadParameters();
+	void ReadParameters(string fileDir);
 	void GenerateEarth();
 	void GenerateAlien();
 };

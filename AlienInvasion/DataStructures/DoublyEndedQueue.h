@@ -23,9 +23,11 @@ public:
 		if (Todelete != NULL) {
 			backentry = Todelete->getItem();
 			backPtr = Todelete->getPrev();
-
+			
 			if (Todelete == frontPtr)	 // Special case: last node in the queue
 				backPtr = frontPtr = nullptr;
+
+			if(backPtr) backPtr->setNext(nullptr);
 			delete Todelete;
 			count--;
 			return true;
@@ -39,7 +41,7 @@ public:
 	bool enqueuefront(const T& toaddfront) {
 
 		Node<T>* ToAdd = new Node<T>(toaddfront);
-
+		ToAdd->setNext(nullptr);
 		if (backPtr == nullptr) {
 			backPtr = ToAdd;
 			frontPtr = ToAdd;

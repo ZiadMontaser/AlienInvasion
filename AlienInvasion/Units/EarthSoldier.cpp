@@ -11,9 +11,9 @@ void EarthSoldier::Attack() {
 		AlienSoldier* soldier = pGame->GetAlienArmy()->GetSoldier();
 		if (soldier) soldier->Damage(health , attackPower);
 	}
-
-	cout << "ES " << GetID();
-	pGame->GetAlienArmy()->PrintArenaList();
-	pGame->GetAlienArmy()->RestoreAliveUnits();
-
+	if (pGame->GetUIMode() == UIMode::Interactive) {
+		cout << "ES " << GetID() << " ";
+		pGame->GetAlienArmy()->PrintArenaList();
+		pGame->GetAlienArmy()->RestoreAliveUnits();
+	}
 }

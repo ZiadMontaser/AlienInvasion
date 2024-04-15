@@ -41,6 +41,8 @@ public:
 	void AddDrone(Drone* D);
 
 	int GetSoldiersCount() const;
+	int GetMonstersCount() const;
+	int GetDroneCount() const;
 
 	void Attack();
 

@@ -6,31 +6,35 @@
 #include "Drones.h"
 
 void EarthGunnery::Attack() {
+	AlienArmy* alienArmy = pGame->GetAlienArmy();
 
-	double capacity = attackCapacity / 2;
+	int remainingCapacity = attackCapacity;
 
-	for (int i = 0; i < floor(capacity); i++) {
+	int droneCapacity = floor(attackCapacity / 2.0);
+	droneCapacity = min(droneCapacity, alienArmy->GetDroneCount());
+	remainingCapacity -= droneCapacity;
+
+	for (int i = 0; i < remainingCapacity; i++) {
 		Monester* unit = pGame->GetAlienArmy()->GetMonester();
 		if(unit)
 			unit->Damage(health, attackPower);
 	}
 
-	capacity = ceil(capacity) / 2;
-
-	for (int i = 0; i < floor(capacity); i++) {
+	for (int i = 0; i < floor(droneCapacity / 2.0); i++) {
 		Drone* unit = pGame->GetAlienArmy()->GetdroneFront();
 		if (unit)
 			unit->Damage(health, attackPower);
 	}
 
-	//for (int i = 0; i < ceil(capacity); i++) {
-	//	Drone* unit = pGame->GetAlienArmy()->GetdroneBack();
-	//	if (unit)
-	//		unit->Damage(health, attackPower);
-	//}
+	for (int i = 0; i < ceil(droneCapacity / 2.0); i++) {
+		Drone* unit = pGame->GetAlienArmy()->GetdroneBack();
+		if (unit)
+			unit->Damage(health, attackPower);
+	}
 
-	cout << "ES " << GetID();
-	pGame->GetAlienArmy()->PrintArenaList();
-	pGame->GetAlienArmy()->RestoreAliveUnits();
-
+	if (pGame->GetUIMode() == UIMode::Interactive) {
+		cout << "ES " << GetID() << " ";
+		pGame->GetAlienArmy()->PrintArenaList();
+		pGame->GetAlienArmy()->RestoreAliveUnits();
+	}
 }

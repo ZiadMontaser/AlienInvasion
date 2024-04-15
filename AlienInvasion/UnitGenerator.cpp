@@ -22,9 +22,9 @@ UnitGenerator::UnitGenerator(Game* game) {
 	srand(random);
 }
 
-void UnitGenerator::ReadParameters() 
+void UnitGenerator::ReadParameters(string fileDir) 
 {
-	string Filename = "testfile.txt";
+	string Filename = fileDir;
 
 #ifndef _DEBUG
 	cout << "Please enter the file name you would like to use for unit Generation: ";

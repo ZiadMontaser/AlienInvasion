@@ -83,6 +83,7 @@ bool LinkedQueue<T>::enqueue(const T& newEntry)
 	Node<T>* PrevNode = backPtr;
 	backPtr = newNodePtr;// New node is the last node now
 	backPtr->setPrev(PrevNode);
+	backPtr->setNext(nullptr);
 	count++;
 	return true;
 } // end enqueue

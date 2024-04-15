@@ -2,6 +2,7 @@
 #include "../DataStructures/LinkedQueue.h"
 #include <cstdlib>
 #include <time.h>
+#include <string>
 
 AlienSoldier* AlienArmy::GetSoldier() {
 	AlienSoldier* value = nullptr;
@@ -47,6 +48,7 @@ Drone* AlienArmy::GetdroneBack()
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
+
 	return NULL;
 }
 
@@ -63,6 +65,7 @@ void AlienArmy::AddMonester(Monester* M){
 	Monesters[Count_Monesters++] = M;
 
 }
+#include "../Game.h"
 
 void AlienArmy::AddDrone(Drone* D)
 {
@@ -76,15 +79,14 @@ void AlienArmy::Attack() {
 
 }
 
-int AlienArmy::GetSoldiersCount() const {
-	return Soldiers.getCount();
-}
+int AlienArmy::GetSoldiersCount() const { return Soldiers.getCount(); }
+int AlienArmy::GetMonstersCount() const { return Count_Monesters; }
+int AlienArmy::GetDroneCount()	  const { return Drones.getCount(); }
 
 void AlienArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
 		Unit* unit = nullptr;
 		ArenaList.pop(unit);
-
 		if (unit->IsDead()) continue;
 
 		switch (unit->GetType())
@@ -97,7 +99,7 @@ void AlienArmy::RestoreAliveUnits() {
 			break;
 		case UnitType::DRONE:
 			AddDrone((Drone*)unit);
-			
+			break;
 		default:
 			break;
 		}
