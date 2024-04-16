@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Units\HealUnit.h" />
     <ClInclude Include="UnitGenerator.h" />
     <ClInclude Include="Units\AlienSoldier.h" />
     <ClInclude Include="Armys\AlienArmy.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Units\Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Units\HealUnit.cpp" />
     <ClCompile Include="UnitGenerator.cpp" />
     <ClCompile Include="Units\AlienSoldier.cpp" />
     <ClCompile Include="Armys\AlienArmy.cpp" />

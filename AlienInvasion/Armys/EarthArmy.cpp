@@ -41,7 +41,7 @@ void EarthArmy::AddSoldier(EarthSoldier* Him)
 {
 	if (!Him) return;
 	Soldiers.enqueue(Him);
-	Cap_Soliders++;
+
 }
 
 void EarthArmy::AddTank(EarthTank* T){
@@ -53,6 +53,16 @@ void EarthArmy::AddGunnery(EarthGunnery* G)
 {
 	if (!G) return;
 	Gunnery.enqueue(G, G->GetPower() + G->GetHealth());
+}
+
+void EarthArmy::AddHealUnit(HealUnit* G) {
+	if (!G) return;
+	healUnits.push(G);
+}
+
+void EarthArmy::MoveUnitToUML(Unit* unit) {
+	if (!unit) return;
+	unitMaintenanceList.enqueue(unit, unit->GetType());
 }
 
 EarthSoldier* EarthArmy::GetSoldier()
@@ -78,6 +88,15 @@ EarthGunnery* EarthArmy::GetGunnery()
 	EarthGunnery* Chosen = nullptr;
 	int dummy;    /// may need it ?
 	if (Gunnery.dequeue(Chosen , dummy))
+		return Chosen;
+
+	return NULL;
+}
+
+Unit* EarthArmy::SelectUnitFromUML() {
+	Unit* Chosen = nullptr;
+	int dummy;    /// may need it ?
+	if (unitMaintenanceList.dequeue(Chosen, dummy))
 		return Chosen;
 
 	return NULL;
