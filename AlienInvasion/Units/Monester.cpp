@@ -13,7 +13,10 @@ void Monester::Attack()
 		if (Tunit)
 			Tunit->Damage(health, attackPower);
 	}
-	cout << "AM " << GetID() << " shots: ";
-	pGame->GetEarthArmy()->PrintArenaList();
-	pGame->GetEarthArmy()->RestoreAliveUnits();
+	if (pGame->GetUIMode() == UIMode::Interactive)
+	{
+		cout << "AM " << GetID() << " Shots: ";
+		pGame->GetEarthArmy()->PrintArenaList();
+		pGame->GetEarthArmy()->RestoreAliveUnits();
+	}
 }

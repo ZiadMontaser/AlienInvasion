@@ -69,7 +69,10 @@ EarthSoldier* EarthArmy::GetSoldier()
 {
 	EarthSoldier* Chosen = nullptr;
 	if (Soldiers.dequeue(Chosen))
-	return Chosen;
+	{
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
 
 	return NULL;
 }
@@ -78,7 +81,10 @@ EarthTank* EarthArmy::GetTank()
 {
 	EarthTank* Chosen = nullptr;
 	if (Tanks.pop(Chosen))
-	return Chosen;
+	{
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
 
 	return NULL;
 }
@@ -88,7 +94,10 @@ EarthGunnery* EarthArmy::GetGunnery()
 	EarthGunnery* Chosen = nullptr;
 	int dummy;    /// may need it ?
 	if (Gunnery.dequeue(Chosen , dummy))
+	{
+		ArenaList.push(Chosen);
 		return Chosen;
+	}
 
 	return NULL;
 }

@@ -13,7 +13,10 @@ void Drone::Attack()
 			if (Tunit)
 				Tunit->Damage(health, attackPower);
 		}
-		cout << "AD " << GetID() << " shots: ";
-		pGame->GetEarthArmy()->PrintArenaList();
-		pGame->GetEarthArmy()->RestoreAliveUnits();
+		if (pGame->GetUIMode() == UIMode::Interactive)
+		{
+			cout << "AD " << GetID() << " Shots: ";
+			pGame->GetEarthArmy()->PrintArenaList();
+			pGame->GetEarthArmy()->RestoreAliveUnits();
+		}
 }

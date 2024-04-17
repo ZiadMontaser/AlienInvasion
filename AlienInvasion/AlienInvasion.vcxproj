@@ -161,6 +161,7 @@
     <ClInclude Include="Units\Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Units\Drones.cpp" />
     <ClCompile Include="Units\HealUnit.cpp" />
     <ClCompile Include="UnitGenerator.cpp" />
     <ClCompile Include="Units\AlienSoldier.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Units\EarthTank.cpp" />
+    <ClCompile Include="Units\Monester.cpp" />
     <ClCompile Include="Units\Unit.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
