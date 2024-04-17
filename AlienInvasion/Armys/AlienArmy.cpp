@@ -23,6 +23,8 @@ Monester* AlienArmy::GetMonester()
 	
 	Monester* Chosen = Monesters[index];
 	if(Chosen) ArenaList.push(Chosen);
+	Monesters[index] = Monesters[Count_Monesters - 1];
+	Monesters[Count_Monesters - 1] = NULL;
 	Count_Monesters--;
 
 
