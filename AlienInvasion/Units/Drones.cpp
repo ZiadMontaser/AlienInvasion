@@ -4,14 +4,52 @@
 #include "../Game.h"
 void Drone::Attack()
 {
-		for (int i = 0; i < attackCapacity; i++)
+		EarthTank* Tunit = nullptr;
+		EarthGunnery* Gunit = nullptr;
+		int remaincap = attackCapacity % 2;
+		for (int i = 0; i < attackCapacity / 2; i++)
 		{
-			EarthGunnery* Gunit = pGame->GetEarthArmy()->GetGunnery();
-			EarthTank* Tunit = pGame->GetEarthArmy()->GetTank();
+			Gunit = pGame->GetEarthArmy()->GetGunnery();
 			if (Gunit)
 				Gunit->Damage(health, attackPower);
+			else
+			{
+				Tunit = pGame->GetEarthArmy()->GetTank();
+				if (Tunit)
+					Tunit->Damage(health, attackPower);
+			}
+		}
+		for (int i = 0; i < attackCapacity / 2; i++)
+		{
+			Tunit = pGame->GetEarthArmy()->GetTank();
 			if (Tunit)
 				Tunit->Damage(health, attackPower);
+			else
+			{
+				Gunit = pGame->GetEarthArmy()->GetGunnery();
+				if (Gunit)
+					Gunit->Damage(health, attackPower);
+			}
+		}
+		if (remaincap)
+		{
+			int ran = rand() % 2;
+			Tunit = pGame->GetEarthArmy()->GetTank();
+			Gunit = pGame->GetEarthArmy()->GetGunnery();
+			if (ran)
+			{
+				if (Tunit)
+					Tunit->Damage(health, attackPower);
+				else if (Gunit)
+					Gunit->Damage(health, attackPower);
+			}
+			else
+			{
+				if (Gunit)
+					Gunit->Damage(health, attackPower);
+				else if (Tunit)
+					Tunit->Damage(health, attackPower);
+			}
 		}
 		if (pGame->GetUIMode() == UIMode::Interactive)
 		{

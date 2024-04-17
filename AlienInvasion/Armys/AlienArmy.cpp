@@ -29,6 +29,18 @@ Monester* AlienArmy::GetMonester()
 	return Chosen;
 }
 
+Monester* AlienArmy::GetMonesterTofight()
+{
+	if (Count_Monesters == 0)
+		return nullptr;
+
+	srand(time(NULL));
+	int index = (rand() % (Count_Monesters + 1));
+	Monester* Chosen = Monesters[index];
+	Count_Monesters--;
+	return Chosen;
+}
+
 Drone* AlienArmy::GetdroneFront()
 {
 	Drone* Chosen = nullptr;
@@ -88,6 +100,7 @@ void AlienArmy::Attack() {
 	Drone* frontDrone = nullptr;
 	Drone* backDrone = nullptr;
 	Drones.dequeue(frontDrone);
+	Drones.dequeueback(backDrone);
 	if (frontDrone)
 		frontDrone->Attack();
 	if (backDrone)
@@ -95,7 +108,7 @@ void AlienArmy::Attack() {
 	
 	// Monster Attack
 	Monester* M = nullptr;
-	M = GetMonester();
+	M = GetMonesterTofight();
 	if (M)
 		M->Attack();
 }
