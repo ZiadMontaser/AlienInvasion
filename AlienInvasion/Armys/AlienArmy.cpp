@@ -76,7 +76,28 @@ void AlienArmy::AddDrone(Drone* D)
 }
 
 void AlienArmy::Attack() {
+	
+	// Soldier Attack
+	AlienSoldier* soldier = nullptr;
+	Soldiers.peek(soldier);
+	if (soldier) {
+		soldier->Attack();
+	}
 
+	// Drone Attack
+	Drone* frontDrone = nullptr;
+	Drone* backDrone = nullptr;
+	Drones.dequeue(frontDrone);
+	if (frontDrone)
+		frontDrone->Attack();
+	if (backDrone)
+		backDrone->Attack();
+	
+	// Monster Attack
+	Monester* M = nullptr;
+	M = GetMonester();
+	if (M)
+		M->Attack();
 }
 
 int AlienArmy::GetSoldiersCount() const { return Soldiers.getCount(); }
