@@ -22,6 +22,8 @@ Monester* AlienArmy::GetMonester()
 	int index = (rand() % (Count_Monesters + 1));
 	
 	Monester* Chosen = Monesters[index];
+	Monesters[index] = Monesters[Count_Monesters - 1];
+	Monesters[Count_Monesters] = nullptr;
 	if(Chosen) ArenaList.push(Chosen);
 	Count_Monesters--;
 
