@@ -33,6 +33,7 @@ public:
 	}
 	AlienSoldier* GetSoldier();
 	Monester* GetMonester();
+	Monester* GetMonesterTofight();
 	Drone* GetdroneFront();
 	Drone* GetdroneBack();
 

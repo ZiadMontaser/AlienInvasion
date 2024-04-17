@@ -22,11 +22,25 @@ Monester* AlienArmy::GetMonester()
 	int index = (rand() % (Count_Monesters + 1));
 	
 	Monester* Chosen = Monesters[index];
+	Monesters[index] = Monesters[Count_Monesters - 1];
+	Monesters[Count_Monesters] = nullptr;
 	if(Chosen) ArenaList.push(Chosen);
 	Monesters[index] = Monesters[Count_Monesters - 1];
 	Monesters[Count_Monesters - 1] = NULL;
 	Count_Monesters--;
 
+
+	return Chosen;
+}
+
+Monester* AlienArmy::GetMonesterTofight()
+{
+	if (Count_Monesters == 0)
+		return nullptr;
+
+	srand(time(NULL));
+	int index = (rand() % (Count_Monesters + 1));
+	Monester* Chosen = Monesters[index];
 
 	return Chosen;
 }
@@ -78,7 +92,29 @@ void AlienArmy::AddDrone(Drone* D)
 }
 
 void AlienArmy::Attack() {
+	
+	// Soldier Attack
+	AlienSoldier* soldier = nullptr;
+	Soldiers.peek(soldier);
+	if (soldier) {
+		soldier->Attack();
+	}
 
+	// Drone Attack
+	Drone* frontDrone = nullptr;
+	Drone* backDrone = nullptr;
+	Drones.dequeue(frontDrone);
+	Drones.dequeueback(backDrone);
+	if (frontDrone)
+		frontDrone->Attack();
+	if (backDrone)
+		backDrone->Attack();
+	
+	// Monster Attack
+	Monester* M = nullptr;
+	M = GetMonesterTofight();
+	if (M)
+		M->Attack();
 }
 
 int AlienArmy::GetSoldiersCount() const { return Soldiers.getCount(); }

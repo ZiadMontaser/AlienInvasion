@@ -9,6 +9,7 @@
 #include "../Units/EarthSoldier.h"
 #include "../Units/EarthGunnery.h"
 #include "../Units/EarthTank.h"
+#include "../Units/HealUnit.h"
 
 class EarthArmy
 {
@@ -18,13 +19,10 @@ class EarthArmy
 	LinkedQueue<EarthSoldier*> Soldiers;
 	ArrayStack<EarthTank*> Tanks;
 	PriorityQueue<EarthGunnery*> Gunnery;
+	ArrayStack<HealUnit*> healUnits;
 
 	ArrayStack<Unit*> ArenaList;
-
-	int Cap_Soliders = 0;
-	/// if needed
-	//int Cap_Tanks = 0;     
-	//int Cap_Gunnery = 0;
+	PriorityQueue<Unit*> unitMaintenanceList;
 
 	bool isLowSoldiersMode = false;
     
@@ -37,10 +35,14 @@ public:
 	void AddSoldier(EarthSoldier* Him);
 	void AddTank(EarthTank* T);
 	void AddGunnery(EarthGunnery* G);
+	void AddHealUnit(HealUnit* G);
+
+	void MoveUnitToUML(Unit* unit);
 
 	EarthSoldier* GetSoldier();
 	EarthTank* GetTank();
 	EarthGunnery* GetGunnery();
+	Unit* SelectUnitFromUML();
 
 	int GetSoldiersCount() const;
 	int IsLowSoldiersMode() const;
