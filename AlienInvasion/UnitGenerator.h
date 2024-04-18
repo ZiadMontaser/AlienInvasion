@@ -1,7 +1,7 @@
 #pragma once
-#include "Game.h"
+//#include "Game.h"
 #include <string>
-
+class Game;
 class UnitGenerator
 {
 	Game* pGame;
@@ -24,8 +24,9 @@ class UnitGenerator
 	int numberGEN(int min, int max);
 public:
 	UnitGenerator(Game* game);
-	void ReadParameters(string fileDir);
+	void ReadParameters(int ,int , int , int ,int ,  int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
 	void GenerateEarth();
 	void GenerateAlien();
+
 };
 

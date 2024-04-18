@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include "Game.h"
 
 using namespace std;
 
@@ -22,67 +23,47 @@ UnitGenerator::UnitGenerator(Game* game) {
 	srand(random);
 }
 
-void UnitGenerator::ReadParameters(string fileDir) 
+void UnitGenerator::ReadParameters(int NumberOfUnits,
+	int es, int et, int eg,
+	int as, int am, int ad,
+	int prob,
+	int earthPowerLower,
+	int earthPowerUpper,
+	int earthHealthLower,
+	int earthHealthUpper,
+	int earthCapacityLower,
+	int earthCapacityUpper,
+	int alienPowerLower,
+	int alienPowerUpper,
+	int alienHealthLower,
+	int alienHealthUpper,
+	int alienCapacityLower,
+	int alienCapacityUpper)
 {
-	string Filename = fileDir;
-
-#ifndef _DEBUG
-	cout << "Please enter the file name you would like to use for unit Generation: ";
-	cin >> Filename;
-#endif // DEBUG
-
-	fstream inputfile ;
+	this->numberOfUnits = NumberOfUnits;
+	this->ES = es;
+	this->ET = et;
+	this->EG = eg;
+	this->AS = as;
+	this->AM = am;
+	this->AD = ad;
+	this->Prob = prob;
+	this->EarthPowerLower = earthPowerLower;
+	this->EarthPowerUpper = earthPowerUpper;
+	this->EarthHealthLower = earthHealthLower;
+	this->EarthHealthUpper = earthHealthUpper;
+	this->EarthCapacityLower = earthCapacityLower;
+	this->EarthCapacityUpper = earthCapacityUpper;
+	this->AlienPowerLower = alienPowerLower;
+	this->AlienPowerUpper = alienPowerUpper;
+	this->AlienHealthLower = alienHealthLower;
+	this->AlienHealthUpper = alienHealthUpper;
+	this->AlienCapacityLower = alienCapacityLower;
+	this->AlienCapacityUpper = alienCapacityUpper;
 	
-	inputfile.open(Filename.c_str(), ios::in);
-	if (inputfile.is_open()) {
-
-		int temp;
-
-		inputfile >> numberOfUnits;
-		inputfile >> ES >> ET >> EG;
-		inputfile >> AS >> AM >> AD;
-		inputfile >> Prob;
-
-		inputfile >> temp;
-		EarthPowerLower = abs(temp);
-		inputfile >> temp;
-		EarthPowerUpper = abs(temp);
-
-
-		inputfile >> temp;
-		EarthHealthLower = abs(temp);
-		inputfile >> temp;
-		EarthHealthUpper = abs(temp);
-
-
-		inputfile >> temp;
-		EarthCapacityLower = abs(temp);
-		inputfile >> temp;
-		EarthCapacityUpper = abs(temp);
-
-
-		
-		inputfile >> temp;
-		AlienPowerLower = abs(temp);
-		inputfile >> temp;
-		AlienPowerUpper = abs(temp);
-
-		inputfile >> temp;
-		AlienHealthLower = abs(temp);
-		inputfile >> temp;
-		AlienHealthUpper = abs(temp);
-
-		inputfile >> temp;
-		AlienCapacityLower = abs(temp);
-		inputfile >> temp;
-		AlienCapacityUpper = abs(temp);
-
-
-		//cout << AlienCapacityLower << endl << AlienHealthUpper;
-
 	}
 
-}
+
 
 void UnitGenerator::GenerateEarth()
 {

@@ -3,7 +3,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-
+#include "UnitGenerator.h"
 #include "Armys/AlienArmy.h"
 #include "Armys/EarthArmy.h"
 #include <string>
@@ -28,6 +28,7 @@ public:
 	Game();
 
 	void StartSimulation();
+	void ReadinputFile(UnitGenerator&);
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
 	void ReportDeadUnit(Unit*);

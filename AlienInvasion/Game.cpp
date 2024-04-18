@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <cmath>
 #include <conio.h>
+#include <fstream>
 
 Game::Game() {
 	alienArmy = new AlienArmy;
@@ -74,7 +75,7 @@ void Game::StartSimulation() {
 
 
 	UnitGenerator generator(this);
-	generator.ReadParameters(inputFileDir);
+	ReadinputFile(generator);
 
 	if (uiMode == UIMode::Silent) PrintSilentMessages();
 
@@ -107,6 +108,87 @@ void Game::StartSimulation() {
 		currentTimeStep++;
 	}
 
+}
+
+void Game::ReadinputFile(UnitGenerator& generator)
+{
+
+	string Filename = "testfile.txt";
+
+#ifndef _DEBUG
+	cout << "Please enter the file name you would like to use for unit Generation: ";
+	cin >> Filename;
+#endif // DEBUG
+
+	fstream inputfile;
+
+	inputfile.open(Filename.c_str(), ios::in);
+	if (inputfile.is_open()) {
+
+		int temp;
+		int numberOfUnits;
+		int ES, ET, EG;
+		int AS, AM, AD;
+		int Prob;
+
+		inputfile >> numberOfUnits;
+		inputfile >> ES >> ET >> EG;
+		inputfile >> AS >> AM >> AD;
+		inputfile >> Prob;
+
+		inputfile >> temp;
+		int EarthPowerLower = abs(temp);
+		inputfile >> temp;
+		int EarthPowerUpper = abs(temp);
+
+
+		inputfile >> temp;
+		int EarthHealthLower = abs(temp);
+		inputfile >> temp;
+		int EarthHealthUpper = abs(temp);
+
+
+		inputfile >> temp;
+		int EarthCapacityLower = abs(temp);
+		inputfile >> temp;
+		int EarthCapacityUpper = abs(temp);
+
+
+
+		inputfile >> temp;
+		int AlienPowerLower = abs(temp);
+		inputfile >> temp;
+		int AlienPowerUpper = abs(temp);
+
+		inputfile >> temp;
+		int AlienHealthLower = abs(temp);
+		inputfile >> temp;
+		int AlienHealthUpper = abs(temp);
+
+		inputfile >> temp;
+		int AlienCapacityLower = abs(temp);
+		inputfile >> temp;
+		int AlienCapacityUpper = abs(temp);
+
+
+		generator.ReadParameters(numberOfUnits,
+			ES, ET, EG,
+			AS, AM, AD,
+			Prob,
+			EarthPowerLower,
+			EarthPowerUpper,
+			EarthHealthLower,
+			EarthHealthUpper,
+			EarthCapacityLower,
+			EarthCapacityUpper,
+			AlienPowerLower,
+			AlienPowerUpper,
+			AlienHealthLower,
+			AlienHealthUpper,
+			AlienCapacityLower,
+			AlienCapacityUpper);
+
+	}
 }
 
 void Game::PrintSilentMessages() const {
