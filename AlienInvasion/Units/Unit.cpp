@@ -19,6 +19,10 @@ void Unit::Heal(double HUpower, double HUhealth)
 {
 	double theheal = (HUpower * (HUhealth / 100)) / sqrt(health);
 	health += theheal;
+	if (health > 0.2 * MaxHealth)
+	{
+		pGame->ReportHealedUnit(this);
+	}
 }
 std::ostream& operator<<(std::ostream& out, Unit* unit) {
 	if(unit)

@@ -32,6 +32,7 @@ public:
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
 	void ReportDeadUnit(Unit*);
+	void ReportHealedUnit(Unit*);
 	void HandleUI();
 	void Print() const;
 	void PrintSilentMessages() const;

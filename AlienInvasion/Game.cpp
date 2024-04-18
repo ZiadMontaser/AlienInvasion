@@ -18,6 +18,16 @@ void Game::ReportDeadUnit(Unit* dead)
 	KilledList.enqueue(dead);
 }
 
+void Game::ReportHealedUnit(Unit* healed)
+{
+	EarthSoldier* es = dynamic_cast<EarthSoldier*>(healed);
+	EarthTank* et = dynamic_cast<EarthTank*>(healed);
+	if (es)
+		earthArmy->AddSoldier(es);
+	else if (et)
+		earthArmy->AddTank(et);
+}
+
 #define ENTER 13
 #define KEY_UP 72
 #define KEY_DOWN 80
