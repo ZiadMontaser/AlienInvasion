@@ -13,7 +13,6 @@ class UnitGenerator
 	int EarthHealthUpper,   EarthHealthLower;
 	int EarthCapacityUpper, EarthCapacityLower;
 
-
 	int AlienPowerUpper,    AlienPowerLower;
 	int AlienHealthUpper,   AlienHealthLower;
 	int AlienCapacityUpper, AlienCapacityLower;

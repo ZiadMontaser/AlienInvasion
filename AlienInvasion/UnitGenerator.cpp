@@ -76,7 +76,7 @@ void UnitGenerator::GenerateEarth()
 
 		while (added < numberOfUnits) {
 			int unittoadd = numberGEN(1, 100);
-
+			
 			if (unittoadd <= ES) {
 
 				/// add solider
@@ -119,6 +119,8 @@ void UnitGenerator::GenerateEarth()
 	else
 		return;
 }
+
+
 
 void UnitGenerator::GenerateAlien()
 {

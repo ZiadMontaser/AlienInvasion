@@ -26,10 +26,11 @@ protected:
 	int joinTime;
 	int attackPower;
 	int attackCapacity;
-
+	const int MaxHealth;
 
 public:
-	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) {
+	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :MaxHealth(health)
+	{
 
 		pGame = game;
 		this->id = id;
