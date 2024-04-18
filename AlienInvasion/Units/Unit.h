@@ -44,7 +44,7 @@ public:
 	virtual void Attack() = 0;
 
 	void Damage(double attackerHealth, double attackerPower);
-
+	void Heal(double HUpower, double Huhealth);
 	UnitType GetType() { return type; };
 	int GetID() { return id; };
 	double GetHealth() { return health; };

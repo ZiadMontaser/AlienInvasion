@@ -15,6 +15,11 @@ void Unit::Damage(double attackerHealth, double attackerPower)
 	}
 }
 
+void Unit::Heal(double HUpower, double HUhealth)
+{
+	double theheal = (HUpower * (HUhealth / 100)) / sqrt(health);
+	health += theheal;
+}
 std::ostream& operator<<(std::ostream& out, Unit* unit) {
 	if(unit)
 		cout << unit->GetID();
