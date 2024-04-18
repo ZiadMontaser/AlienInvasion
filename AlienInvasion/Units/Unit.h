@@ -8,8 +8,8 @@ class Game;
 
 enum UnitType
 {
-	EARTH_SOLDIER,
-	TANK,
+	TANK = 0,
+	EARTH_SOLDIER = 1,
 	GUNNERY,
 	ALIEN_SOLDIER,
 	MONSTER,

@@ -7,6 +7,10 @@
 #include "Armys/AlienArmy.h"
 #include "Armys/EarthArmy.h"
 #include <string>
+#include <Windows.h>
+
+#define FOREGROUND_WHITE FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN
+#define FOREGROUND_YELLOW FOREGROUND_RED | FOREGROUND_GREEN
 
 enum class UIMode {
 	Interactive = 0,

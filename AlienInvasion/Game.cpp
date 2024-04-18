@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <fstream>
 
+
 Game::Game() {
 	alienArmy = new AlienArmy;
 	earthArmy = new EarthArmy(this);
@@ -34,7 +35,12 @@ void Game::ReportHealedUnit(Unit* healed)
 #define ESCAPE 8
 
 void Game::HandleUI() {
-	cout << "Input File Name: (testfile.txt)";
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+	cout << "Input File Name: ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << "(testfile.txt)";
 	string file;
 
 	char c = 0;
@@ -43,13 +49,23 @@ void Game::HandleUI() {
 		if (c == ENTER)
 			break;
 		
-		if (c == ESCAPE)
-			file.erase(file.length() - 1);
+		if (c == ESCAPE) {
+			if (!file.empty()) {
+				file.erase(file.length() - 1);
+			}
+		}
 		else
 			file += c;
 
 		system("CLS");
-		cout << "Input File Name: " << file << endl;
+		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+		cout << "Input File Name: ";
+		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+		cout << file << endl;
+
+		COORD pos = { 17 + file.length(), 0 };
+		SetConsoleCursorPosition(hConsole, pos);
+
 
 	} while (true);
 	file = file.empty() ? "testfile.txt" : file + ".txt";
@@ -68,9 +84,15 @@ void Game::HandleUI() {
 
 		system("CLS");
 
-		cout << "Input File Name: " << file << endl;
+		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+		cout << "Input File Name: ";
+		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+		cout << file << endl;
+		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
 		cout << "Simulation mode:" << endl;
+		SetConsoleTextAttribute(hConsole, modeIndex == (int)UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
 		cout << (modeIndex == (int) UIMode::Interactive ? ">" : " ") << " Interactive" << endl;
+		SetConsoleTextAttribute(hConsole, modeIndex == (int)UIMode::Silent      ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
 		cout << (modeIndex == (int) UIMode::Silent     ? ">" : " ")  << " Silent"      << endl;
 	} while ((c = _getch()) != ENTER);
 	uiMode = (UIMode) modeIndex;
@@ -111,6 +133,9 @@ void Game::StartSimulation() {
 		if (uiMode == UIMode::Interactive) {
 			do
 			{
+				HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+				SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
 				cout << '\n' << "Press enter to continue...";
 			} while (cin.get() != '\n');
 		}
@@ -123,16 +148,9 @@ void Game::StartSimulation() {
 void Game::ReadinputFile(UnitGenerator& generator)
 {
 
-	string Filename = "testfile.txt";
-
-#ifndef _DEBUG
-	cout << "Please enter the file name you would like to use for unit Generation: ";
-	cin >> Filename;
-#endif // DEBUG
-
 	fstream inputfile;
 
-	inputfile.open(Filename.c_str(), ios::in);
+	inputfile.open(inputFileDir.c_str(), ios::in);
 	if (inputfile.is_open()) {
 
 		int temp;
@@ -208,7 +226,12 @@ void Game::PrintSilentMessages() const {
 }
 
 void Game::Print() const {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
 	cout << "Current Timestep " << currentTimeStep << endl;
+
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	earthArmy->Print();
 	alienArmy->Print();
 

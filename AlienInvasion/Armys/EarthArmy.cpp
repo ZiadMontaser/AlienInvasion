@@ -1,5 +1,6 @@
 #include "EarthArmy.h"
 #include <iostream>
+#include <Windows.h>
 
 #include "../Game.h"
 
@@ -62,7 +63,15 @@ void EarthArmy::AddHealUnit(HealUnit* G) {
 
 void EarthArmy::MoveUnitToUML(Unit* unit) {
 	if (!unit) return;
-	unitMaintenanceList.enqueue(unit, unit->GetType());
+
+	EarthTank* tank;
+	EarthSoldier* soldier;
+	if (tank = dynamic_cast<EarthTank*>(unit)) {
+		tankUnitMaintenanceList.enqueue(tank);
+	}
+	else if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
+		soldierUnitMaintenanceList.enqueue(soldier, INT_MAX - soldier->GetHealth());
+	}
 }
 
 EarthSoldier* EarthArmy::GetSoldier()
@@ -103,10 +112,14 @@ EarthGunnery* EarthArmy::GetGunnery()
 }
 
 Unit* EarthArmy::SelectUnitFromUML() {
-	Unit* Chosen = nullptr;
-	int dummy;    /// may need it ?
-	if (unitMaintenanceList.dequeue(Chosen, dummy))
-		return Chosen;
+
+	EarthSoldier* soldier; int pri;
+	if(soldierUnitMaintenanceList.dequeue(soldier, pri))
+		return soldier;
+
+	EarthTank* tank;
+	if (tankUnitMaintenanceList.dequeue(tank))
+		return tank;
 
 	return NULL;
 }
@@ -125,43 +138,60 @@ void EarthArmy::RestoreAliveUnits() {
 		Unit* unit;
 		ArenaList.pop(unit);
 
-		switch (unit->GetType())
-		{
-		case UnitType::EARTH_SOLDIER: {
-			LinkedQueue<EarthSoldier*> temp;
-			while (!Soldiers.isEmpty()) {
-				EarthSoldier* value;
-				Soldiers.dequeue(value);
-				temp.enqueue(value);
-			}
+		EarthSoldier* soldier;
+		EarthTank* tank;
+		EarthGunnery* gunnery;
 
-			Soldiers.enqueue((EarthSoldier*)unit);
-
-			while (!temp.isEmpty()) {
-				EarthSoldier* value;
-				temp.dequeue(value);
-				Soldiers.enqueue(value);
-			}
-
-			break;
+		if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
+			AddSoldier(soldier);
 		}
-		default:
-			break;
+		else if (tank = dynamic_cast<EarthTank*>(unit)) {
+			AddTank(tank);
+		}
+		else if (gunnery = dynamic_cast<EarthGunnery*>(unit)) {
+			AddGunnery(gunnery);
 		}
 	}
 }
 
 
 void EarthArmy::Print() const {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	cout << "===========" << "Earth Army Alive Units" << "===========" << endl;
 
-	cout << Soldiers.getCount() << " ES ";
+	cout << Soldiers.getCount();
+	CONSOLE_SCREEN_BUFFER_INFO cbsi;
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " ES ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE); 
 	Soldiers.print();
 
-	cout << Tanks.getCount() << " ET ";
+	cout << Tanks.getCount();
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " ET ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Tanks.print();
 
-	cout << Gunnery.getCount() << " EG ";
+	cout << Gunnery.getCount();
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " EG ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Gunnery.print();
 
 	cout << endl;

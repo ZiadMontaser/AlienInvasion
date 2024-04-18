@@ -25,8 +25,7 @@ Monester* AlienArmy::GetMonester()
 	Monesters[index] = Monesters[Count_Monesters - 1];
 	Monesters[Count_Monesters] = nullptr;
 	if(Chosen) ArenaList.push(Chosen);
-	Monesters[index] = Monesters[Count_Monesters - 1];
-	Monesters[Count_Monesters - 1] = NULL;
+
 	Count_Monesters--;
 
 
@@ -126,31 +125,50 @@ void AlienArmy::RestoreAliveUnits() {
 		Unit* unit = nullptr;
 		ArenaList.pop(unit);
 		if (unit->IsDead()) continue;
+		
+		AlienSoldier* soldier;
+		Monester* monester;
+		Drone* drone;
 
-		switch (unit->GetType())
-		{
-		case UnitType::ALIEN_SOLDIER:
-			Soldiers.enqueue((AlienSoldier*)unit);
-			break;
-		case UnitType::MONSTER:
-			AddMonester((Monester*)unit);
-			break;
-		case UnitType::DRONE:
-			AddDrone((Drone*)unit);
-			break;
-		default:
-			break;
+		if (soldier = dynamic_cast<AlienSoldier*>(unit)) {
+			AddSoldier(soldier);
+
+		}else if (monester = dynamic_cast<Monester*>(unit)) {
+			AddMonester(monester);
+
+		}else if (drone = dynamic_cast<Drone*>(unit)) {
+			AddDrone(drone);
 		}
 	}
 }
 
 void AlienArmy::Print() const {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	cout << "===========" << "Alien Army Alive Units" << "===========" << endl;
 
-	cout << Soldiers.getCount() << " AS ";
+	cout << Soldiers.getCount();
+	CONSOLE_SCREEN_BUFFER_INFO cbsi;
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " AS ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+
 	Soldiers.print();
 
-	cout << Count_Monesters << " AM [";
+	cout << Count_Monesters;
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " AM ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << "[";
 	for (int i = 0; i < Count_Monesters; i++) {
 		cout << Monesters[i];
 		if (i != Count_Monesters - 1)
@@ -158,7 +176,15 @@ void AlienArmy::Print() const {
 	}
 	cout << "]" << endl;
 
-	cout << Drones.getCount() << " AD ";
+	cout << Drones.getCount();
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " AD ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Drones.print();
 
 	cout << endl;

@@ -22,7 +22,9 @@ class EarthArmy
 	ArrayStack<HealUnit*> healUnits;
 
 	ArrayStack<Unit*> ArenaList;
-	PriorityQueue<Unit*> unitMaintenanceList;
+	PriorityQueue<EarthSoldier*> soldierUnitMaintenanceList;
+	LinkedQueue<EarthTank*> tankUnitMaintenanceList;
+
 
 	bool isLowSoldiersMode = false;
     
