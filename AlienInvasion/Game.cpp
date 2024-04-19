@@ -34,13 +34,45 @@ void Game::ReportHealedUnit(Unit* healed)
 #define KEY_DOWN 80
 #define ESCAPE 8
 
-void Game::HandleUI() {
+void PrintMainMenue(string file, UIMode mode, bool isSelectionMenu) {
+
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
+	system("CLS");
+	cout << R"(
+  ____  _      ____    ___  ____       ____  ____   __ __   ____  _____ ____  ___   ____  
+ /    || |    |    |  /  _]|    \     |    ||    \ |  |  | /    |/ ___/|    |/   \ |    \ 
+|  o  || |     |  |  /  [_ |  _  |     |  | |  _  ||  |  ||  o  (   \_  |  ||     ||  _  |
+|     || |___  |  | |    _]|  |  |     |  | |  |  ||  |  ||     |\__  | |  ||  O  ||  |  |
+|  _  ||     | |  | |   [_ |  |  |     |  | |  |  ||  :  ||  _  |/  \ | |  ||     ||  |  |
+|  |  ||     | |  | |     ||  |  |     |  | |  |  | \   / |  |  |\    | |  ||     ||  |  |
+|__|__||_____||____||_____||__|__|    |____||__|__|  \_/  |__|__| \___||____|\___/ |__|__|                                                                  
+)";
 
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
 	cout << "Input File Name: ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	cout << "(testfile.txt)";
+	cout << (file.empty() ? "(testfile.txt)" : file) << endl;
+
+	if (!isSelectionMenu) {
+		COORD pos = { 17 + file.length(), 9 };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+
+	if (isSelectionMenu) {
+		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+		cout << "Simulation mode:" << endl;
+		SetConsoleTextAttribute(hConsole, mode == UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
+		cout << (mode == UIMode::Interactive ? ">" : " ") << " Interactive" << endl;
+		SetConsoleTextAttribute(hConsole, mode == UIMode::Silent ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
+		cout << (mode == UIMode::Silent ? ">" : " ") << " Silent" << endl;
+	}
+}
+
+void Game::HandleUI() {
+
+	PrintMainMenue(inputFileDir, uiMode, false);
+
 	string file;
 
 	char c = 0;
@@ -48,7 +80,7 @@ void Game::HandleUI() {
 		c = _getch();
 		if (c == ENTER)
 			break;
-		
+
 		if (c == ESCAPE) {
 			if (!file.empty()) {
 				file.erase(file.length() - 1);
@@ -57,17 +89,10 @@ void Game::HandleUI() {
 		else
 			file += c;
 
-		system("CLS");
-		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-		cout << "Input File Name: ";
-		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-		cout << file << endl;
-
-		COORD pos = { 17 + file.length(), 0 };
-		SetConsoleCursorPosition(hConsole, pos);
-
+		PrintMainMenue(file, uiMode, false);
 
 	} while (true);
+
 	file = file.empty() ? "testfile.txt" : file + ".txt";
 	inputFileDir = file;
 
@@ -82,18 +107,7 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		system("CLS");
-
-		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-		cout << "Input File Name: ";
-		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-		cout << file << endl;
-		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-		cout << "Simulation mode:" << endl;
-		SetConsoleTextAttribute(hConsole, modeIndex == (int)UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
-		cout << (modeIndex == (int) UIMode::Interactive ? ">" : " ") << " Interactive" << endl;
-		SetConsoleTextAttribute(hConsole, modeIndex == (int)UIMode::Silent      ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
-		cout << (modeIndex == (int) UIMode::Silent     ? ">" : " ")  << " Silent"      << endl;
+		PrintMainMenue(file, (UIMode)modeIndex, true);
 	} while ((c = _getch()) != ENTER);
 	uiMode = (UIMode) modeIndex;
 }
@@ -101,7 +115,6 @@ void Game::HandleUI() {
 UIMode Game::GetUIMode() const {
 	return uiMode;
 }
-
 
 void Game::StartSimulation() {
 
@@ -131,13 +144,11 @@ void Game::StartSimulation() {
 		alienArmy->Attack();
 
 		if (uiMode == UIMode::Interactive) {
-			do
-			{
-				HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-				SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-				cout << '\n' << "Press enter to continue...";
-			} while (cin.get() != '\n');
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+			cout << '\n' << "Press enter to continue...";
+			while (_getch() != ENTER);
 		}
 
 		currentTimeStep++;
