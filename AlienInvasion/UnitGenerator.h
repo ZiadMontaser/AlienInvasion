@@ -6,7 +6,7 @@ class UnitGenerator
 {
 	Game* pGame;
 	int numberOfUnits;
-	int ES, ET, EG, AS, AM, AD;
+	int ES, ET, EG, EHU, AS, AM, AD;
 	int Prob;
 
 	int EarthPowerUpper,    EarthPowerLower;
@@ -23,7 +23,7 @@ class UnitGenerator
 	int numberGEN(int min, int max);
 public:
 	UnitGenerator(Game* game);
-	void ReadParameters(int ,int , int , int ,int ,  int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
+	void ReadParameters(int ,int , int , int ,int,int ,  int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
 	void GenerateEarth();
 	void GenerateAlien();
 

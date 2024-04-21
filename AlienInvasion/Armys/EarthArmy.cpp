@@ -194,6 +194,17 @@ void EarthArmy::Print() const {
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Gunnery.print();
 
+	cout << healUnits.getCount();
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " EHU ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	healUnits.print();
+
 	cout << endl;
 }
 

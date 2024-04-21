@@ -52,6 +52,6 @@ public:
 	void RestoreAliveUnits();
 	void Print() const;
 	void PrintArenaList() const { ArenaList.print(); };
-
+	//void KillHealUnit(HealUnit*);
 };
 #endif // !EARTH_ARMY_H

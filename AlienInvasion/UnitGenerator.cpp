@@ -24,7 +24,7 @@ UnitGenerator::UnitGenerator(Game* game) {
 }
 
 void UnitGenerator::ReadParameters(int NumberOfUnits,
-	int es, int et, int eg,
+	int es, int et, int eg,int ehu,
 	int as, int am, int ad,
 	int prob,
 	int earthPowerLower,
@@ -44,6 +44,7 @@ void UnitGenerator::ReadParameters(int NumberOfUnits,
 	this->ES = es;
 	this->ET = et;
 	this->EG = eg;
+	this->EHU = ehu;
 	this->AS = as;
 	this->AM = am;
 	this->AD = ad;
@@ -67,6 +68,7 @@ void UnitGenerator::ReadParameters(int NumberOfUnits,
 
 void UnitGenerator::GenerateEarth()
 {
+	int JoinTime = pGame->GetTimeStamp();
 	
 	int canadd = numberGEN(1, 100);
 
@@ -84,7 +86,7 @@ void UnitGenerator::GenerateEarth()
 
 				pGame->GetEarthArmy()->AddSoldier(new EarthSoldier(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime,
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
@@ -96,18 +98,30 @@ void UnitGenerator::GenerateEarth()
 
 				pGame->GetEarthArmy()->AddTank(new EarthTank(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
 			}
-			else {
+			else if (unittoadd <= (ES+ET+EG)) {
 
 				/// add gunnery
 
 				pGame->GetEarthArmy()->AddGunnery(new EarthGunnery(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
+					numberGEN(EarthPowerLower, EarthPowerUpper),
+					numberGEN(EarthCapacityLower, EarthCapacityUpper))
+				);
+			}
+
+			else {
+
+				///add healunit
+
+				pGame->GetEarthArmy()->AddHealUnit(new HealUnit(
+					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+					JoinTime, 
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
@@ -124,7 +138,8 @@ void UnitGenerator::GenerateEarth()
 
 void UnitGenerator::GenerateAlien()
 {
-	
+	int JoinTime = pGame->GetTimeStamp();
+
 	int canadd = numberGEN(1, 100);
 
 	if (canadd <= Prob) {
@@ -140,7 +155,7 @@ void UnitGenerator::GenerateAlien()
 				/// add solider
 				pGame->GetAlienArmy()->AddSoldier(new AlienSoldier(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
 					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);
@@ -151,7 +166,7 @@ void UnitGenerator::GenerateAlien()
 
 				pGame->GetAlienArmy()->AddMonester(new Monester(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
 					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);
@@ -160,7 +175,7 @@ void UnitGenerator::GenerateAlien()
 
 				pGame->GetAlienArmy()->AddDrone(new Drone(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
 					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);

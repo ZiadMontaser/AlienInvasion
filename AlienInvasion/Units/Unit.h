@@ -11,6 +11,7 @@ enum UnitType
 	TANK = 0,
 	EARTH_SOLDIER = 1,
 	GUNNERY,
+	HEALUNIT,
 	ALIEN_SOLDIER,
 	MONSTER,
 	DRONE,
@@ -23,10 +24,14 @@ protected:
 	UnitType type;
 	int id;
 	double health;
-	int joinTime;
 	int attackPower;
 	int attackCapacity;
 	const int MaxHealth;
+
+	/// Times
+	int joinTime;
+	int DeathTime;
+
 
 public:
 	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :MaxHealth(health)
@@ -51,8 +56,12 @@ public:
 	double GetHealth() { return health; };
 	double GetPower() { return attackPower; };
 	int GetCapacity() { return attackCapacity; };
+	double GetMaxHealth(){ return MaxHealth; }
 
 	bool IsDead() { return health <= 0; }
+
+	void SetDeathTime(int T) {  DeathTime = T;  }
+	int GetDeathTime() { return DeathTime; }
 };
 
 std::ostream& operator<<(std::ostream& out, Unit* unit);

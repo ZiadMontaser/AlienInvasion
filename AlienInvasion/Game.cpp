@@ -16,7 +16,13 @@ EarthArmy* Game::GetEarthArmy() { return earthArmy; }
 
 void Game::ReportDeadUnit(Unit* dead)
 {
+	dead->SetDeathTime(GetTimeStamp());
 	KilledList.enqueue(dead);
+}
+
+int Game::GetTimeStamp()
+{
+	return currentTimeStep;
 }
 
 void Game::ReportHealedUnit(Unit* healed)
@@ -166,12 +172,12 @@ void Game::ReadinputFile(UnitGenerator& generator)
 
 		int temp;
 		int numberOfUnits;
-		int ES, ET, EG;
+		int ES, ET, EG,EHU;
 		int AS, AM, AD;
 		int Prob;
 
 		inputfile >> numberOfUnits;
-		inputfile >> ES >> ET >> EG;
+		inputfile >> ES >> ET >> EG>>EHU;
 		inputfile >> AS >> AM >> AD;
 		inputfile >> Prob;
 
@@ -211,7 +217,7 @@ void Game::ReadinputFile(UnitGenerator& generator)
 
 
 		generator.ReadParameters(numberOfUnits,
-			ES, ET, EG,
+			ES, ET, EG,EHU,
 			AS, AM, AD,
 			Prob,
 			EarthPowerLower,
