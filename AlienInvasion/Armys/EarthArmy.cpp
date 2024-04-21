@@ -35,6 +35,14 @@ void EarthArmy::Attack()
 	if (gunnery) {
 		gunnery->Attack();
 	}
+
+	HealUnit* Healunit = nullptr;
+	healUnits.peek(Healunit);
+	if (Healunit) {
+
+		Healunit->Attack();
+	}
+
 }
 
 
@@ -111,6 +119,13 @@ EarthGunnery* EarthArmy::GetGunnery()
 	return NULL;
 }
 
+void EarthArmy::RemoveHealUnit() 
+{
+	HealUnit* Chosen = nullptr;
+	healUnits.pop(Chosen);
+
+}
+
 Unit* EarthArmy::SelectUnitFromUML() {
 
 	EarthSoldier* soldier; int pri;
@@ -138,15 +153,22 @@ void EarthArmy::RestoreAliveUnits() {
 		Unit* unit;
 		ArenaList.pop(unit);
 
+		if (unit->IsDead()) continue;
+
 		EarthSoldier* soldier;
 		EarthTank* tank;
 		EarthGunnery* gunnery;
 
 		if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
+			if (unit->GetHealth() < 0.2 * unit->GetMaxHealth()) { MoveUnitToUML(unit); }
+			else 
 			AddSoldier(soldier);
 		}
 		else if (tank = dynamic_cast<EarthTank*>(unit)) {
+			if (unit->GetHealth() < 0.2 * unit->GetMaxHealth()) { MoveUnitToUML(unit); }
+			else
 			AddTank(tank);
+
 		}
 		else if (gunnery = dynamic_cast<EarthGunnery*>(unit)) {
 			AddGunnery(gunnery);

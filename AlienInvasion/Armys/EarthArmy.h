@@ -25,7 +25,6 @@ class EarthArmy
 	PriorityQueue<EarthSoldier*> soldierUnitMaintenanceList;
 	LinkedQueue<EarthTank*> tankUnitMaintenanceList;
 
-
 	bool isLowSoldiersMode = false;
     
 
@@ -44,6 +43,7 @@ public:
 	EarthSoldier* GetSoldier();
 	EarthTank* GetTank();
 	EarthGunnery* GetGunnery();
+    void RemoveHealUnit();
 	Unit* SelectUnitFromUML();
 
 	int GetSoldiersCount() const;

@@ -9,6 +9,9 @@ void Unit::Damage(double attackerHealth, double attackerPower)
 
 	health -= Thedamage;
 
+	EarthSoldier* S = dynamic_cast<EarthSoldier*>(this);
+	EarthTank* T = dynamic_cast<EarthTank*>(this);
+
 	if (health <= 0) {
 
 		pGame->ReportDeadUnit(this);

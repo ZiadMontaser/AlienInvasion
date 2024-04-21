@@ -62,11 +62,13 @@ public:
 		return top + 1;
 	}
 
-	void print() const {
+
+	 /// this changed 
+	void print() const {    
 		cout << "[";
-		for (int i = 0; i <= top; i++) {
+		for (int i = top; i >= 0; i--) {
 			cout << items[i];
-			if (i != top)
+			if (i != 0)
 				cout << ", ";
 		}
 		cout << "]" << endl;
