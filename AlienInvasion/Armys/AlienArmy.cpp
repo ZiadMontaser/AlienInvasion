@@ -3,10 +3,13 @@
 #include <cstdlib>
 #include <time.h>
 #include <string>
+#include "../Game.h"
 
 AlienSoldier* AlienArmy::GetSoldier() {
 	AlienSoldier* value = nullptr;
 	if (Soldiers.dequeue(value)) {
+		if (value)
+		value->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(value);
 		return value;
 	}
@@ -22,6 +25,8 @@ Monester* AlienArmy::GetMonester()
 	int index = (rand() % (Count_Monesters + 1));
 	
 	Monester* Chosen = Monesters[index];
+	if (Chosen)
+		Chosen->SetAttackedTime(pGame->GetTimeStamp());
 	Monesters[index] = Monesters[Count_Monesters - 1];
 	Monesters[Count_Monesters] = nullptr;
 	if(Chosen) ArenaList.push(Chosen);
@@ -48,6 +53,8 @@ Drone* AlienArmy::GetdroneFront()
 {
 	Drone* Chosen = nullptr;
 	if (Drones.dequeue(Chosen)) {
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -60,6 +67,8 @@ Drone* AlienArmy::GetdroneBack()
 {
 	Drone* Chosen = nullptr;
 	if (Drones.dequeueback(Chosen)) {
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -102,8 +111,8 @@ void AlienArmy::Attack() {
 	// Drone Attack
 	Drone* frontDrone = nullptr;
 	Drone* backDrone = nullptr;
-	Drones.dequeue(frontDrone);
-	Drones.dequeueback(backDrone);
+	Drones.peek(frontDrone);
+	Drones.Rear(backDrone);
 	if (frontDrone)
 		frontDrone->Attack();
 	if (backDrone)
@@ -119,6 +128,11 @@ void AlienArmy::Attack() {
 int AlienArmy::GetSoldiersCount() const { return Soldiers.getCount(); }
 int AlienArmy::GetMonstersCount() const { return Count_Monesters; }
 int AlienArmy::GetDroneCount()	  const { return Drones.getCount(); }
+
+int AlienArmy::GetAlienCount()
+{
+	return GetSoldiersCount() + GetDroneCount() + GetMonstersCount();
+}
 
 void AlienArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {

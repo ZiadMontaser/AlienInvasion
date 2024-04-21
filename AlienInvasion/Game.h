@@ -16,13 +16,17 @@ enum class UIMode {
 	Interactive = 0,
 	Silent = 1
 };
-
+enum EndBattle {
+	DRAW,
+	ALIENWON,
+	EARTHWON
+};
 class Game
 {
 	AlienArmy* alienArmy;
 	EarthArmy* earthArmy;
 	LinkedQueue<Unit* > KilledList;
-
+	EndBattle endbattle = DRAW;
 	string inputFileDir;
 	UIMode uiMode = UIMode::Interactive;
 
@@ -39,6 +43,7 @@ public:
 	int GetTimeStamp();
 	void ReportHealedUnit(Unit*);
 	void HandleUI();
+	void outfile();
 	void Print() const;
 	void PrintSilentMessages() const;
 	UIMode GetUIMode() const;

@@ -46,7 +46,10 @@ public:
 	EarthGunnery* GetGunnery();
 	Unit* SelectUnitFromUML();
 
+	int GetEarthCount() const;
 	int GetSoldiersCount() const;
+	int GetTankCount() const;
+	int GetGunneryCount() const;
 	int IsLowSoldiersMode() const;
 
 	void RestoreAliveUnits();
