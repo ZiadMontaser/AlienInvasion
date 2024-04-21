@@ -31,7 +31,7 @@ protected:
 	/// Times
 	int joinTime;
 	int DeathTime;
-
+	int AttackedTime;
 
 public:
 	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :MaxHealth(health)
@@ -44,7 +44,6 @@ public:
 		this->joinTime = joinTime;
 		this->attackPower = attackPower;
 		this->attackCapacity = attackCapacity;
-
 	}
 
 	virtual void Attack() = 0;
@@ -61,7 +60,14 @@ public:
 	bool IsDead() { return health <= 0; }
 
 	void SetDeathTime(int T) {  DeathTime = T;  }
-	int GetDeathTime() { return DeathTime; }
+	void SetAttackedTime(int T) { AttackedTime = T; }
+
+	int GetDeathTime() const { return DeathTime; }
+	int getJoinTime() const { return joinTime; }
+	int getAttackedTime() const { return AttackedTime; }
+	int getAttackDelay() const { return AttackedTime - joinTime; }
+	int getDestructDelay() const { return DeathTime - joinTime; };
+	int getBattleTime() const { return DeathTime - joinTime; }
 };
 
 std::ostream& operator<<(std::ostream& out, Unit* unit);

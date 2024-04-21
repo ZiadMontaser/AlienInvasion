@@ -36,6 +36,14 @@ public:
 		else
 			return false;
 	}
+	template <typename T>
+	bool Rear(T &back)
+	{
+		if (LinkedQueue<T>::isEmpty())
+			return false;
+		back = backPtr->getItem();
+		return true;
+	}
 
 	template <typename T>
 	bool enqueuefront(const T& toaddfront) {

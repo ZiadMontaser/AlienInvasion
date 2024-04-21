@@ -14,6 +14,7 @@
 class AlienArmy
 {
 public:
+	Game* pGame;
 	LinkedQueue<AlienSoldier*> Soldiers;
 	Monester* Monesters[1000];
 	DoublyEndedQueue<Drone*> Drones;
@@ -27,7 +28,7 @@ public:
 	
 
 public:
-	AlienArmy() {
+	AlienArmy(Game *game):pGame(game) {
 		for (int i = 0; i < 1000; i++)
 			Monesters[i] = NULL;
 	}
@@ -44,7 +45,7 @@ public:
 	int GetSoldiersCount() const;
 	int GetMonstersCount() const;
 	int GetDroneCount() const;
-
+	int GetAlienCount();
 	void Attack();
 
 	void RestoreAliveUnits();

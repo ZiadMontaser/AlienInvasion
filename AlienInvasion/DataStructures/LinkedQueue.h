@@ -100,7 +100,7 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool LinkedQueue<T>::dequeue(T& frntEntry)
+bool LinkedQueue<T>::dequeue(T &frntEntry)
 {
 	if (isEmpty())
 		return false;

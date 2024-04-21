@@ -87,6 +87,8 @@ EarthSoldier* EarthArmy::GetSoldier()
 	EarthSoldier* Chosen = nullptr;
 	if (Soldiers.dequeue(Chosen))
 	{
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -99,6 +101,8 @@ EarthTank* EarthArmy::GetTank()
 	EarthTank* Chosen = nullptr;
 	if (Tanks.pop(Chosen))
 	{
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -112,6 +116,8 @@ EarthGunnery* EarthArmy::GetGunnery()
 	int dummy;    /// may need it ?
 	if (Gunnery.dequeue(Chosen , dummy))
 	{
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -152,9 +158,7 @@ void EarthArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
 		Unit* unit;
 		ArenaList.pop(unit);
-
 		if (unit->IsDead()) continue;
-
 		EarthSoldier* soldier;
 		EarthTank* tank;
 		EarthGunnery* gunnery;
@@ -228,6 +232,23 @@ void EarthArmy::Print() const {
 	healUnits.print();
 
 	cout << endl;
+}
+
+int EarthArmy::GetEarthCount() const
+{
+	return GetTankCount() + GetSoldiersCount() + GetGunneryCount();
+}
+
+int EarthArmy::GetTankCount() const
+{
+	int count = Tanks.getCount();
+	return count;
+}
+
+int EarthArmy::GetGunneryCount() const
+{
+	int count = Gunnery.getCount();
+	return count;
 }
 
 
