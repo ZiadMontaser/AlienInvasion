@@ -40,7 +40,7 @@ void Game::ReportHealedUnit(Unit* healed)
 #define KEY_DOWN 80
 #define ESCAPE 8
 
-void PrintMainMenue(string file, UIMode mode, bool isSelectionMenu) {
+void PrintMainMenue(string file, string ofile, UIMode mode, bool isSelectionMenu) {
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
@@ -59,7 +59,10 @@ void PrintMainMenue(string file, UIMode mode, bool isSelectionMenu) {
 	cout << "Input File Name: ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	cout << (file.empty() ? "(testfile.txt)" : file) << endl;
-
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+	cout << "Output File Name: ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << (ofile.empty() ? "(testfile.txt)" : ofile) << endl;
 	if (!isSelectionMenu) {
 		COORD pos = { 17 + file.length(), 9 };
 		SetConsoleCursorPosition(hConsole, pos);
@@ -77,11 +80,12 @@ void PrintMainMenue(string file, UIMode mode, bool isSelectionMenu) {
 
 void Game::HandleUI() {
 
-	PrintMainMenue(inputFileDir, uiMode, false);
+	PrintMainMenue(inputFileDir, outputFileDir,uiMode, false);
 
 	string file;
-
+	string ofile;
 	char c = 0;
+	char co = 0;
 	do {
 		c = _getch();
 		if (c == ENTER)
@@ -95,13 +99,29 @@ void Game::HandleUI() {
 		else
 			file += c;
 
-		PrintMainMenue(file, uiMode, false);
+		PrintMainMenue(file, ofile, uiMode, false);
 
 	} while (true);
+	do {
+		co = _getch();
+		if (co == ENTER)
+			break;
 
+		if (co == ESCAPE) {
+			if (!ofile.empty()) {
+				ofile.erase(ofile.length() - 1);
+			}
+		}
+		else
+			ofile += co;
+
+		PrintMainMenue(file, ofile, uiMode, false);
+
+	} while (true);
 	file = file.empty() ? "testfile.txt" : file + ".txt";
 	inputFileDir = file;
-
+	ofile = ofile.empty() ? "testfile.txt" : ofile + ".txt";
+	outputFileDir = ofile;
 	int modeIndex = 0;
 	do{
 		if (c == KEY_UP) {
@@ -113,7 +133,7 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		PrintMainMenue(file, (UIMode)modeIndex, true);
+		PrintMainMenue(file, ofile, (UIMode)modeIndex, true);
 	} while ((c = _getch()) != ENTER);
 	uiMode = (UIMode) modeIndex;
 }
@@ -125,7 +145,8 @@ void Game::outfile()
 	int AsDestrCount = 0, AmDestrCount = 0, AdDestrCount = 0;
 	int EDf = 0, EDb = 0, EDd = 0;
 	int ADf = 0, ADb = 0, ADd = 0;
-	outfile.open("battle_results.txt", ios::out);
+
+	outfile.open(outputFileDir.c_str(), ios::out);
 	if (outfile.is_open())
 	{
 		string table = "Td\tID\tTj\tDf\tDd\tDb\n";
@@ -283,14 +304,6 @@ void Game::StartSimulation() {
 
 		earthArmy->Attack();
 		alienArmy->Attack();
-
-		if (uiMode == UIMode::Interactive) {
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-			SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-			cout << '\n' << "Press enter to continue...";
-			while (_getch() != ENTER);
-		}
 		if (currentTimeStep >= 40 && (earthArmy->GetEarthCount() == 0 || alienArmy->GetAlienCount() == 0))
 		{
 			if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
@@ -310,6 +323,14 @@ void Game::StartSimulation() {
 			}
 			break;
 		}
+		if (uiMode == UIMode::Interactive) {
+			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+			cout << '\n' << "Press enter to continue...";
+			while (_getch() != ENTER);
+		}
+
 		currentTimeStep++;
 	}
 	outfile();
@@ -394,6 +415,7 @@ void Game::PrintSilentMessages() const {
 	system("CLS");
 	cout << "Silent Mode" << endl;
 	cout << "Simulation starts...";
+	cout << "Simulation ends, output file is created: " << outputFileDir << endl;
 }
 
 void Game::Print() const {

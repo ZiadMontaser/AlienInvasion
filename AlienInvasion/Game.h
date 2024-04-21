@@ -28,6 +28,7 @@ class Game
 	LinkedQueue<Unit* > KilledList;
 	EndBattle endbattle = DRAW;
 	string inputFileDir;
+	string outputFileDir;
 	UIMode uiMode = UIMode::Interactive;
 
 	int currentTimeStep = 0;
