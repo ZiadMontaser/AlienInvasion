@@ -62,7 +62,7 @@ void PrintMainMenue(string file, string ofile, UIMode mode, bool isSelectionMenu
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
 	cout << "Output File Name: ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	cout << (ofile.empty() ? "(testfile.txt)" : ofile) << endl;
+	cout << (ofile.empty() ? "(battle_results.txt)" : ofile) << endl;
 	if (!isSelectionMenu) {
 		COORD pos = { 17 + file.length(), 9 };
 		SetConsoleCursorPosition(hConsole, pos);
@@ -120,7 +120,7 @@ void Game::HandleUI() {
 	} while (true);
 	file = file.empty() ? "testfile.txt" : file + ".txt";
 	inputFileDir = file;
-	ofile = ofile.empty() ? "testfile.txt" : ofile + ".txt";
+	ofile = ofile.empty() ? "battle_results.txt" : ofile + ".txt";
 	outputFileDir = ofile;
 	int modeIndex = 0;
 	do{
@@ -306,20 +306,23 @@ void Game::StartSimulation() {
 		alienArmy->Attack();
 		if (currentTimeStep >= 40 && (earthArmy->GetEarthCount() == 0 || alienArmy->GetAlienCount() == 0))
 		{
-			if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
+			if (uiMode == UIMode::Interactive)
 			{
-				endbattle = DRAW;
-				cout << "Battle ended in draw";
-			}
-			else if (earthArmy->GetEarthCount() != 0 && alienArmy->GetAlienCount() == 0)
-			{
-				endbattle = EARTHWON;
-				cout << "Earth Army Won";
-			}
-			else
-			{
-				endbattle = ALIENWON;
-				cout << "ALien Army Won";
+				if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
+				{
+					endbattle = DRAW;
+					cout << "Battle ended in draw";
+				}
+				else if (earthArmy->GetEarthCount() != 0 && alienArmy->GetAlienCount() == 0)
+				{
+					endbattle = EARTHWON;
+					cout << "Earth Army Won";
+				}
+				else
+				{
+					endbattle = ALIENWON;
+					cout << "ALien Army Won";
+				}
 			}
 			break;
 		}
