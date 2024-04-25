@@ -7,15 +7,15 @@ class EarthSoldier :
     public Unit
 {
 
-    int TimeSpentUML=0;
+    int TimestartUML=0;
 public:
     EarthSoldier(Game* game, int id, double health, int joinTime, double attackPower, int attackCapacity):
         Unit(game, id, health, EARTH_SOLDIER, joinTime, attackPower, attackCapacity) {}
 
     void Attack();
-    void ResetHealTime() { TimeSpentUML = 0; }
-    int GetTimeHeal() { return TimeSpentUML; }
-    void SetTimeHeal(int T) { TimeSpentUML = T; }
+    void ResetHealTime() { TimestartUML = 0; }
+    int GetTimestartHeal() { return TimestartUML; }
+    void SetTimeHeal(int T) { TimestartUML = T; }
 };
 
 #endif

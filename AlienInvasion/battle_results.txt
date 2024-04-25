@@ -2,16 +2,16 @@ Td	ID	Tj	Df	Dd	Db
 
 =============================================================
 
-Earth Army Won The Battle
+Alien Army Won The Battle
 
 =============================================================
 
 Earth Statistics:
-ES Count-> 7
+ES Count-> 0
 ET Count-> 0
 EG Count-> 0
 
-ES_destructed:ES_total-> 0%
+There is no Earth Soldiers
 There is no Earth Gunnerys
 There is no Earth Tanks
 
@@ -20,11 +20,11 @@ total Db = 0
 =============================================================
 
 Alien Statistics:
-AS Count-> 0
+AS Count-> 7
 AD Count-> 0
 AM Count-> 0
 
-There is no Alien Soldiers
+AS_destructed:AS_total-> 0%
 There is no Alien Drone
 There is no Alien Monsters
 
