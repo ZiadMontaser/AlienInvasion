@@ -7,16 +7,17 @@ Earth Army Won The Battle
 =============================================================
 
 Earth Statistics:
-ES Count-> 7
-ET Count-> 0
+ES Count-> 15
+ET Count-> 6
 EG Count-> 0
 
 ES_destructed:ES_total-> 0%
 There is no Earth Gunnerys
-There is no Earth Tanks
+ET_destructed:ET_total-> 0%
 
-There is no Destructed Earth Army
-total Db = 0
+Total Destructed Earth Units : Total Earth Units-> 0%
+
+there no destructed alien armytotal Db = 0
 =============================================================
 
 Alien Statistics:
@@ -28,5 +29,7 @@ There is no Alien Soldiers
 There is no Alien Drone
 There is no Alien Monsters
 
-There is no Destructed Alien Army
+There is Alien Army
+
+There is Alien Army
 total Db = 0

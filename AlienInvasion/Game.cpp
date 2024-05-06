@@ -35,6 +35,9 @@ void Game::ReportHealedUnit(Unit* healed)
 		earthArmy->AddTank(et);
 }
 
+
+
+
 #define ENTER 13
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -141,9 +144,9 @@ void Game::HandleUI() {
 void Game::outfile()
 {
 	fstream outfile;
-	int EsDestrCount = 0, EtDestrCount = 0, EgDestrCount = 0;
-	int AsDestrCount = 0, AmDestrCount = 0, AdDestrCount = 0;
-	int EDf = 0, EDb = 0, EDd = 0;
+	double EsDestrCount = 0, EtDestrCount = 0, EgDestrCount = 0;
+	double AsDestrCount = 0, AmDestrCount = 0, AdDestrCount = 0;
+	double EDf = 0, EDb = 0, EDd = 0;
 	int ADf = 0, ADb = 0, ADd = 0;
 
 	outfile.open(outputFileDir.c_str(), ios::out);
@@ -182,17 +185,17 @@ void Game::outfile()
 				<< "\t" << temp->getDestructDelay() << "\t" << temp->getBattleTime() << "\n";
 		}
 		outfile << "\n=============================================================\n";
-		int Es_total = EsDestrCount + earthArmy->GetSoldiersCount();
-		int Et_total = EtDestrCount + earthArmy->GetTankCount();
-		int Eg_total = EgDestrCount + earthArmy->GetGunneryCount();
-		int total_earth = Es_total + Et_total + Eg_total;
-		int total_desEarth = EsDestrCount + EtDestrCount + EgDestrCount;
+		double Es_total = EsDestrCount + earthArmy->GetSoldiersCount();
+		double Et_total = EtDestrCount + earthArmy->GetTankCount();
+		double Eg_total = EgDestrCount + earthArmy->GetGunneryCount();
+		double total_earth = Es_total + Et_total + Eg_total;
+		double total_desEarth = EsDestrCount + EtDestrCount + EgDestrCount;
 
-		int As_total = AsDestrCount + alienArmy->GetSoldiersCount();
-		int Ad_total = AdDestrCount + alienArmy->GetDroneCount();
-		int Am_total = AmDestrCount + alienArmy->GetMonstersCount();
-		int total_alien = As_total + Ad_total + Am_total;
-		int total_desAlien = AsDestrCount + AdDestrCount + AmDestrCount;
+		double As_total = AsDestrCount + alienArmy->GetSoldiersCount();
+		double Ad_total = AdDestrCount + alienArmy->GetDroneCount();
+		double Am_total = AmDestrCount + alienArmy->GetMonstersCount();
+		double total_alien = As_total + Ad_total + Am_total;
+		double total_desAlien = AsDestrCount + AdDestrCount + AmDestrCount;
 		string str;
 
 		if (endbattle == EARTHWON)
@@ -203,7 +206,7 @@ void Game::outfile()
 			outfile << "\nThe Battle Ended With Draw\n";
 		outfile << "\n=============================================================\n";
 		
-		int EsAvg = 0, EgAvg = 0, EtAvg = 0, AsAvg = 0, AmAvg = 0, AdAvg = 0;
+		double EsAvg = 0, EgAvg = 0, EtAvg = 0, AsAvg = 0, AmAvg = 0, AdAvg = 0;
 		if (Es_total) EsAvg = (double)(EsDestrCount / Es_total) * 100.0;
 		if (Et_total) EtAvg = (double)(EtDestrCount / Et_total) * 100.0;
 		if (Eg_total) EgAvg = (double)(EgDestrCount / Eg_total) * 100.0;
@@ -224,14 +227,17 @@ void Game::outfile()
 			outfile << "ET_destructed:ET_total-> " << EtAvg << "%\n";
 		else
 			outfile << "There is no Earth Tanks\n";
-		if (total_desEarth)
+		if (total_earth)
 		{
-			outfile << "\nTotal Earth Units : Total Destructed Earth Units-> " << (double)(total_earth / total_desEarth) * 100.0 << "%\n";
-			outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
+			outfile << "\nTotal Destructed Earth Units : Total Earth Units-> " << (double)(total_desEarth / total_earth) * 100.0 << "%\n";
+			if (total_desEarth)
+				outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
 				<< "\nAverage of Dd-> " << (double)(EDd / total_desEarth) << "\n";
+			else
+				outfile << "\nthere no destructed alien army";
 		}
 		else
-			outfile << "\nThere is no Destructed Earth Army\n";
+			outfile << "\nThere is no Earth Army\n";
 
 		if (EDb)
 		{
@@ -255,14 +261,18 @@ void Game::outfile()
 			outfile << "AM_destructed:AM_total-> " << AmAvg << "%\n";
 		else
 			outfile << "There is no Alien Monsters\n";
-		if (total_desAlien)
+		if (total_alien)
 		{
-			outfile << "\nTotal Alien Units : Total Destructed Alien Units-> " << (double)(total_alien / total_desAlien) * 100.0 << "%\n";
+			outfile << "\nTotal Destructed Alien Units : Total Alien Units :-> " << (double)(total_desAlien / total_alien) * 100.0 << "%\n";
+			if (total_desAlien)
 			outfile << "\nAverage of Df-> " << (double)(ADf / total_desAlien) << "\nAverage of Db-> " << (double)(ADb / total_desAlien)
 				<< "\nAverage of Dd-> " << (double)(ADd / total_desAlien) << "\n";
+			else
+				outfile << "\nThere is no destructed Alien Army\n";
 		}
 		else
-			outfile << "\nThere is no Destructed Alien Army\n";
+			outfile << "\nThere is Alien Army\n";
+			outfile << "\nThere is Alien Army\n";
 		if (ADb)
 		{
 			outfile << "\nDf / Db = " << (double)(ADf / ADb) * 100.0 << "%\nDd / Db = "
