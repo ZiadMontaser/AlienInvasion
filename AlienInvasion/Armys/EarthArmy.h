@@ -50,6 +50,8 @@ public:
 	int GetSoldiersCount() const;
 	int GetTankCount() const;
 	int GetGunneryCount() const;
+	int GetSoldierCountinUML() const;
+	int GetTankCountinUML() const;
 	int IsLowSoldiersMode() const;
 
 	void RestoreAliveUnits();

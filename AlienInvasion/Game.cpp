@@ -154,7 +154,7 @@ void Game::outfile()
 	double EsDestrCount = 0, EtDestrCount = 0, EgDestrCount = 0;
 	double AsDestrCount = 0, AmDestrCount = 0, AdDestrCount = 0;
 	double EDf = 0, EDb = 0, EDd = 0;
-	int ADf = 0, ADb = 0, ADd = 0;
+	double ADf = 0, ADb = 0, ADd = 0;
 
 	outfile.open(outputFileDir.c_str(), ios::out);
 	if (outfile.is_open())
@@ -192,8 +192,8 @@ void Game::outfile()
 				<< "\t" << temp->getDestructDelay() << "\t" << temp->getBattleTime() << "\n";
 		}
 		outfile << "\n=============================================================\n";
-		double Es_total = EsDestrCount + earthArmy->GetSoldiersCount();
-		double Et_total = EtDestrCount + earthArmy->GetTankCount();
+		double Es_total = EsDestrCount + earthArmy->GetSoldiersCount() + earthArmy->GetSoldierCountinUML();
+		double Et_total = EtDestrCount + earthArmy->GetTankCount() + earthArmy->GetTankCountinUML();
 		double Eg_total = EgDestrCount + earthArmy->GetGunneryCount();
 		double total_earth = Es_total + Et_total + Eg_total;
 		double total_desEarth = EsDestrCount + EtDestrCount + EgDestrCount;
@@ -241,7 +241,7 @@ void Game::outfile()
 				outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
 				<< "\nAverage of Dd-> " << (double)(EDd / total_desEarth) << "\n";
 			else
-				outfile << "\nthere no destructed alien army";
+				outfile << "\nthere no destructed earth army\n";
 		}
 		else
 			outfile << "\nThere is no Earth Army\n";

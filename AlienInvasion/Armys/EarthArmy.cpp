@@ -275,4 +275,14 @@ int EarthArmy::GetGunneryCount() const
 	return count;
 }
 
+int EarthArmy::GetSoldierCountinUML() const
+{
+	return soldierUnitMaintenanceList.getCount();
+}
+
+int EarthArmy::GetTankCountinUML() const
+{
+	return tankUnitMaintenanceList.getCount();
+}
+
 
