@@ -11,13 +11,35 @@ void HealUnit::Attack() {
     for (int i = 0; i < attackCapacity; i++)
     {
         Unit* ToHeal = pGame->GetEarthArmy()->SelectUnitFromUML();
-        if (ToHeal) {
-            heals = true;
-            ToHeal->Heal(attackPower, health);
-            TempHealList.enqueue(ToHeal);
+        
+        EarthTank* tank = dynamic_cast<EarthTank*>(ToHeal);
+        EarthSoldier* soldier = dynamic_cast<EarthSoldier*>(ToHeal);
+
+        if (tank) {
+            if (pGame->GetTimeStamp() - tank->GetTimeStartHeal() < 10) {
+                heals = true;
+                ToHeal->Heal(attackPower, health);
+                TempHealList.enqueue(ToHeal);
+            }
+            else {
+                pGame->ReportDeadUnit(ToHeal);
+            }
+        }
+        if  (soldier) {
+            if (pGame->GetTimeStamp() - soldier->GetTimestartHeal() < 10)
+            {
+                heals = true; 
+                ToHeal->Heal(attackPower, health);
+                TempHealList.enqueue(ToHeal);
+            }
+            else {
+                pGame->ReportDeadUnit(ToHeal);
+            }
         }
 
     }
+
+
     if (heals) {
         if (pGame->GetUIMode() == UIMode::Interactive) {
             cout << "EHU " << GetID() << " Heals ";

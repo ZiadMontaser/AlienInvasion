@@ -43,7 +43,7 @@ void Game::ReportHealedUnit(Unit* healed)
 #define KEY_DOWN 80
 #define ESCAPE 8
 
-void PrintMainMenue(string file, string ofile, UIMode mode, bool isSelectionMenu) {
+void PrintMainMenue(string file, string ofile, UIMode mode, bool isInputOne, bool isInputTwo, bool isSelectionMenu) {
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
@@ -65,9 +65,14 @@ void PrintMainMenue(string file, string ofile, UIMode mode, bool isSelectionMenu
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
 	cout << "Output File Name: ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	cout << (ofile.empty() ? "(battle_results.txt)" : ofile) << endl;
-	if (!isSelectionMenu) {
+	cout << (ofile.empty() ? "(output.txt)" : ofile) << endl;
+
+	if (isInputOne) {
 		COORD pos = { 17 + file.length(), 9 };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	else if (isInputTwo) {
+		COORD pos = { 17 + file.length(), 10 };
 		SetConsoleCursorPosition(hConsole, pos);
 	}
 
@@ -83,7 +88,7 @@ void PrintMainMenue(string file, string ofile, UIMode mode, bool isSelectionMenu
 
 void Game::HandleUI() {
 
-	PrintMainMenue(inputFileDir, outputFileDir,uiMode, false);
+	PrintMainMenue(inputFileDir, outputFileDir, uiMode, true, false, false);
 
 	string file;
 	string ofile;
@@ -102,9 +107,11 @@ void Game::HandleUI() {
 		else
 			file += c;
 
-		PrintMainMenue(file, ofile, uiMode, false);
+		PrintMainMenue(file, ofile, uiMode, true, false, false);
 
 	} while (true);
+
+	PrintMainMenue(file, ofile, uiMode, false, true, false);
 	do {
 		co = _getch();
 		if (co == ENTER)
@@ -118,15 +125,15 @@ void Game::HandleUI() {
 		else
 			ofile += co;
 
-		PrintMainMenue(file, ofile, uiMode, false);
+		PrintMainMenue(file, ofile, uiMode, false, true, false);
 
 	} while (true);
 	file = file.empty() ? "testfile.txt" : file + ".txt";
 	inputFileDir = file;
-	ofile = ofile.empty() ? "battle_results.txt" : ofile + ".txt";
+	ofile = ofile.empty() ? "output.txt" : ofile + ".txt";
 	outputFileDir = ofile;
 	int modeIndex = 0;
-	do{
+	do {
 		if (c == KEY_UP) {
 			modeIndex--;
 			modeIndex = max(modeIndex, 0);
@@ -136,9 +143,9 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		PrintMainMenue(file, ofile, (UIMode)modeIndex, true);
+		PrintMainMenue(file, ofile, (UIMode)modeIndex, false, false, true);
 	} while ((c = _getch()) != ENTER);
-	uiMode = (UIMode) modeIndex;
+	uiMode = (UIMode)modeIndex;
 }
 
 void Game::outfile()

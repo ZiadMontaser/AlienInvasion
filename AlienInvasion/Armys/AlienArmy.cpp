@@ -22,7 +22,7 @@ Monester* AlienArmy::GetMonester()
 		return nullptr;
 
 	srand(time(NULL));
-	int index = (rand() % (Count_Monesters + 1));
+	int index = (rand() % (Count_Monesters));
 	
 	Monester* Chosen = Monesters[index];
 	if (Chosen)
@@ -43,7 +43,7 @@ Monester* AlienArmy::GetMonesterTofight()
 		return nullptr;
 
 	srand(time(NULL));
-	int index = (rand() % (Count_Monesters + 1));
+	int index = (rand() % (Count_Monesters));
 	Monester* Chosen = Monesters[index];
 
 	return Chosen;
