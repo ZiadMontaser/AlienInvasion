@@ -1,32 +1,6 @@
-Td	ID	Tj	Df	Dd	Db
-
-=============================================================
-
-The Battle Ended With Draw
-
-=============================================================
-
-Earth Statistics:
-ES Count-> 0
-ET Count-> 0
-EG Count-> 0
-
-There is no Earth Soldiers
-There is no Earth Gunnerys
-There is no Earth Tanks
-
-There is no Destructed Earth Army
-total Db = 0
-=============================================================
-
-Alien Statistics:
-AS Count-> 0
-AD Count-> 0
-AM Count-> 0
-
-There is no Alien Soldiers
-There is no Alien Drone
-There is no Alien Monsters
-
-There is no Destructed Alien Army
-total Db = 0
+7
+70 20 10 
+80 12 8 
+40
+3-50 30-90 2-5
+1-20 40-80 1-4

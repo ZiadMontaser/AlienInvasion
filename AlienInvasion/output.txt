@@ -1,0 +1,53 @@
+Td	ID	Tj	Df	Dd	Db
+30	2004	0	30	30	30
+30	2003	0	30	30	30
+88	2001	0	88	88	88
+94	2000	0	94	94	94
+96	18	75	96	21	21
+117	2006	0	117	117	117
+117	2005	0	117	117	117
+120	2002	0	120	120	120
+
+=============================================================
+
+Earth Army Won The Battle
+
+=============================================================
+
+Earth Statistics:
+ES Count-> 25
+ET Count-> 2
+EG Count-> 3
+
+ES_destructed:ES_total-> 0%
+EG_destructed:EG_total-> 0%
+ET_destructed:ET_total-> 0%
+
+Total Earth Units : Total Destructed Earth Units-> 3000%
+
+Average of Df-> 21
+Average of Db-> 21
+Average of Dd-> 21
+
+Df / Db = 100%
+Dd / Db = 100%
+
+=============================================================
+
+Alien Statistics:
+AS Count-> 2
+AD Count-> 5
+AM Count-> 0
+
+AS_destructed:AS_total-> 100%
+AD_destructed:AD_total-> 100%
+There is no Alien Monsters
+
+Total Alien Units : Total Destructed Alien Units-> 100%
+
+Average of Df-> 85
+Average of Db-> 85
+Average of Dd-> 85
+
+Df / Db = 100%
+Dd / Db = 100%

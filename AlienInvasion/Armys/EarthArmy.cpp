@@ -232,6 +232,28 @@ void EarthArmy::Print() const {
 	healUnits.print();
 
 	cout << endl;
+	cout << (soldierUnitMaintenanceList.getCount() + tankUnitMaintenanceList.getCount());
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " UML ES ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	soldierUnitMaintenanceList.print();
+
+	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
+	{
+		COORD pos = { 3, cbsi.dwCursorPosition.Y };
+		SetConsoleCursorPosition(hConsole, pos);
+	}
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << "     ET ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	tankUnitMaintenanceList.print();
+
+	cout << endl;
 }
 
 int EarthArmy::GetEarthCount() const
