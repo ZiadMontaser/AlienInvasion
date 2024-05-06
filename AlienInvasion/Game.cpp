@@ -313,20 +313,23 @@ void Game::StartSimulation() {
 		alienArmy->Attack();
 		if (currentTimeStep >= 40 && (earthArmy->GetEarthCount() == 0 || alienArmy->GetAlienCount() == 0))
 		{
-			if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
+			if (uiMode == UIMode::Interactive)
 			{
-				endbattle = DRAW;
-				cout << "Battle ended in draw";
-			}
-			else if (earthArmy->GetEarthCount() != 0 && alienArmy->GetAlienCount() == 0)
-			{
-				endbattle = EARTHWON;
-				cout << "Earth Army Won";
-			}
-			else
-			{
-				endbattle = ALIENWON;
-				cout << "ALien Army Won";
+				if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
+				{
+					endbattle = DRAW;
+					cout << "Battle ended in draw";
+				}
+				else if (earthArmy->GetEarthCount() != 0 && alienArmy->GetAlienCount() == 0)
+				{
+					endbattle = EARTHWON;
+					cout << "Earth Army Won";
+				}
+				else
+				{
+					endbattle = ALIENWON;
+					cout << "ALien Army Won";
+				}
 			}
 			break;
 		}

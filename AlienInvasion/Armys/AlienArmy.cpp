@@ -113,10 +113,13 @@ void AlienArmy::Attack() {
 	Drone* backDrone = nullptr;
 	Drones.peek(frontDrone);
 	Drones.Rear(backDrone);
-	if (frontDrone)
-		frontDrone->Attack();
-	if (backDrone)
-		backDrone->Attack();
+	if (backDrone != frontDrone)
+	{
+		if (frontDrone)
+			frontDrone->Attack();
+		if (backDrone)
+			backDrone->Attack();
+	}
 	
 	// Monster Attack
 	Monester* M = nullptr;

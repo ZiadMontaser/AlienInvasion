@@ -75,9 +75,11 @@ void EarthArmy::MoveUnitToUML(Unit* unit) {
 	EarthTank* tank;
 	EarthSoldier* soldier;
 	if (tank = dynamic_cast<EarthTank*>(unit)) {
+		tank->SetTimeHeal(pGame->GetTimeStamp());
 		tankUnitMaintenanceList.enqueue(tank);
 	}
 	else if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
+		soldier->SetTimeHeal(pGame->GetTimeStamp());
 		soldierUnitMaintenanceList.enqueue(soldier, INT_MAX - soldier->GetHealth());
 	}
 }
