@@ -1,34 +1,39 @@
 Td	ID	Tj	Df	Dd	Db
-38	2005	31	38	7	7
-40	2003	31	40	9	9
-41	2001	31	41	10	10
-41	2002	31	41	10	10
-41	2004	31	41	10	10
-42	2006	31	42	11	11
-50	2000	31	50	19	19
+17	5	6	17	11	11
+24	11	10	24	14	14
+25	1	6	25	19	19
+25	0	6	25	19	19
+27	12	10	27	17	17
+29	8	10	29	19	19
+31	20	20	31	11	11
 
 =============================================================
 
-Earth Army Won The Battle
+Alien Army Won The Battle
 
 =============================================================
 
 Earth Statistics:
-ES Count-> 7
+ES Count-> 21
 ET Count-> 0
 EG Count-> 0
 
-ES_destructed:ES_total-> 0%
+ES_destructed:ES_total-> 33.3333%
 There is no Earth Gunnerys
 There is no Earth Tanks
 
-Total Destructed Earth Units : Total Earth Units-> 0%
-Total Units in UML : Total Earht Units->0%
+Total Destructed Earth Units : Total Earth Units-> 33.3333%
+Total Units in UML : Total Earth Units->66.6667%
 
-Healed Units : Total Earth Units0%
+Healed Units : Total Earth Units-> 0%
 
-there no destructed earth army
-total Db = 0
+Average of Df-> 15.7143
+Average of Db-> 15.7143
+Average of Dd-> 15.7143
+
+Df / Db = 100%
+Dd / Db = 100%
+
 =============================================================
 
 Alien Statistics:
@@ -36,15 +41,11 @@ AS Count-> 7
 AD Count-> 0
 AM Count-> 0
 
-AS_destructed:AS_total-> 100%
+AS_destructed:AS_total-> 0%
 There is no Alien Drone
 There is no Alien Monsters
 
-Total Destructed Alien Units : Total Alien Units :-> 100%
+Total Destructed Alien Units : Total Alien Units-> 0%
 
-Average of Df-> 10.8571
-Average of Db-> 10.8571
-Average of Dd-> 10.8571
-
-Df / Db = 100%
-Dd / Db = 100%
+There is no destructed Alien Army
+total Db = 0
