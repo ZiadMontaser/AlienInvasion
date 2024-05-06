@@ -26,7 +26,7 @@ class EarthArmy
 	LinkedQueue<EarthTank*> tankUnitMaintenanceList;
 
 	bool isLowSoldiersMode = false;
-    
+	int healedcount = 0;
 
 public:
 	EarthArmy(Game* game):pGame(game){}
@@ -52,6 +52,7 @@ public:
 	int GetGunneryCount() const;
 	int GetSoldierCountinUML() const;
 	int GetTankCountinUML() const;
+	int GetHealedCount() const;
 	int IsLowSoldiersMode() const;
 
 	void RestoreAliveUnits();

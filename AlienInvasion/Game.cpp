@@ -203,6 +203,7 @@ void Game::outfile()
 		double Am_total = AmDestrCount + alienArmy->GetMonstersCount();
 		double total_alien = As_total + Ad_total + Am_total;
 		double total_desAlien = AsDestrCount + AdDestrCount + AmDestrCount;
+		double umlcount = earthArmy->GetSoldierCountinUML() + earthArmy->GetTankCountinUML();
 		string str;
 
 		if (endbattle == EARTHWON)
@@ -237,14 +238,18 @@ void Game::outfile()
 		if (total_earth)
 		{
 			outfile << "\nTotal Destructed Earth Units : Total Earth Units-> " << (double)(total_desEarth / total_earth) * 100.0 << "%\n";
+			outfile << "Total Units in UML : Total Earth Units->" << (double)(umlcount / total_earth) * 100.0 << "%\n";
+			double healed = earthArmy->GetHealedCount();
+			outfile << "\nHealed Units : Total Earth Units-> " << (double)(healed / total_earth) * 100.0 << "%\n";
+		}
+		else
+			outfile << "\nThere is no Earth Army\n";
 			if (total_desEarth)
 				outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
 				<< "\nAverage of Dd-> " << (double)(EDd / total_desEarth) << "\n";
 			else
 				outfile << "\nthere no destructed earth army\n";
-		}
-		else
-			outfile << "\nThere is no Earth Army\n";
+
 
 		if (EDb)
 		{
@@ -270,16 +275,19 @@ void Game::outfile()
 			outfile << "There is no Alien Monsters\n";
 		if (total_alien)
 		{
-			outfile << "\nTotal Destructed Alien Units : Total Alien Units :-> " << (double)(total_desAlien / total_alien) * 100.0 << "%\n";
+			outfile << "\nTotal Destructed Alien Units : Total Alien Units-> " << (double)(total_desAlien / total_alien) * 100.0 << "%\n";
+		}
+		else
+			outfile << "\nThere is no Alien Army\n";
 			if (total_desAlien)
 			outfile << "\nAverage of Df-> " << (double)(ADf / total_desAlien) << "\nAverage of Db-> " << (double)(ADb / total_desAlien)
 				<< "\nAverage of Dd-> " << (double)(ADd / total_desAlien) << "\n";
 			else
 				outfile << "\nThere is no destructed Alien Army\n";
-		}
-		else
-			outfile << "\nThere is Alien Army\n";
-			outfile << "\nThere is Alien Army\n";
+		
+		
+
+			//outfile << "\nThere is Alien Army\n";
 		if (ADb)
 		{
 			outfile << "\nDf / Db = " << (double)(ADf / ADb) * 100.0 << "%\nDd / Db = "
@@ -318,9 +326,6 @@ void Game::StartSimulation() {
 			cout << endl;
 			cout << "===========" << " Units Fighting at Current Timestep " << "===========" << endl;
 		}
-
-		earthArmy->Attack();
-		alienArmy->Attack();
 		if (currentTimeStep >= 40 && (earthArmy->GetEarthCount() == 0 || alienArmy->GetAlienCount() == 0))
 		{
 			if (uiMode == UIMode::Interactive)
@@ -341,8 +346,12 @@ void Game::StartSimulation() {
 					cout << "ALien Army Won";
 				}
 			}
+			//Print();
 			break;
 		}
+		earthArmy->Attack();
+		alienArmy->Attack();
+
 		if (uiMode == UIMode::Interactive) {
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 

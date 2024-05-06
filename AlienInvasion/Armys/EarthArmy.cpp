@@ -131,6 +131,7 @@ void EarthArmy::RemoveHealUnit()
 {
 	HealUnit* Chosen = nullptr;
 	healUnits.pop(Chosen);
+	healedcount++;
 
 }
 
@@ -283,6 +284,11 @@ int EarthArmy::GetSoldierCountinUML() const
 int EarthArmy::GetTankCountinUML() const
 {
 	return tankUnitMaintenanceList.getCount();
+}
+
+int EarthArmy::GetHealedCount() const
+{
+	return healedcount;
 }
 
 
