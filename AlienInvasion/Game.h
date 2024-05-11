@@ -35,6 +35,7 @@ class Game
 	string outputFileDir;
 	UIMode uiMode = UIMode::Interactive;
 
+	int InfectionThreshold;
 	int currentTimeStep = 0;
 
 public:

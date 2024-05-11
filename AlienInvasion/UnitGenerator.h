@@ -27,6 +27,7 @@ public:
 	void ReadParameters(int ,int , int , int ,int,int , int, int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
 	void GenerateEarth();
 	void GenerateAlien();
+	void GenerateSaverUnits();
 
 };
 

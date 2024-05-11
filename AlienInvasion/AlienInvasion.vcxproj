@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="UI_helpers.h" />
+    <ClInclude Include="Units\EarthSaverUnit.h" />
     <ClInclude Include="Units\HealUnit.h" />
     <ClInclude Include="UnitGenerator.h" />
     <ClInclude Include="Units\AlienSoldier.h" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Units\Drones.cpp" />
+    <ClCompile Include="Units\EarthSaverUnit.cpp" />
     <ClCompile Include="Units\HealUnit.cpp" />
     <ClCompile Include="UnitGenerator.cpp" />
     <ClCompile Include="Units\AlienSoldier.cpp" />

@@ -45,7 +45,7 @@ void Game::ReportHealedUnit(Unit* healed)
 #define ESCAPE 8
 
 void AnimateLogo() {
-	PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	///PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
 	ifstream logoFile("Resources/Animations/logo.txt");
 	string imported[15];
@@ -373,6 +373,21 @@ void Game::StartSimulation() {
 			//Print();
 			break;
 		}
+		/// Emergency check
+		if (((float)earthArmy->GetInfectedCount() / earthArmy->GetSoldiersCount()) * 100 >= InfectionThreshold) {
+			
+			earthArmy->SetEmergency(true);
+		}
+		else if (earthArmy->GetInfectedCount() == 0) {
+			earthArmy->SetEmergency(false);
+			earthArmy->RemoveReinforcement();
+
+		}
+
+		if (earthArmy->EmergencyState() == true) {
+			generator.GenerateSaverUnits();
+		}
+
 		earthArmy->Attack();
 		alienArmy->Attack();
 
@@ -404,12 +419,14 @@ void Game::ReadinputFile(UnitGenerator& generator)
 		int AS, AM, AD;
 		int Prob;
 		int InfectionProb;
+		
 
 		inputfile >> numberOfUnits;
 		inputfile >> ES >> ET >> EG>>EHU;
 		inputfile >> AS >> AM >> AD;
 		inputfile >> Prob;
 		inputfile >> InfectionProb;
+		inputfile >> InfectionThreshold;        /// parameter in the game class 
 
 		inputfile >> temp;
 		int EarthPowerLower = abs(temp);

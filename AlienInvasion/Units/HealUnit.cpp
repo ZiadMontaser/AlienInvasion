@@ -74,11 +74,6 @@ void HealUnit::Attack() {
         this->KILL();
 
     }
-    
-
-   
-
-    
 }
 
 void HealUnit::KILL()

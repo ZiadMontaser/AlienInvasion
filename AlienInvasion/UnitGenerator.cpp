@@ -190,3 +190,20 @@ void UnitGenerator::GenerateAlien()
 		return;
 }
 
+
+void UnitGenerator::GenerateSaverUnits() {
+
+	
+	int JoinTime = pGame->GetTimeStamp();
+	
+		pGame->GetEarthArmy()->AddSaverUnit(new EarthSaverUnit(
+			pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+			JoinTime,
+			numberGEN(EarthPowerLower, EarthPowerUpper),
+			numberGEN(EarthCapacityLower, EarthCapacityUpper))
+		);
+
+		
+	
+}
+

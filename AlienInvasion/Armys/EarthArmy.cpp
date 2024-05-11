@@ -37,6 +37,12 @@ void EarthArmy::Attack()
 	if (gunnery) {
 		gunnery->Attack();
 	}
+	EarthSaverUnit* Sv = NULL;
+	AlliedArmy.peek(Sv);
+	if (Sv) {
+
+		Sv->Attack();
+	}
 
 	HealUnit* Healunit = nullptr;
 	healUnits.peek(Healunit);
@@ -44,7 +50,7 @@ void EarthArmy::Attack()
 
 		Healunit->Attack();
 	}
-
+	
 }
 
 
@@ -71,6 +77,12 @@ void EarthArmy::AddHealUnit(HealUnit* G) {
 	healUnits.push(G);
 }
 
+void EarthArmy::AddSaverUnit(EarthSaverUnit* Sv)
+{
+	if (!Sv) return;
+	AlliedArmy.enqueue(Sv);
+}
+
 void EarthArmy::MoveUnitToUML(Unit* unit) {
 	if (!unit) return;
 
@@ -85,6 +97,23 @@ void EarthArmy::MoveUnitToUML(Unit* unit) {
 		soldierUnitMaintenanceList.enqueue(soldier, INT_MAX - soldier->GetHealth());
 	}
 }
+
+int EarthArmy::GetInfectedCount()
+{
+	return InfectedSoldiersCount;
+}
+
+void EarthArmy::SetEmergency(bool state) {
+
+	Emergency = state;
+}
+
+bool EarthArmy::EmergencyState()
+{
+	return Emergency;
+}
+
+
 
 EarthSoldier* EarthArmy::GetSoldier()
 {
@@ -130,6 +159,27 @@ EarthGunnery* EarthArmy::GetGunnery()
 	return NULL;
 }
 
+EarthSaverUnit* EarthArmy::GetSaverUnit() {
+	EarthSaverUnit* chosen;
+	if (AlliedArmy.dequeue(chosen)) {
+		chosen->SetAttackedTime(pGame->GetTimeStamp());
+		ArenaList.push(chosen);
+		return chosen;
+	}
+	return NULL;
+}
+
+void EarthArmy::RemoveReinforcement()
+{
+	EarthSaverUnit* chosen;
+
+	while (!AlliedArmy.isEmpty()) {
+		AlliedArmy.dequeue(chosen);
+		chosen->KILL();
+	}
+}
+
+
 void EarthArmy::RemoveHealUnit() 
 {
 	HealUnit* Chosen = nullptr;
@@ -168,6 +218,7 @@ void EarthArmy::RestoreAliveUnits() {
 		EarthSoldier* soldier;
 		EarthTank* tank;
 		EarthGunnery* gunnery;
+		EarthSaverUnit* Saver;
 
 		if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
 			if (unit->GetHealth() < 0.2 * unit->GetMaxHealth()) { MoveUnitToUML(unit); }
@@ -181,6 +232,9 @@ void EarthArmy::RestoreAliveUnits() {
 		}
 		else if (gunnery = dynamic_cast<EarthGunnery*>(unit)) {
 			AddGunnery(gunnery);
+		}
+		else if (Saver = dynamic_cast<EarthSaverUnit*> (unit)) {
+			AddSaverUnit(Saver);
 		}
 	}
 }
@@ -216,6 +270,15 @@ void EarthArmy::Print() const {
 	cout << " EHU ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	healUnits.print();
+
+	if (Emergency) {
+
+		cout << AlliedArmy.getCount() << half_tab;
+		SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+		cout << " ESV ";
+		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+		AlliedArmy.print();
+	}
 
 	cout << endl;
 	cout << (soldierUnitMaintenanceList.getCount() + tankUnitMaintenanceList.getCount()) << half_tab;

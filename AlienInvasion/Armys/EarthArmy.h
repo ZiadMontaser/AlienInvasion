@@ -10,6 +10,8 @@
 #include "../Units/EarthGunnery.h"
 #include "../Units/EarthTank.h"
 #include "../Units/HealUnit.h"
+#include "../Units/EarthSaverUnit.h"
+
 
 class EarthArmy
 {
@@ -20,6 +22,7 @@ class EarthArmy
 	ArrayStack<EarthTank*> Tanks;
 	PriorityQueue<EarthGunnery*> Gunnery;
 	ArrayStack<HealUnit*> healUnits;
+	LinkedQueue<EarthSaverUnit*> AlliedArmy;
 
 	ArrayStack<Unit*> ArenaList;
 	PriorityQueue<EarthSoldier*> soldierUnitMaintenanceList;
@@ -27,7 +30,7 @@ class EarthArmy
 
 	bool isLowSoldiersMode = false;
 	int InfectedSoldiersCount = 0;
-
+	bool Emergency = false;
 	int healedcount = 0;
 
 public:
@@ -39,12 +42,18 @@ public:
 	void AddTank(EarthTank* T);
 	void AddGunnery(EarthGunnery* G);
 	void AddHealUnit(HealUnit* G);
+	void AddSaverUnit(EarthSaverUnit* Sv);
 
 	void MoveUnitToUML(Unit* unit);
+	int GetInfectedCount();
+	void SetEmergency(bool);
+	bool EmergencyState();
 
 	EarthSoldier* GetSoldier();
 	EarthTank* GetTank();
 	EarthGunnery* GetGunnery();
+	EarthSaverUnit* GetSaverUnit();
+	void RemoveReinforcement();
     void RemoveHealUnit();
 	Unit* SelectUnitFromUML();
 
