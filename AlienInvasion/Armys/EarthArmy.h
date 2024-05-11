@@ -28,6 +28,8 @@ class EarthArmy
 	bool isLowSoldiersMode = false;
 	int InfectedSoldiersCount = 0;
 
+	int healedcount = 0;
+
 public:
 	EarthArmy(Game* game):pGame(game){}
 
@@ -50,6 +52,9 @@ public:
 	int GetSoldiersCount() const;
 	int GetTankCount() const;
 	int GetGunneryCount() const;
+	int GetSoldierCountinUML() const;
+	int GetTankCountinUML() const;
+	int GetHealedCount() const;
 	int IsLowSoldiersMode() const;
 
 	void RestoreAliveUnits();

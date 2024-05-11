@@ -60,9 +60,11 @@ void HealUnit::Attack() {
                 EarthSoldier* S = dynamic_cast <EarthSoldier*> (Return);
 
                 if (S) {
+                    S->ResetHealTime();
                     pGame->GetEarthArmy()->AddSoldier(S);
                 }
                 else if (T)
+                    T->ResetHealTime();
                     pGame->GetEarthArmy()->AddTank(T);
 
             }
