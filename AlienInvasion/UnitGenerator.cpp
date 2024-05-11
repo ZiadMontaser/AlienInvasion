@@ -24,9 +24,10 @@ UnitGenerator::UnitGenerator(Game* game) {
 }
 
 void UnitGenerator::ReadParameters(int NumberOfUnits,
-	int es, int et, int eg,int ehu,
+	int es, int et, int eg, int ehu,
 	int as, int am, int ad,
 	int prob,
+	int infectionProb,
 	int earthPowerLower,
 	int earthPowerUpper,
 	int earthHealthLower,
@@ -49,6 +50,7 @@ void UnitGenerator::ReadParameters(int NumberOfUnits,
 	this->AM = am;
 	this->AD = ad;
 	this->Prob = prob;
+	this->InfectionProb = infectionProb;
 	this->EarthPowerLower = earthPowerLower;
 	this->EarthPowerUpper = earthPowerUpper;
 	this->EarthHealthLower = earthHealthLower;
@@ -157,7 +159,7 @@ void UnitGenerator::GenerateAlien()
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
 					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
-					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+					numberGEN(AlienCapacityLower, AlienCapacityUpper), InfectionProb)
 				);
 
 			}

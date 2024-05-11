@@ -27,6 +27,8 @@ protected:
 	int attackPower;
 	int attackCapacity;
 	const int MaxHealth;
+	bool isInfected = false;
+	bool isImune = false;
 
 	/// Times
 	int joinTime;
@@ -55,11 +57,11 @@ public:
 	double GetHealth() { return health; };
 	double GetPower() { return attackPower; };
 	int GetCapacity() { return attackCapacity; };
-	double GetMaxHealth(){ return MaxHealth; }
+	double GetMaxHealth() { return MaxHealth; }
 
 	bool IsDead() { return health <= 0; }
 
-	void SetDeathTime(int T) {  DeathTime = T;  }
+	void SetDeathTime(int T) { DeathTime = T; }
 	void SetAttackedTime(int T) { AttackedTime = T; }
 
 	int GetDeathTime() const { return DeathTime; }
@@ -68,6 +70,10 @@ public:
 	int getAttackDelay() const { return AttackedTime - joinTime; }
 	int getDestructDelay() const { return DeathTime - joinTime; };
 	int getBattleTime() const { return DeathTime - joinTime; }
+
+	bool IsInfected() const { return isInfected; }
+	void Infect();
+	void TreatInfection();
 };
 
 std::ostream& operator<<(std::ostream& out, Unit* unit);

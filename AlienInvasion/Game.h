@@ -11,7 +11,11 @@
 
 #define FOREGROUND_WHITE FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN
 #define FOREGROUND_YELLOW FOREGROUND_RED | FOREGROUND_GREEN
-
+enum class FocusMode {
+	InFileInput,
+	OutFileInput,
+	ModeSelection
+};
 enum class UIMode {
 	Interactive = 0,
 	Silent = 1

@@ -92,6 +92,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI_helpers.h" />
     <ClInclude Include="Units\HealUnit.h" />
     <ClInclude Include="UnitGenerator.h" />
     <ClInclude Include="Units\AlienSoldier.h" />
@@ -174,6 +176,12 @@
     <ClCompile Include="Units\EarthTank.cpp" />
     <ClCompile Include="Units\Monester.cpp" />
     <ClCompile Include="Units\Unit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\background.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Animations\logo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

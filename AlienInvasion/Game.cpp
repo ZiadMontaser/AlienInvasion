@@ -4,8 +4,7 @@
 #include <cmath>
 #include <conio.h>
 #include <fstream>
-
-
+#include <mmsystem.h>
 Game::Game() {
 	alienArmy = new AlienArmy(this);
 	earthArmy = new EarthArmy(this);
@@ -29,8 +28,10 @@ void Game::ReportHealedUnit(Unit* healed)
 {
 	EarthSoldier* es = dynamic_cast<EarthSoldier*>(healed);
 	EarthTank* et = dynamic_cast<EarthTank*>(healed);
-	if (es)
+	if (es) {
+		if (es->IsInfected()) es->TreatInfection();
 		earthArmy->AddSoldier(es);
+	}
 	else if (et)
 		earthArmy->AddTank(et);
 }
@@ -40,7 +41,29 @@ void Game::ReportHealedUnit(Unit* healed)
 #define KEY_DOWN 80
 #define ESCAPE 8
 
-void PrintMainMenue(string file, string ofile, UIMode mode, bool isInputOne, bool isInputTwo, bool isSelectionMenu) {
+void AnimateLogo() {
+	PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
+	ifstream logoFile("Resources/Animations/logo.txt");
+	string imported[15];
+	string line;
+
+	int index = 0;
+	while (getline(logoFile, line))
+	{
+		if (line.empty()) index++;
+		else imported[index] += (line + '\n');
+	}
+
+	for (size_t i = 0; i < 14; i++)
+	{
+		system("CLS");
+		cout << endl << imported[i];
+		Sleep(1000 * 0.4);
+	}
+}
+
+void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode) {
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
@@ -64,16 +87,16 @@ void PrintMainMenue(string file, string ofile, UIMode mode, bool isInputOne, boo
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	cout << (ofile.empty() ? "(output.txt)" : ofile) << endl;
 
-	if (isInputOne) {
+	if (focusMode == FocusMode::InFileInput) {
 		COORD pos = { 17 + file.length(), 9 };
 		SetConsoleCursorPosition(hConsole, pos);
 	}
-	else if (isInputTwo) {
+	else if (focusMode == FocusMode::OutFileInput) {
 		COORD pos = { 17 + file.length(), 10 };
 		SetConsoleCursorPosition(hConsole, pos);
 	}
 
-	if (isSelectionMenu) {
+	if (focusMode == FocusMode::ModeSelection) {
 		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
 		cout << "Simulation mode:" << endl;
 		SetConsoleTextAttribute(hConsole, mode == UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
@@ -84,8 +107,9 @@ void PrintMainMenue(string file, string ofile, UIMode mode, bool isInputOne, boo
 }
 
 void Game::HandleUI() {
-
-	PrintMainMenue(inputFileDir, outputFileDir, uiMode, true, false, false);
+	AnimateLogo();
+	SetConsoleOutputCP(CP_UTF8);
+	PrintMainMenue(inputFileDir, outputFileDir, uiMode, FocusMode::InFileInput);
 
 	string file;
 	string ofile;
@@ -104,11 +128,11 @@ void Game::HandleUI() {
 		else
 			file += c;
 
-		PrintMainMenue(file, ofile, uiMode, true, false, false);
+		PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
 
 	} while (true);
 
-	PrintMainMenue(file, ofile, uiMode, false, true, false);
+	PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
 	do {
 		co = _getch();
 		if (co == ENTER)
@@ -122,7 +146,7 @@ void Game::HandleUI() {
 		else
 			ofile += co;
 
-		PrintMainMenue(file, ofile, uiMode, false, true, false);
+		PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
 
 	} while (true);
 	file = file.empty() ? "testfile.txt" : file + ".txt";
@@ -140,7 +164,7 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		PrintMainMenue(file, ofile, (UIMode)modeIndex, false, false, true);
+		PrintMainMenue(file, ofile, (UIMode)modeIndex, FocusMode::ModeSelection);
 	} while ((c = _getch()) != ENTER);
 	uiMode = (UIMode)modeIndex;
 }
@@ -360,11 +384,13 @@ void Game::ReadinputFile(UnitGenerator& generator)
 		int ES, ET, EG,EHU;
 		int AS, AM, AD;
 		int Prob;
+		int InfectionProb;
 
 		inputfile >> numberOfUnits;
 		inputfile >> ES >> ET >> EG>>EHU;
 		inputfile >> AS >> AM >> AD;
 		inputfile >> Prob;
+		inputfile >> InfectionProb;
 
 		inputfile >> temp;
 		int EarthPowerLower = abs(temp);
@@ -405,6 +431,7 @@ void Game::ReadinputFile(UnitGenerator& generator)
 			ES, ET, EG,EHU,
 			AS, AM, AD,
 			Prob,
+			InfectionProb,
 			EarthPowerLower,
 			EarthPowerUpper,
 			EarthHealthLower,
@@ -429,6 +456,7 @@ void Game::PrintSilentMessages() const {
 }
 
 void Game::Print() const {
+	string half_tab = "\t\b\b\b\b\b";
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
@@ -440,7 +468,10 @@ void Game::Print() const {
 
 	cout << "===========" << " Killed Units " << "===========" << endl;
 
-	cout << KilledList.getCount() << " units ";
+	cout << KilledList.getCount() << half_tab;
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " Units ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	KilledList.print();
 
 	cout.clear();

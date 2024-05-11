@@ -26,7 +26,7 @@ class EarthArmy
 	LinkedQueue<EarthTank*> tankUnitMaintenanceList;
 
 	bool isLowSoldiersMode = false;
-    
+	int InfectedSoldiersCount = 0;
 
 public:
 	EarthArmy(Game* game):pGame(game){}

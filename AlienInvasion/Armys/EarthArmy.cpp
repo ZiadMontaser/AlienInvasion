@@ -1,6 +1,7 @@
 #include "EarthArmy.h"
 #include <iostream>
 #include <Windows.h>
+#include <iomanip>
 
 #include "../Game.h"
 
@@ -19,9 +20,10 @@ void EarthArmy::Attack()
 	}
 
 	EarthSoldier* soldier = nullptr;
-	Soldiers.peek(soldier);
+	Soldiers.dequeue(soldier);
 	if (soldier) {
 		soldier->Attack();
+		Soldiers.enqueue(soldier);
 	}
 
 	EarthTank* tank = nullptr;
@@ -50,7 +52,7 @@ void EarthArmy::AddSoldier(EarthSoldier* Him)
 {
 	if (!Him) return;
 	Soldiers.enqueue(Him);
-
+	if (Him->IsInfected()) InfectedSoldiersCount++;
 }
 
 void EarthArmy::AddTank(EarthTank* T){
@@ -91,6 +93,7 @@ EarthSoldier* EarthArmy::GetSoldier()
 	{
 		if (Chosen)
 			Chosen->SetAttackedTime(pGame->GetTimeStamp());
+		if (Chosen->IsInfected()) InfectedSoldiersCount--;
 		ArenaList.push(Chosen);
 		return Chosen;
 	}
@@ -167,8 +170,7 @@ void EarthArmy::RestoreAliveUnits() {
 
 		if (soldier = dynamic_cast<EarthSoldier*>(unit)) {
 			if (unit->GetHealth() < 0.2 * unit->GetMaxHealth()) { MoveUnitToUML(unit); }
-			else 
-			AddSoldier(soldier);
+			else AddSoldier(soldier);
 		}
 		else if (tank = dynamic_cast<EarthTank*>(unit)) {
 			if (unit->GetHealth() < 0.2 * unit->GetMaxHealth()) { MoveUnitToUML(unit); }
@@ -184,74 +186,46 @@ void EarthArmy::RestoreAliveUnits() {
 
 
 void EarthArmy::Print() const {
+	string half_tab = "\t\b\b\b\b\b";
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
+	
 	cout << "===========" << "Earth Army Alive Units" << "===========" << endl;
-
-	cout << Soldiers.getCount();
-	CONSOLE_SCREEN_BUFFER_INFO cbsi;
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	std::setprecision(std::numeric_limits<float> ::digits10 + 1);
+	cout << "Infection Status: " <<( Soldiers.getCount() ? (InfectedSoldiersCount * 100 / Soldiers.getCount()) : 0 )<< "%" << endl;
+	cout << Soldiers.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " ES ";
+	cout << " ES  ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE); 
 	Soldiers.print();
 
-	cout << Tanks.getCount();
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << Tanks.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " ET ";
+	cout << " ET  ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Tanks.print();
 
-	cout << Gunnery.getCount();
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << Gunnery.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " EG ";
+	cout << " EG  ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Gunnery.print();
 
-	cout << healUnits.getCount();
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << healUnits.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
 	cout << " EHU ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	healUnits.print();
 
 	cout << endl;
-	cout << (soldierUnitMaintenanceList.getCount() + tankUnitMaintenanceList.getCount());
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << (soldierUnitMaintenanceList.getCount() + tankUnitMaintenanceList.getCount()) << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
 	cout << " UML ES ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	soldierUnitMaintenanceList.print();
 
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << "\t";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << "     ET ";
+	cout << "ET ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	tankUnitMaintenanceList.print();
 

@@ -8,7 +8,14 @@ void AlienSoldier::Attack() {
 	for (int i = 0; i < attackCapacity; i++) {
 
 		EarthSoldier* soldier = pGame->GetEarthArmy()->GetSoldier();
-		if (soldier) soldier->Damage(health , attackPower);
+		if (soldier) {
+			int prob = rand() % 100;
+			if (prob < infectionProb)
+				soldier->Infect();
+			else 
+				soldier->Damage(health, attackPower);
+
+		}
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive) {
 		cout << "AS " << GetID() << " Shots ";

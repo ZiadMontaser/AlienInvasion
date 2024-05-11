@@ -160,28 +160,19 @@ void AlienArmy::RestoreAliveUnits() {
 }
 
 void AlienArmy::Print() const {
+	string half_tab = "\t\b\b\b\b\b";
+
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	cout << "===========" << "Alien Army Alive Units" << "===========" << endl;
 
-	cout << Soldiers.getCount();
-	CONSOLE_SCREEN_BUFFER_INFO cbsi;
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << Soldiers.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
 	cout << " AS ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 
 	Soldiers.print();
 
-	cout << Count_Monesters;
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << Count_Monesters << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
 	cout << " AM ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
@@ -193,12 +184,7 @@ void AlienArmy::Print() const {
 	}
 	cout << "]" << endl;
 
-	cout << Drones.getCount();
-	if (GetConsoleScreenBufferInfo(hConsole, &cbsi))
-	{
-		COORD pos = { 3, cbsi.dwCursorPosition.Y };
-		SetConsoleCursorPosition(hConsole, pos);
-	}
+	cout << Drones.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
 	cout << " AD ";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
