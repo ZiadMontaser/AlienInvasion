@@ -1,4 +1,16 @@
 Td	ID	Tj	Df	Dd	Db
+1	1	0	1	1	1
+5	3	5	5	0	0
+5	2	5	5	0	0
+6	5	6	6	0	0
+6	4	6	6	0	0
+7	7	7	7	0	0
+7	6	7	7	0	0
+19	9	19	19	0	0
+20	11	20	20	0	0
+23	12	23	23	0	0
+25	15	25	25	0	0
+25	14	25	25	0	0
 
 =============================================================
 
@@ -7,26 +19,38 @@ Alien Army Won The Battle
 =============================================================
 
 Earth Statistics:
-ES Count-> 0
-ET Count-> 0
+ES Count-> 10
+ET Count-> 2
 EG Count-> 0
 
-There is no Earth Soldiers
+ES_destructed:ES_total-> 100%
 There is no Earth Gunnerys
-There is no Earth Tanks
+ET_destructed:ET_total-> 100%
 
-There is no Destructed Earth Army
-total Db = 0
+Total Destructed Earth Units : Total Earth Units-> 100%
+Total Units in UML : Total Earth Units->0%
+
+Healed Units : Total Earth Units-> 0%
+
+Average of Df-> 0.0833333
+Average of Db-> 0.0833333
+Average of Dd-> 0.0833333
+
+Df / Db = 100%
+Dd / Db = 100%
+
 =============================================================
 
 Alien Statistics:
-AS Count-> 29
-AD Count-> 1
-AM Count-> 5
+AS Count-> 14
+AD Count-> 3
+AM Count-> 1
 
 AS_destructed:AS_total-> 0%
 AD_destructed:AD_total-> 0%
 AM_destructed:AM_total-> 0%
 
-There is no Destructed Alien Army
+Total Destructed Alien Units : Total Alien Units-> 0%
+
+There is no destructed Alien Army
 total Db = 0

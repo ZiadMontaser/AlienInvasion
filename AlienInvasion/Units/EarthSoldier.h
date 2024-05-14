@@ -16,6 +16,7 @@ public:
     void ResetHealTime() { TimestartUML = 0; }
     int GetTimestartHeal() { return TimestartUML; }
     void SetTimeHeal(int T) { TimestartUML = T; }
+    void infectSoldier(EarthSoldier*);
 };
 
 #endif

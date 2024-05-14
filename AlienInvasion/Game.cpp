@@ -10,6 +10,39 @@ Game::Game() {
 	earthArmy = new EarthArmy(this);
 }
 
+EndBattle Game::endsim()
+{
+		if (currentTimeStep >= 40 && (!canAttack() || (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)))
+			return DRAW;
+		 if (currentTimeStep >= 40 && earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() > 0)
+			return ALIENWON;
+		 if (currentTimeStep >= 40 && earthArmy->GetEarthCount() > 0 && alienArmy->GetAlienCount() == 0)
+			return EARTHWON;
+		return CONTINUE;
+}
+
+bool Game::canAttack()
+{
+	int EScount = earthArmy->GetSoldiersCount(), AScount = alienArmy->GetSoldiersCount();
+	int EGcount = earthArmy->GetGunneryCount(), ADcount = alienArmy->GetDroneCount();
+	int ETcount = earthArmy->GetTankCount(), AMcount = alienArmy->GetMonstersCount();
+	if (!earthArmy->GetEarthCount() || !alienArmy->GetAlienCount())
+		return true;
+	if (EScount && AScount)
+		return true;
+	if (ETcount && AMcount)
+		return true;
+	if (ETcount && earthArmy->IsLowSoldiersMode() && AScount)
+		return true;
+	if (EGcount && (AMcount || ADcount))
+		return true;
+	if (AMcount && (ETcount || EScount))
+		return true;
+	if (ADcount && (ETcount || EGcount))
+		return true;
+	return false;
+}
+
 AlienArmy* Game::GetAlienArmy() { return alienArmy; }
 EarthArmy* Game::GetEarthArmy() { return earthArmy; }
 
@@ -350,7 +383,7 @@ void Game::StartSimulation() {
 			cout << endl;
 			cout << "===========" << " Units Fighting at Current Timestep " << "===========" << endl;
 		}
-		if (currentTimeStep >= 40 && (earthArmy->GetEarthCount() == 0 || alienArmy->GetAlienCount() == 0))
+		/*if (currentTimeStep >= 40)
 		{
 			if (uiMode == UIMode::Interactive)
 			{
@@ -372,7 +405,28 @@ void Game::StartSimulation() {
 			}
 			//Print();
 			break;
+		}*/
+		if (uiMode == UIMode::Interactive) {
+			endbattle = endsim();
+			if (endbattle != CONTINUE)
+			{
+				switch (endbattle)
+				{
+				case EARTHWON:
+					cout << "Earth Army Won\n";
+					break;
+				case ALIENWON:
+					cout << "Alien Army Won\n";
+					break;
+				case DRAW:
+					cout << "Battle Ended with Draw\n";
+					break;
+				}
+				break;
+			}
 		}
+
+
 		/// Emergency check
 		if (((float)earthArmy->GetInfectedCount() / earthArmy->GetSoldiersCount()) * 100 >= InfectionThreshold) {
 			
@@ -390,7 +444,7 @@ void Game::StartSimulation() {
 
 		earthArmy->Attack();
 		alienArmy->Attack();
-
+		earthArmy->infectionspread();
 		if (uiMode == UIMode::Interactive) {
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 

@@ -113,6 +113,48 @@ bool EarthArmy::EmergencyState()
 	return Emergency;
 }
 
+void EarthArmy::infectionspread()
+{
+	int i = 0;
+	int infectprob;
+	int toinfectran;
+	LinkedQueue<EarthSoldier*> temp;
+	LinkedQueue<EarthSoldier*> infected;
+	LinkedQueue<EarthSoldier*> notinfected;
+	LinkedQueue<EarthSoldier*> temp4;
+	EarthSoldier* deq;
+	while (Soldiers.dequeue(deq))
+	{
+		if (deq->IsInfected())
+			infected.enqueue(deq);
+		else
+			notinfected.enqueue(deq);
+		temp.enqueue(deq);
+	}
+	EarthSoldier* inf;
+	while (infected.dequeue(inf))
+	{
+		infectprob = rand() % 100;
+		if (infectprob <= 2)
+		{
+			infectprob = rand() % (GetSoldiersCount() - GetInfectedCount());
+			EarthSoldier* toinf;
+			for (int i = 0; i < infectprob; i++)
+			{
+				notinfected.dequeue(toinf);
+				temp4.enqueue(toinf);
+			}
+			notinfected.peek(toinf);
+			inf->infectSoldier(toinf);
+			while (temp4.dequeue(toinf))
+				notinfected.enqueue(toinf);
+		}
+	}
+	EarthSoldier* sols;
+	while (temp.dequeue(sols))
+		Soldiers.enqueue(sols);	
+}
+
 
 
 EarthSoldier* EarthArmy::GetSoldier()

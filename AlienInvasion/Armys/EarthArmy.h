@@ -48,6 +48,7 @@ public:
 	int GetInfectedCount();
 	void SetEmergency(bool);
 	bool EmergencyState();
+	void infectionspread();
 
 	EarthSoldier* GetSoldier();
 	EarthTank* GetTank();

@@ -29,3 +29,14 @@ void EarthSoldier::Attack() {
 		}
 	}
 }
+
+void EarthSoldier::infectSoldier(EarthSoldier* sol)
+{
+	if (IsInfected())
+	{
+		if (sol && !sol->IsInfected())
+		{
+			sol->Infect();
+		}
+	}
+}

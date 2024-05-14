@@ -23,14 +23,15 @@ enum class UIMode {
 enum EndBattle {
 	DRAW,
 	ALIENWON,
-	EARTHWON
+	EARTHWON,
+	CONTINUE
 };
 class Game
 {
 	AlienArmy* alienArmy;
 	EarthArmy* earthArmy;
 	LinkedQueue<Unit* > KilledList;
-	EndBattle endbattle = DRAW;
+	EndBattle endbattle = CONTINUE;
 	string inputFileDir;
 	string outputFileDir;
 	UIMode uiMode = UIMode::Interactive;
@@ -40,7 +41,8 @@ class Game
 
 public:
 	Game();
-
+	EndBattle endsim();
+	bool canAttack();
 	void StartSimulation();
 	void ReadinputFile(UnitGenerator&);
 	AlienArmy* GetAlienArmy();
