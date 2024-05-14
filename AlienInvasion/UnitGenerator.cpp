@@ -202,7 +202,7 @@ void UnitGenerator::GenerateSaverUnits() {
 			numberGEN(EarthPowerLower, EarthPowerUpper),
 			numberGEN(EarthCapacityLower, EarthCapacityUpper))
 		);
-
+		LastIDearth++;
 		
 	
 }
