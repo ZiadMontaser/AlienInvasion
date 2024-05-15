@@ -17,16 +17,22 @@ void EarthSoldier::Attack() {
 		}
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive) {
-		cout << "ES " << GetID() << " ";
+		cout << "ES " << this << " Shoots ";
 		if (IsInfected()) {
 			pGame->GetEarthArmy()->PrintArenaList();
-			pGame->GetEarthArmy()->RestoreAliveUnits();
 		}
 		else {
 			
 			pGame->GetAlienArmy()->PrintArenaList();
-			pGame->GetAlienArmy()->RestoreAliveUnits();
 		}
+	}
+
+	if (IsInfected()) {
+		pGame->GetEarthArmy()->RestoreAliveUnits();
+	}
+	else {
+
+		pGame->GetAlienArmy()->RestoreAliveUnits();
 	}
 }
 

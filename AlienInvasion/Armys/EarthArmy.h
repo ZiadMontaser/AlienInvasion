@@ -34,6 +34,8 @@ class EarthArmy
 	bool Emergency = false;
 	int healedcount = 0;
 
+	int totalInfectedLifeTime = 0;
+
 public:
 	EarthArmy(Game* game):pGame(game){}
 
@@ -59,15 +61,21 @@ public:
     void RemoveHealUnit();
 	Unit* SelectUnitFromUML();
 
-	int GetEarthCount() const;
+	int GetTotalUnitsCount() const;
+
 	int GetSoldiersCount() const;
 	int GetTankCount() const;
 	int GetGunneryCount() const;
+	int GetHealUnitsCount() const;
 	int GetSoldierCountinUML() const;
 	int GetTankCountinUML() const;
 	int GetHealedCount() const;
+	int GetLifeTimeInfectedUnits()const;
+	double GetInfectionPercentage()const;
 	int IsLowSoldiersMode() const;
 
+	void ReportInfectedUnit(Unit* unit);
+	void ReportTreatedUnit(Unit* unit);
 	void RestoreAliveUnits();
 	void Print() const;
 	void PrintArenaList() const { ArenaList.print(); };

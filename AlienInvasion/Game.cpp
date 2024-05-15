@@ -47,6 +47,20 @@ void Game::StartSimulation() {
 		generator.GenerateEarth();
 		generator.GenerateAlien();
 
+		/// Emergency check
+		if (earthArmy->GetInfectionPercentage() >= InfectionThreshold) {
+
+			earthArmy->SetEmergency(true);
+		}
+		else if (earthArmy->GetInfectedCount() == 0) {
+			earthArmy->SetEmergency(false);
+			earthArmy->RemoveReinforcement();
+		}
+
+		if (earthArmy->EmergencyState() == true) {
+			generator.GenerateSaverUnits();
+		}
+
 		if (uiMode == UIMode::Interactive) {
 			//system("CLS");
 
@@ -55,42 +69,33 @@ void Game::StartSimulation() {
 			cout << endl;
 			cout << "===========" << " Units Fighting at Current Timestep " << "===========" << endl;
 		}
+		else if (uiMode == UIMode::Silent) {
+			gotoXY(0, 1); 
+			setcursor(false);
+			cout << CSI"32m" << "Current Time Step : " << currentTimeStep << CSI"0m" << endl;
+		}
 
-		if (uiMode == UIMode::Interactive) {
-			endbattle = CheckForEndSimulation();
-			if (endbattle != CONTINUE)
+		endbattle = CheckForEndSimulation();
+		if (endbattle != CONTINUE)
+		{
+			switch (endbattle)
 			{
-				switch (endbattle)
-				{
-				case EARTHWON:
-					cout << "Earth Army Won\n";
-					break;
-				case ALIENWON:
-					cout << "Alien Army Won\n";
-					break;
-				case DRAW:
-					cout << "Battle Ended with Draw\n";
-					break;
-				}
+			case EARTHWON:
+				cout << "Earth Army Won\n";
+				break;
+			case ALIENWON:
+				cout << "Alien Army Won\n";
+				break;
+			case DRAW:
+				cout << "Battle Ended with Draw\n";
 				break;
 			}
+			break;
 		}
 
 
-		/// Emergency check
-		if (((float)earthArmy->GetInfectedCount() / earthArmy->GetSoldiersCount()) * 100 >= InfectionThreshold) {
 
-			earthArmy->SetEmergency(true);
-		}
-		else if (earthArmy->GetInfectedCount() == 0) {
-			earthArmy->SetEmergency(false);
-			earthArmy->RemoveReinforcement();
 
-		}
-
-		if (earthArmy->EmergencyState() == true) {
-			generator.GenerateSaverUnits();
-		}
 
 		earthArmy->Attack();
 		alienArmy->Attack();
@@ -100,14 +105,15 @@ void Game::StartSimulation() {
 			cout << '\n' << "Press enter to continue..." << endl << endl;
 
 			int delay = 0;
-			while (_getch() != ENTER || delay < 10)
+			while (_getch() != ENTER || delay < 1)
 				delay++;
 		}
 
 		currentTimeStep++;
 	}
 	outfile();
-
+	if(uiMode == UIMode::Silent)
+		cout << "Simulation ends, output file is created: " << outputFileDir << endl;
 }
 
 void Game::ReportDeadUnit(Unit* dead)
@@ -135,11 +141,12 @@ void Game::ReportHealedUnit(Unit* healed)
 
 EndBattle Game::CheckForEndSimulation()
 {
-	if (currentTimeStep >= 40 && (!CanAttack() || (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)))
+	if (currentTimeStep < 40) return CONTINUE;
+	if ((!CanAttack() || (earthArmy->GetTotalUnitsCount() == 0 && alienArmy->GetAlienCount() == 0)))
 		return DRAW;
-	if (currentTimeStep >= 40 && earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() > 0)
+	if (earthArmy->GetTotalUnitsCount() == 0 && alienArmy->GetAlienCount() > 0)
 		return ALIENWON;
-	if (currentTimeStep >= 40 && earthArmy->GetEarthCount() > 0 && alienArmy->GetAlienCount() == 0)
+	if (earthArmy->GetTotalUnitsCount() > 0 && alienArmy->GetAlienCount() == 0)
 		return EARTHWON;
 	return CONTINUE;
 }
@@ -149,7 +156,7 @@ bool Game::CanAttack()
 	int EScount = earthArmy->GetSoldiersCount(), AScount = alienArmy->GetSoldiersCount();
 	int EGcount = earthArmy->GetGunneryCount(), ADcount = alienArmy->GetDroneCount();
 	int ETcount = earthArmy->GetTankCount(), AMcount = alienArmy->GetMonstersCount();
-	if (!earthArmy->GetEarthCount() || !alienArmy->GetAlienCount())
+	if (!earthArmy->GetTotalUnitsCount() || !alienArmy->GetAlienCount())
 		return true;
 	if (EScount && AScount)
 		return true;
@@ -189,7 +196,7 @@ void Game::AnimateLogo() {
 		setcursor(false);
 
 		cout << endl << CSI"36m" << imported[i];
-		Sleep(1000 * 0.4);
+		Sleep(1000 * 0.05);
 	}
 }
 
@@ -291,7 +298,7 @@ void Game::PrintSilentMessages() const {
 	system("CLS");
 	cout << "Silent Mode" << endl;
 	cout << "Simulation starts...";
-	cout << "Simulation ends, output file is created: " << outputFileDir << endl;
+	
 }
 
 void Game::Print() const {
@@ -419,6 +426,7 @@ void Game::outfile()
 	outfile.open(outputFileDir.c_str(), ios::out);
 	if (outfile.is_open())
 	{
+		outfile << "Total Simulation steps: " << currentTimeStep << endl;
 		string table = "Td\tID\tTj\tDf\tDd\tDb\n";
 		outfile << table;
 		Unit* temp;
@@ -455,8 +463,10 @@ void Game::outfile()
 		double Es_total = EsDestrCount + earthArmy->GetSoldiersCount() + earthArmy->GetSoldierCountinUML();
 		double Et_total = EtDestrCount + earthArmy->GetTankCount() + earthArmy->GetTankCountinUML();
 		double Eg_total = EgDestrCount + earthArmy->GetGunneryCount();
+		double EHU_total = earthArmy->GetHealUnitsCount();
 		double total_earth = Es_total + Et_total + Eg_total;
 		double total_desEarth = EsDestrCount + EtDestrCount + EgDestrCount;
+		double InfectedCount = earthArmy->GetLifeTimeInfectedUnits();
 
 		double As_total = AsDestrCount + alienArmy->GetSoldiersCount();
 		double Ad_total = AdDestrCount + alienArmy->GetDroneCount();
@@ -482,7 +492,7 @@ void Game::outfile()
 		if (Am_total) AmAvg = (double)(AmDestrCount / Am_total) * 100.0;
 		if (Ad_total) AdAvg = (double)(AdDestrCount / Ad_total) * 100.0;
 
-		outfile << "\nEarth Statistics:\nES Count-> " << Es_total << "\nET Count-> " << Et_total << "\nEG Count-> " << Eg_total << "\n";
+		outfile << "\nEarth Statistics:\nES Count-> " << Es_total << "\nET Count-> " << Et_total << "\nEG Count-> " << Eg_total << "\n" << "Heal Units -> " << EHU_total << '\n';
 		if (Es_total)
 			outfile << "\nES_destructed:ES_total-> " << EsAvg << "%\n";
 		else
@@ -495,6 +505,13 @@ void Game::outfile()
 			outfile << "ET_destructed:ET_total-> " << EtAvg << "%\n";
 		else
 			outfile << "There is no Earth Tanks\n";
+
+		outfile << endl;
+		outfile << "Infection states: " << endl;
+		outfile << "Total Infected Units : " << InfectedCount << endl;
+		outfile << "Infection Percentage : " << GetEarthArmy()->GetInfectionPercentage() << "%" << endl;
+		outfile << endl;
+
 		if (total_earth)
 		{
 			outfile << "\nTotal Destructed Earth Units : Total Earth Units-> " << (double)(total_desEarth / total_earth) * 100.0 << "%\n";

@@ -45,9 +45,6 @@ class Game
 public:
 	Game();
 
-
-
-
 	//Getters
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();

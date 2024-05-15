@@ -1,4 +1,4 @@
-#include "HealUnit.h"
+﻿#include "HealUnit.h"
 #include "../Game.h"
 #include "EarthSoldier.h"
 #include "EarthTank.h"
@@ -29,7 +29,14 @@ void HealUnit::Attack() {
             if (pGame->GetTimeStamp() - soldier->GetTimestartHeal() < 10)
             {
                 heals = true; 
-                ToHeal->Heal(attackPower, health);
+                if (ToHeal->IsInfected()) {
+                    ToHeal->TreatInfection();
+                    pGame->GetEarthArmy()->ReportTreatedUnit(ToHeal);
+                }
+                else {
+                    ToHeal->Heal(attackPower, health);
+                }
+
                 TempHealList.enqueue(ToHeal);
             }
             else {
@@ -42,7 +49,7 @@ void HealUnit::Attack() {
 
     if (heals) {
         if (pGame->GetUIMode() == UIMode::Interactive) {
-            cout << "EHU " << GetID() << " Heals ";
+            cout << "EHU " << GetID() << " Heals💊 ";
             TempHealList.print();
         }
 
@@ -61,11 +68,9 @@ void HealUnit::Attack() {
 
                 if (S) {
                     S->ResetHealTime();
-                    pGame->GetEarthArmy()->AddSoldier(S);
                 }
                 else if (T)
                     T->ResetHealTime();
-                    pGame->GetEarthArmy()->AddTank(T);
 
             }
         }

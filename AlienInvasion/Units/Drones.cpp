@@ -53,8 +53,8 @@ void Drone::Attack()
 		}
 		if (pGame->GetUIMode() == UIMode::Interactive)
 		{
-			cout << "AD " << GetID() << " Shots: ";
+			cout << "AD " << GetID() << " Shoots: ";
 			pGame->GetEarthArmy()->PrintArenaList();
-			pGame->GetEarthArmy()->RestoreAliveUnits();
 		}
+		pGame->GetEarthArmy()->RestoreAliveUnits();
 }

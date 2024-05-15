@@ -16,7 +16,7 @@ class LinkedQueue:public QueueADT<T>
 public :
 	Node<T>* backPtr;
 	Node<T>* frontPtr;
-	int count = 0;
+	long long count = 0;
 
 public :
 	LinkedQueue();	

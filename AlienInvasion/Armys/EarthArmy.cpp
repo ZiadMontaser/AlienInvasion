@@ -118,13 +118,9 @@ bool EarthArmy::EmergencyState()
 
 void EarthArmy::infectionspread()
 {
-	int i = 0;
-	int infectprob;
-	int toinfectran;
-	LinkedQueue<EarthSoldier*> temp;
-	LinkedQueue<EarthSoldier*> infected;
-	LinkedQueue<EarthSoldier*> notinfected;
-	LinkedQueue<EarthSoldier*> temp4;
+	const int INFECTION_PROB = 2;
+	LinkedQueue<EarthSoldier*> temp, infected, notinfected, temp4;
+
 	EarthSoldier* deq;
 	while (Soldiers.dequeue(deq))
 	{
@@ -134,21 +130,25 @@ void EarthArmy::infectionspread()
 			notinfected.enqueue(deq);
 		temp.enqueue(deq);
 	}
+
 	EarthSoldier* inf;
 	while (infected.dequeue(inf))
 	{
-		infectprob = rand() % 100;
-		if (infectprob <= 2)
+		int infectprob = rand() % 100;
+		if (infectprob <= INFECTION_PROB)
 		{
-			infectprob = rand() % (GetSoldiersCount() - GetInfectedCount());
+			int toinfectran = rand() % (GetSoldiersCount() - GetInfectedCount());
 			EarthSoldier* toinf;
-			for (int i = 0; i < infectprob; i++)
+			bool isPreyFound = false;
+			for (int i = 0; i < toinfectran; i++)
 			{
-				notinfected.dequeue(toinf);
-				temp4.enqueue(toinf);
+				if(isPreyFound = notinfected.dequeue(toinf))
+					temp4.enqueue(toinf);
 			}
-			if(notinfected.peek(toinf))
+			if (notinfected.peek(toinf) && isPreyFound) {
 				inf->infectSoldier(toinf);
+				std::cout << CSI"32mES " << toinf->GetID() << "caught infection from ES " << inf->GetID();
+			}
 			while (temp4.dequeue(toinf))
 				notinfected.enqueue(toinf);
 		}
@@ -253,6 +253,15 @@ int EarthArmy::GetSoldiersCount() const {
 	return Soldiers.getCount();
 }
 
+void EarthArmy::ReportInfectedUnit(Unit* unit) {
+	if (unit && unit->IsInfected()) totalInfectedLifeTime++;
+}
+
+void EarthArmy::ReportTreatedUnit(Unit* unit)
+{
+	if (unit && unit->IsImmune()) InjuredInfectedSoldiersCount--;
+}
+
 int EarthArmy::IsLowSoldiersMode() const {
 	return isLowSoldiersMode;
 }
@@ -349,7 +358,7 @@ void EarthArmy::Print() const {
 	}cout << endl;
 }
 
-int EarthArmy::GetEarthCount() const
+int EarthArmy::GetTotalUnitsCount() const
 {
 	return GetTankCount() + GetSoldiersCount() + GetGunneryCount();
 }
@@ -366,6 +375,11 @@ int EarthArmy::GetGunneryCount() const
 	return count;
 }
 
+int EarthArmy::GetHealUnitsCount() const
+{
+	return healUnits.getCount();
+}
+
 int EarthArmy::GetSoldierCountinUML() const
 {
 	return soldierUnitMaintenanceList.getCount();
@@ -374,6 +388,17 @@ int EarthArmy::GetSoldierCountinUML() const
 int EarthArmy::GetTankCountinUML() const
 {
 	return tankUnitMaintenanceList.getCount();
+}
+
+double EarthArmy::GetInfectionPercentage() const {
+	double totalInfectedCount = InjuredInfectedSoldiersCount + InfectedSoldiersCount;
+	int totalSoldierCount = Soldiers.getCount() + soldierUnitMaintenanceList.getCount();
+
+	return (totalSoldierCount ? (totalInfectedCount * 100 / totalSoldierCount) : 0);
+}
+
+int EarthArmy::GetLifeTimeInfectedUnits() const {
+	return totalInfectedLifeTime;
 }
 
 int EarthArmy::GetHealedCount() const

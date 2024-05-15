@@ -76,8 +76,8 @@ void Monester::Attack()
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive)
 	{
-		cout << "AM " << GetID() << " Shots: ";
+		cout << "AM " << GetID() << " Shoots: ";
 		pGame->GetEarthArmy()->PrintArenaList();
-		pGame->GetEarthArmy()->RestoreAliveUnits();
 	}
+	pGame->GetEarthArmy()->RestoreAliveUnits();
 }

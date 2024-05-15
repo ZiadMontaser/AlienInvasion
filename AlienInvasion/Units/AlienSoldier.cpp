@@ -17,7 +17,7 @@ void AlienSoldier::Attack() {
 		}
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive) {
-		cout << "AS " << GetID() << " Shots ";
+		cout << "AS " << GetID() << " Shoots ";
 		pGame->GetEarthArmy()->PrintArenaList();
 		pGame->GetEarthArmy()->RestoreAliveUnits();
 	}

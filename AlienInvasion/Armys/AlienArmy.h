@@ -16,7 +16,7 @@ class AlienArmy
 public:
 	Game* pGame;
 	LinkedQueue<AlienSoldier*> Soldiers;
-	Monester* Monesters[1000];
+	Monester* Monesters[10000];
 	DoublyEndedQueue<Drone*> Drones;
 
 	ArrayStack<Unit*> ArenaList;

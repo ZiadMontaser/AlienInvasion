@@ -7,7 +7,7 @@ class EarthSoldier :
     public Unit
 {
 
-    int TimestartUML=0;
+    int TimestartUML= 0;
 public:
     EarthSoldier(Game* game, int id, double health, int joinTime, double attackPower, int attackCapacity):
         Unit(game, id, health, EARTH_SOLDIER, joinTime, attackPower, attackCapacity) {}

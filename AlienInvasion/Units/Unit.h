@@ -31,6 +31,8 @@ protected:
 	bool isInfected = false;
 	bool isImune = false;
 
+
+
 	/// Times
 	int joinTime;
 	int DeathTime;
@@ -72,6 +74,7 @@ public:
 	int getDestructDelay() const { return DeathTime - joinTime; };
 	int getBattleTime() const { return DeathTime - joinTime; }
 
+	bool IsImmune() const { return isImune; }
 	bool IsInfected() const { return isInfected; }
 	void Infect();
 	void TreatInfection();
