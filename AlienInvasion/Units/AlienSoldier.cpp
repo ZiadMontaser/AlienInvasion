@@ -9,18 +9,12 @@ void AlienSoldier::Attack() {
 
 		EarthSoldier* soldier = pGame->GetEarthArmy()->GetSoldier();
 		EarthSaverUnit* Sv = pGame->GetEarthArmy()->GetSaverUnit();
-			if (soldier) {
-				
-				int prob = rand() % 100;
-				if (prob < infectionProb)
-					soldier->Infect();
-				else
-					soldier->Damage(health, attackPower);
-
+		if (soldier) {
+			soldier->Damage(health, attackPower);
 		}
-			else if (Sv) {
-				Sv->Damage(health, attackPower);
-			}
+		else if (Sv) {
+			Sv->Damage(health, attackPower);
+		}
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive) {
 		cout << "AS " << GetID() << " Shots ";

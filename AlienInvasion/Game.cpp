@@ -1,50 +1,114 @@
 #include "Game.h"
-#include "UnitGenerator.h"
+
 #include <Windows.h>
 #include <cmath>
 #include <conio.h>
 #include <fstream>
 #include <mmsystem.h>
+
+#include "UnitGenerator.h"
+#include "UI_helpers.h"
+
+#define ENTER 13
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define ESCAPE 8
+
+
 Game::Game() {
 	alienArmy = new AlienArmy(this);
 	earthArmy = new EarthArmy(this);
 }
 
-EndBattle Game::endsim()
-{
-		if (currentTimeStep >= 40 && (!canAttack() || (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)))
-			return DRAW;
-		 if (currentTimeStep >= 40 && earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() > 0)
-			return ALIENWON;
-		 if (currentTimeStep >= 40 && earthArmy->GetEarthCount() > 0 && alienArmy->GetAlienCount() == 0)
-			return EARTHWON;
-		return CONTINUE;
-}
-
-bool Game::canAttack()
-{
-	int EScount = earthArmy->GetSoldiersCount(), AScount = alienArmy->GetSoldiersCount();
-	int EGcount = earthArmy->GetGunneryCount(), ADcount = alienArmy->GetDroneCount();
-	int ETcount = earthArmy->GetTankCount(), AMcount = alienArmy->GetMonstersCount();
-	if (!earthArmy->GetEarthCount() || !alienArmy->GetAlienCount())
-		return true;
-	if (EScount && AScount)
-		return true;
-	if (ETcount && AMcount)
-		return true;
-	if (ETcount && earthArmy->IsLowSoldiersMode() && AScount)
-		return true;
-	if (EGcount && (AMcount || ADcount))
-		return true;
-	if (AMcount && (ETcount || EScount))
-		return true;
-	if (ADcount && (ETcount || EGcount))
-		return true;
-	return false;
-}
-
+  ////////////////
+ //   Getters  //
+////////////////
 AlienArmy* Game::GetAlienArmy() { return alienArmy; }
 EarthArmy* Game::GetEarthArmy() { return earthArmy; }
+UIMode Game::GetUIMode() const {
+	return uiMode;
+}
+
+
+  ////////////////////////
+ //   Game Functions   //
+////////////////////////
+
+void Game::StartSimulation() {
+
+
+	UnitGenerator generator(this);
+	ReadinputFile(generator);
+
+	if (uiMode == UIMode::Silent) PrintSilentMessages();
+
+	while (true)
+	{
+		generator.GenerateEarth();
+		generator.GenerateAlien();
+
+		if (uiMode == UIMode::Interactive) {
+			//system("CLS");
+
+			Print();
+
+			cout << endl;
+			cout << "===========" << " Units Fighting at Current Timestep " << "===========" << endl;
+		}
+
+		if (uiMode == UIMode::Interactive) {
+			endbattle = CheckForEndSimulation();
+			if (endbattle != CONTINUE)
+			{
+				switch (endbattle)
+				{
+				case EARTHWON:
+					cout << "Earth Army Won\n";
+					break;
+				case ALIENWON:
+					cout << "Alien Army Won\n";
+					break;
+				case DRAW:
+					cout << "Battle Ended with Draw\n";
+					break;
+				}
+				break;
+			}
+		}
+
+
+		/// Emergency check
+		if (((float)earthArmy->GetInfectedCount() / earthArmy->GetSoldiersCount()) * 100 >= InfectionThreshold) {
+
+			earthArmy->SetEmergency(true);
+		}
+		else if (earthArmy->GetInfectedCount() == 0) {
+			earthArmy->SetEmergency(false);
+			earthArmy->RemoveReinforcement();
+
+		}
+
+		if (earthArmy->EmergencyState() == true) {
+			generator.GenerateSaverUnits();
+		}
+
+		earthArmy->Attack();
+		alienArmy->Attack();
+		earthArmy->infectionspread();
+		if (uiMode == UIMode::Interactive) {
+			setcolor(FOREGROUND_RED);
+			cout << '\n' << "Press enter to continue..." << endl << endl;
+
+			int delay = 0;
+			while (_getch() != ENTER || delay < 10)
+				delay++;
+		}
+
+		currentTimeStep++;
+	}
+	outfile();
+
+}
 
 void Game::ReportDeadUnit(Unit* dead)
 {
@@ -69,15 +133,43 @@ void Game::ReportHealedUnit(Unit* healed)
 		earthArmy->AddTank(et);
 }
 
+EndBattle Game::CheckForEndSimulation()
+{
+	if (currentTimeStep >= 40 && (!CanAttack() || (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)))
+		return DRAW;
+	if (currentTimeStep >= 40 && earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() > 0)
+		return ALIENWON;
+	if (currentTimeStep >= 40 && earthArmy->GetEarthCount() > 0 && alienArmy->GetAlienCount() == 0)
+		return EARTHWON;
+	return CONTINUE;
+}
 
+bool Game::CanAttack()
+{
+	int EScount = earthArmy->GetSoldiersCount(), AScount = alienArmy->GetSoldiersCount();
+	int EGcount = earthArmy->GetGunneryCount(), ADcount = alienArmy->GetDroneCount();
+	int ETcount = earthArmy->GetTankCount(), AMcount = alienArmy->GetMonstersCount();
+	if (!earthArmy->GetEarthCount() || !alienArmy->GetAlienCount())
+		return true;
+	if (EScount && AScount)
+		return true;
+	if (ETcount && AMcount)
+		return true;
+	if (ETcount && earthArmy->IsLowSoldiersMode() && AScount)
+		return true;
+	if (EGcount && (AMcount || ADcount))
+		return true;
+	if (AMcount && (ETcount || EScount))
+		return true;
+	if (ADcount && (ETcount || EGcount))
+		return true;
+	return false;
+}
 
-
-#define ENTER 13
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define ESCAPE 8
-
-void AnimateLogo() {
+  /////////////////////
+ //   UI functions  //
+/////////////////////
+void Game::AnimateLogo() {
 	///PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
 	ifstream logoFile("Resources/Animations/logo.txt");
@@ -93,17 +185,19 @@ void AnimateLogo() {
 
 	for (size_t i = 0; i < 14; i++)
 	{
-		system("CLS");
-		cout << endl << imported[i];
+		gotoXY(0, 0);
+		setcursor(false);
+
+		cout << endl << CSI"36m" << imported[i];
 		Sleep(1000 * 0.4);
 	}
 }
 
-void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode) {
+void Game::PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode) {
+	if (focusMode != FocusMode::ModeSelection) setcursor(true);
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
-	system("CLS");
+	setcolor(FOREGROUND_YELLOW);
+	gotoXY(0, 0);
 	cout << R"(
   ____  _      ____    ___  ____       ____  ____   __ __   ____  _____ ____  ___   ____  
  /    || |    |    |  /  _]|    \     |    ||    \ |  |  | /    |/ ___/|    |/   \ |    \ 
@@ -114,30 +208,30 @@ void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode)
 |__|__||_____||____||_____||__|__|    |____||__|__|  \_/  |__|__| \___||____|\___/ |__|__|                                                                  
 )";
 
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+	setcolor(FOREGROUND_BLUE);
 	cout << "Input File Name: ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	cout << (file.empty() ? "(testfile.txt)" : file) << endl;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+	setcolor(FOREGROUND_WHITE);
+	cout << file + "                        " << endl;
+	setcolor(FOREGROUND_BLUE);
 	cout << "Output File Name: ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	cout << (ofile.empty() ? "(output.txt)" : ofile) << endl;
+	setcolor(FOREGROUND_WHITE);
+	cout << ofile + "                        " << endl;
+
 
 	if (focusMode == FocusMode::InFileInput) {
-		COORD pos = { 17 + file.length(), 9 };
-		SetConsoleCursorPosition(hConsole, pos);
+		gotoXY(17, 9);
 	}
 	else if (focusMode == FocusMode::OutFileInput) {
-		COORD pos = { 17 + file.length(), 10 };
-		SetConsoleCursorPosition(hConsole, pos);
+		gotoXY(18, 10);
 	}
 
 	if (focusMode == FocusMode::ModeSelection) {
-		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+		setcursor(false);
+		setcolor(FOREGROUND_BLUE);
 		cout << "Simulation mode:" << endl;
-		SetConsoleTextAttribute(hConsole, mode == UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
+		setcolor(mode == UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
 		cout << (mode == UIMode::Interactive ? ">" : " ") << " Interactive" << endl;
-		SetConsoleTextAttribute(hConsole, mode == UIMode::Silent ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
+		setcolor(mode == UIMode::Silent ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
 		cout << (mode == UIMode::Silent ? ">" : " ") << " Silent" << endl;
 	}
 }
@@ -145,66 +239,175 @@ void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode)
 void Game::HandleUI() {
 	AnimateLogo();
 	SetConsoleOutputCP(CP_UTF8);
-	PrintMainMenue(inputFileDir, outputFileDir, uiMode, FocusMode::InFileInput);
 
-	string file;
-	string ofile;
-	char c = 0;
-	char co = 0;
-	do {
-		c = _getch();
-		if (c == ENTER)
-			break;
+	string file  = "(testfile.txt)";
+	string ofile = "(output.txt)";
+	PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
 
-		if (c == ESCAPE) {
-			if (!file.empty()) {
-				file.erase(file.length() - 1);
-			}
-		}
-		else
-			file += c;
-
+	char val = _getch();
+	if (val != ENTER) {
+		file = "";
 		PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
-
-	} while (true);
+		cin >> file;
+	}
+	else {
+		file = "testfile";
+	}
 
 	PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
-	do {
-		co = _getch();
-		if (co == ENTER)
-			break;
-
-		if (co == ESCAPE) {
-			if (!ofile.empty()) {
-				ofile.erase(ofile.length() - 1);
-			}
-		}
-		else
-			ofile += co;
-
+	val = _getch();
+	if (val != ENTER) {
+		ofile = "";
 		PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
+		cin >> ofile;
+	}
+	else {
+		ofile = "output";
+	}
 
-	} while (true);
+
 	file = file.empty() ? "testfile.txt" : file + ".txt";
 	inputFileDir = file;
 	ofile = ofile.empty() ? "output.txt" : ofile + ".txt";
 	outputFileDir = ofile;
+
 	int modeIndex = 0;
 	do {
-		if (c == KEY_UP) {
+		if (val == KEY_UP) {
 			modeIndex--;
 			modeIndex = max(modeIndex, 0);
 		}
-		else if (c == KEY_DOWN) {
+		else if (val == KEY_DOWN) {
 			modeIndex++;
 			modeIndex = min(modeIndex, 1);
 		}
 
 		PrintMainMenue(file, ofile, (UIMode)modeIndex, FocusMode::ModeSelection);
-	} while ((c = _getch()) != ENTER);
+	} while ((val = _getch()) != ENTER);
 	uiMode = (UIMode)modeIndex;
 }
 
+void Game::PrintSilentMessages() const {
+	system("CLS");
+	cout << "Silent Mode" << endl;
+	cout << "Simulation starts...";
+	cout << "Simulation ends, output file is created: " << outputFileDir << endl;
+}
+
+void Game::Print() const {
+	string half_tab = "\t\b\b\b\b\b";
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
+	cout << "////////////////////////////////////////// Current Timestep : " << currentTimeStep <<" ////////////////////////////////////////// " << endl;
+
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	earthArmy->Print();
+	alienArmy->Print();
+
+	cout << "===========" << " Killed Units " << "===========" << endl;
+
+	cout << KilledList.getCount() << half_tab;
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << " Units ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	KilledList.print();
+
+	cout.clear();
+}
+
+  ///////////////////////////////
+ //   Read / Write Functions  //
+///////////////////////////////
+void Game::ReadinputFile(UnitGenerator& generator)
+{
+
+	fstream inputfile;
+
+	inputfile.open(inputFileDir.c_str(), ios::in);
+	if (inputfile.is_open()) {
+
+		int temp;
+		int numberOfUnits;
+		int ES, ET, EG, EHU;
+		int AS, AM, AD;
+		int Prob;
+		int InfectionProb;
+
+
+		inputfile >> numberOfUnits;
+		inputfile >> ES >> ET >> EG >> EHU;
+		inputfile >> AS >> AM >> AD;
+		inputfile >> Prob;
+		inputfile >> InfectionProb;
+		inputfile >> InfectionThreshold;        /// parameter in the game class 
+
+		inputfile >> temp;
+		int EarthPowerLower = abs(temp);
+		inputfile >> temp;
+		int EarthPowerUpper = abs(temp);
+
+
+		inputfile >> temp;
+		int EarthHealthLower = abs(temp);
+		inputfile >> temp;
+		int EarthHealthUpper = abs(temp);
+
+
+		inputfile >> temp;
+		int EarthCapacityLower = abs(temp);
+		inputfile >> temp;
+		int EarthCapacityUpper = abs(temp);
+
+
+
+		inputfile >> temp;
+		int AlienPowerLower = abs(temp);
+		inputfile >> temp;
+		int AlienPowerUpper = abs(temp);
+
+		inputfile >> temp;
+		int AlienHealthLower = abs(temp);
+		inputfile >> temp;
+		int AlienHealthUpper = abs(temp);
+
+		inputfile >> temp;
+		int AlienCapacityLower = abs(temp);
+		inputfile >> temp;
+		int AlienCapacityUpper = abs(temp);
+
+
+		generator.ReadParameters(numberOfUnits,
+			ES, ET, EG, EHU,
+			AS, AM, AD,
+			Prob,
+			InfectionProb,
+			EarthPowerLower,
+			EarthPowerUpper,
+			EarthHealthLower,
+			EarthHealthUpper,
+			EarthCapacityLower,
+			EarthCapacityUpper,
+			AlienPowerLower,
+			AlienPowerUpper,
+			AlienHealthLower,
+			AlienHealthUpper,
+			AlienCapacityLower,
+			AlienCapacityUpper);
+
+	}
+}
+
+/*
+N.of.Units
+ES ET EG HU
+AS AM AD
+Prob
+InfectionProb
+InfectionThreshold
+3-4 3-9 2-5
+100-100 80-80 20-20
+*/
 void Game::outfile()
 {
 	fstream outfile;
@@ -218,7 +421,7 @@ void Game::outfile()
 	{
 		string table = "Td\tID\tTj\tDf\tDd\tDb\n";
 		outfile << table;
-		Unit *temp;
+		Unit* temp;
 		while (KilledList.dequeue(temp))
 		{
 			if (dynamic_cast<EarthSoldier*>(temp) || dynamic_cast<EarthTank*>(temp) || dynamic_cast<EarthGunnery*>(temp))
@@ -270,7 +473,7 @@ void Game::outfile()
 		else if (endbattle == DRAW)
 			outfile << "\nThe Battle Ended With Draw\n";
 		outfile << "\n=============================================================\n";
-		
+
 		double EsAvg = 0, EgAvg = 0, EtAvg = 0, AsAvg = 0, AmAvg = 0, AdAvg = 0;
 		if (Es_total) EsAvg = (double)(EsDestrCount / Es_total) * 100.0;
 		if (Et_total) EtAvg = (double)(EtDestrCount / Et_total) * 100.0;
@@ -278,8 +481,8 @@ void Game::outfile()
 		if (As_total) AsAvg = (double)(AsDestrCount / As_total) * 100.0;
 		if (Am_total) AmAvg = (double)(AmDestrCount / Am_total) * 100.0;
 		if (Ad_total) AdAvg = (double)(AdDestrCount / Ad_total) * 100.0;
-		
-		outfile << "\nEarth Statistics:\nES Count-> " << Es_total << "\nET Count-> " << Et_total << "\nEG Count-> "	<< Eg_total << "\n";
+
+		outfile << "\nEarth Statistics:\nES Count-> " << Es_total << "\nET Count-> " << Et_total << "\nEG Count-> " << Eg_total << "\n";
 		if (Es_total)
 			outfile << "\nES_destructed:ES_total-> " << EsAvg << "%\n";
 		else
@@ -301,11 +504,11 @@ void Game::outfile()
 		}
 		else
 			outfile << "\nThere is no Earth Army\n";
-			if (total_desEarth)
-				outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
-				<< "\nAverage of Dd-> " << (double)(EDd / total_desEarth) << "\n";
-			else
-				outfile << "\nthere no destructed earth army\n";
+		if (total_desEarth)
+			outfile << "\nAverage of Df-> " << (double)(EDf / total_desEarth) << "\nAverage of Db-> " << (double)(EDb / total_desEarth)
+			<< "\nAverage of Dd-> " << (double)(EDd / total_desEarth) << "\n";
+		else
+			outfile << "\nthere no destructed earth army\n";
 
 
 		if (EDb)
@@ -336,15 +539,15 @@ void Game::outfile()
 		}
 		else
 			outfile << "\nThere is no Alien Army\n";
-			if (total_desAlien)
+		if (total_desAlien)
 			outfile << "\nAverage of Df-> " << (double)(ADf / total_desAlien) << "\nAverage of Db-> " << (double)(ADb / total_desAlien)
-				<< "\nAverage of Dd-> " << (double)(ADd / total_desAlien) << "\n";
-			else
-				outfile << "\nThere is no destructed Alien Army\n";
-		
-		
+			<< "\nAverage of Dd-> " << (double)(ADd / total_desAlien) << "\n";
+		else
+			outfile << "\nThere is no destructed Alien Army\n";
 
-			//outfile << "\nThere is Alien Army\n";
+
+
+		//outfile << "\nThere is Alien Army\n";
 		if (ADb)
 		{
 			outfile << "\nDf / Db = " << (double)(ADf / ADb) * 100.0 << "%\nDd / Db = "
@@ -354,215 +557,4 @@ void Game::outfile()
 			outfile << "total Db = 0";
 		outfile.close();
 	}
-}
-
-UIMode Game::GetUIMode() const {
-	return uiMode;
-}
-
-void Game::StartSimulation() {
-
-
-	UnitGenerator generator(this);
-	ReadinputFile(generator);
-
-	if (uiMode == UIMode::Silent) PrintSilentMessages();
-
-	while (true)
-	{
-
-		generator.GenerateEarth();
-		generator.GenerateAlien();
-
-		
-		if (uiMode == UIMode::Interactive) {
-			system("CLS");
-
-			Print();
-
-			cout << endl;
-			cout << "===========" << " Units Fighting at Current Timestep " << "===========" << endl;
-		}
-		/*if (currentTimeStep >= 40)
-		{
-			if (uiMode == UIMode::Interactive)
-			{
-				if (earthArmy->GetEarthCount() == 0 && alienArmy->GetAlienCount() == 0)
-				{
-					endbattle = DRAW;
-					cout << "Battle ended in draw";
-				}
-				else if (earthArmy->GetEarthCount() != 0 && alienArmy->GetAlienCount() == 0)
-				{
-					endbattle = EARTHWON;
-					cout << "Earth Army Won";
-				}
-				else
-				{
-					endbattle = ALIENWON;
-					cout << "ALien Army Won";
-				}
-			}
-			//Print();
-			break;
-		}*/
-		if (uiMode == UIMode::Interactive) {
-			endbattle = endsim();
-			if (endbattle != CONTINUE)
-			{
-				switch (endbattle)
-				{
-				case EARTHWON:
-					cout << "Earth Army Won\n";
-					break;
-				case ALIENWON:
-					cout << "Alien Army Won\n";
-					break;
-				case DRAW:
-					cout << "Battle Ended with Draw\n";
-					break;
-				}
-				break;
-			}
-		}
-
-
-		/// Emergency check
-		if (((float)earthArmy->GetInfectedCount() / earthArmy->GetSoldiersCount()) * 100 >= InfectionThreshold) {
-			
-			earthArmy->SetEmergency(true);
-		}
-		else if (earthArmy->GetInfectedCount() == 0) {
-			earthArmy->SetEmergency(false);
-			earthArmy->RemoveReinforcement();
-
-		}
-
-		if (earthArmy->EmergencyState() == true) {
-			generator.GenerateSaverUnits();
-		}
-
-		earthArmy->Attack();
-		alienArmy->Attack();
-		earthArmy->infectionspread();
-		if (uiMode == UIMode::Interactive) {
-			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-			SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-			cout << '\n' << "Press enter to continue...";
-			while (_getch() != ENTER);
-		}
-
-		currentTimeStep++;
-	}
-	outfile();
-
-}
-
-void Game::ReadinputFile(UnitGenerator& generator)
-{
-
-	fstream inputfile;
-
-	inputfile.open(inputFileDir.c_str(), ios::in);
-	if (inputfile.is_open()) {
-
-		int temp;
-		int numberOfUnits;
-		int ES, ET, EG,EHU;
-		int AS, AM, AD;
-		int Prob;
-		int InfectionProb;
-		
-
-		inputfile >> numberOfUnits;
-		inputfile >> ES >> ET >> EG>>EHU;
-		inputfile >> AS >> AM >> AD;
-		inputfile >> Prob;
-		inputfile >> InfectionProb;
-		inputfile >> InfectionThreshold;        /// parameter in the game class 
-
-		inputfile >> temp;
-		int EarthPowerLower = abs(temp);
-		inputfile >> temp;
-		int EarthPowerUpper = abs(temp);
-
-
-		inputfile >> temp;
-		int EarthHealthLower = abs(temp);
-		inputfile >> temp;
-		int EarthHealthUpper = abs(temp);
-
-
-		inputfile >> temp;
-		int EarthCapacityLower = abs(temp);
-		inputfile >> temp;
-		int EarthCapacityUpper = abs(temp);
-
-
-
-		inputfile >> temp;
-		int AlienPowerLower = abs(temp);
-		inputfile >> temp;
-		int AlienPowerUpper = abs(temp);
-
-		inputfile >> temp;
-		int AlienHealthLower = abs(temp);
-		inputfile >> temp;
-		int AlienHealthUpper = abs(temp);
-
-		inputfile >> temp;
-		int AlienCapacityLower = abs(temp);
-		inputfile >> temp;
-		int AlienCapacityUpper = abs(temp);
-
-
-		generator.ReadParameters(numberOfUnits,
-			ES, ET, EG,EHU,
-			AS, AM, AD,
-			Prob,
-			InfectionProb,
-			EarthPowerLower,
-			EarthPowerUpper,
-			EarthHealthLower,
-			EarthHealthUpper,
-			EarthCapacityLower,
-			EarthCapacityUpper,
-			AlienPowerLower,
-			AlienPowerUpper,
-			AlienHealthLower,
-			AlienHealthUpper,
-			AlienCapacityLower,
-			AlienCapacityUpper);
-
-	}
-}
-
-void Game::PrintSilentMessages() const {
-	system("CLS");
-	cout << "Silent Mode" << endl;
-	cout << "Simulation starts...";
-	cout << "Simulation ends, output file is created: " << outputFileDir << endl;
-}
-
-void Game::Print() const {
-	string half_tab = "\t\b\b\b\b\b";
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	SetConsoleTextAttribute(hConsole, FOREGROUND_YELLOW);
-	cout << "Current Timestep " << currentTimeStep << endl;
-
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	earthArmy->Print();
-	alienArmy->Print();
-
-	cout << "===========" << " Killed Units " << "===========" << endl;
-
-	cout << KilledList.getCount() << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " Units ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
-	KilledList.print();
-
-	cout.clear();
 }

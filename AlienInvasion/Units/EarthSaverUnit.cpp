@@ -12,7 +12,7 @@ void EarthSaverUnit::Attack() {
 		if (soldier) soldier->Damage(health, attackPower);
 	}
 	if (pGame->GetUIMode() == UIMode::Interactive) {
-		cout << "ESV " << GetID() << " ";
+		cout << "SU " << GetID() << " Shots ";
 
 		pGame->GetAlienArmy()->PrintArenaList();
 		pGame->GetAlienArmy()->RestoreAliveUnits();

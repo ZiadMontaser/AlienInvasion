@@ -159,7 +159,7 @@ void UnitGenerator::GenerateAlien()
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
 					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
-					numberGEN(AlienCapacityLower, AlienCapacityUpper), InfectionProb)
+					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);
 
 			}
@@ -170,7 +170,7 @@ void UnitGenerator::GenerateAlien()
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
 					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
-					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+					numberGEN(AlienCapacityLower, AlienCapacityUpper), InfectionProb)
 				);
 			}
 			else {
@@ -197,12 +197,12 @@ void UnitGenerator::GenerateSaverUnits() {
 	int JoinTime = pGame->GetTimeStamp();
 	
 		pGame->GetEarthArmy()->AddSaverUnit(new EarthSaverUnit(
-			pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+			pGame, LastIDallied, numberGEN(EarthHealthLower, EarthHealthUpper),
 			JoinTime,
 			numberGEN(EarthPowerLower, EarthPowerUpper),
 			numberGEN(EarthCapacityLower, EarthCapacityUpper))
 		);
-		LastIDearth++;
+		LastIDallied++;
 		
 	
 }

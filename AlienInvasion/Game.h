@@ -9,6 +9,9 @@
 #include <string>
 #include <Windows.h>
 
+#define ESC "\x1b"
+#define CSI "\x1b["
+
 #define FOREGROUND_WHITE FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN
 #define FOREGROUND_YELLOW FOREGROUND_RED | FOREGROUND_GREEN
 enum class FocusMode {
@@ -41,20 +44,35 @@ class Game
 
 public:
 	Game();
-	EndBattle endsim();
-	bool canAttack();
-	void StartSimulation();
-	void ReadinputFile(UnitGenerator&);
+
+
+
+
+	//Getters
 	AlienArmy* GetAlienArmy();
 	EarthArmy* GetEarthArmy();
+	UIMode GetUIMode() const;
+
+	//Game Functions
+	void StartSimulation();
 	void ReportDeadUnit(Unit*);
 	int GetTimeStamp();
 	void ReportHealedUnit(Unit*);
+	bool CanAttack();
+	EndBattle CheckForEndSimulation();
+
+	// UI functions
 	void HandleUI();
-	void outfile();
+	void AnimateLogo();
+	void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode);
+
 	void Print() const;
 	void PrintSilentMessages() const;
-	UIMode GetUIMode() const;
+
+
+	// Read / Write functions
+	void ReadinputFile(UnitGenerator&);
+	void outfile();
 };
 
 #endif // !GAME_H=

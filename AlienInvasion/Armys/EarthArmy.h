@@ -30,6 +30,7 @@ class EarthArmy
 
 	bool isLowSoldiersMode = false;
 	int InfectedSoldiersCount = 0;
+	int InjuredInfectedSoldiersCount = 0;
 	bool Emergency = false;
 	int healedcount = 0;
 

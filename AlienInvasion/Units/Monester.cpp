@@ -12,8 +12,15 @@ void Monester::Attack()
 	{
 		Sunit = pGame->GetEarthArmy()->GetSoldier();
 		Sv = pGame->GetEarthArmy()->GetSaverUnit();
-		if (Sunit)
-			Sunit->Damage(health, attackPower);
+		if (Sunit) {
+			int prob = rand() % 100;
+			if (prob <= infectionProb) {
+				Sunit->Infect();
+				cout << CSI"32m" << "ES " << Sunit->GetID() << " got infected by " << "AM " << id  << CSI"0m" << endl;;
+			}
+			else
+				Sunit->Damage(health, attackPower);
+		}
 		else if (Sv) {
 			Sv->Damage(health, attackPower);
 		}

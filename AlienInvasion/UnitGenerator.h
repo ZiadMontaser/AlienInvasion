@@ -20,6 +20,7 @@ class UnitGenerator
 
 	int LastIDearth = 0;
 	int LastIDaliens = 2000;
+	int LastIDallied = 4000;
 
 	int numberGEN(int min, int max);
 public:
