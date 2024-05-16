@@ -405,6 +405,21 @@ void Game::ReadinputFile(UnitGenerator& generator)
 		inputfile >> temp;
 		int AlienCapacityUpper = abs(temp);
 
+		inputfile >> temp;
+		int SaverUnitPowerLower = abs(temp);
+		inputfile >> temp;
+		int SaverUnitPowerUpper = abs(temp);
+
+		inputfile >> temp;
+		int SaverUnitHealthLower = abs(temp);
+		inputfile >> temp;
+		int SaverUnitHealthUpper = abs(temp);
+
+		inputfile >> temp;
+		int SaverUnitCapacityLower = abs(temp);
+		inputfile >> temp;
+		int SaverUnitCapacityUpper = abs(temp);
+
 
 		generator.ReadParameters(numberOfUnits,
 			ES, ET, EG, EHU,
@@ -422,7 +437,13 @@ void Game::ReadinputFile(UnitGenerator& generator)
 			AlienHealthLower,
 			AlienHealthUpper,
 			AlienCapacityLower,
-			AlienCapacityUpper);
+			AlienCapacityUpper,
+		    SaverUnitPowerLower,
+			SaverUnitPowerUpper,
+			SaverUnitHealthLower,
+			SaverUnitHealthUpper,
+			SaverUnitCapacityLower,
+			SaverUnitCapacityUpper);
 
 	}
 }

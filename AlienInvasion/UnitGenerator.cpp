@@ -37,7 +37,13 @@ void UnitGenerator::ReadParameters(int NumberOfUnits,
 	int alienHealthLower,
 	int alienHealthUpper,
 	int alienCapacityLower,
-	int alienCapacityUpper)
+	int alienCapacityUpper,
+    int saverunitpowerlower,
+	int saverunitpowerupper,
+	int saverunithealthlower,
+	int saverunithealthupper,
+	int saverunitcapacitylower,
+	int saverunitcapacityupper)
 {
 	this->numberOfUnits = NumberOfUnits;
 	this->ES = es;
@@ -61,7 +67,13 @@ void UnitGenerator::ReadParameters(int NumberOfUnits,
 	this->AlienHealthUpper = alienHealthUpper;
 	this->AlienCapacityLower = alienCapacityLower;
 	this->AlienCapacityUpper = alienCapacityUpper;
-	
+    this->SaverUnitPowerLower = saverunitpowerlower;
+	this->SaverUnitPowerUpper = saverunitpowerupper;
+	this->SaverUnitHealthLower = saverunithealthlower;
+	this->SaverUnitHealthUpper = saverunithealthupper;
+	this->SaverUnitCapacityLower = saverunitcapacitylower;
+	this->SaverUnitCapacityUpper = saverunitcapacityupper;
+
 	}
 
 

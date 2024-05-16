@@ -14,6 +14,10 @@ class UnitGenerator
 	int EarthHealthUpper,   EarthHealthLower;
 	int EarthCapacityUpper, EarthCapacityLower;
 
+	int SaverUnitPowerUpper, SaverUnitPowerLower;
+	int SaverUnitHealthUpper, SaverUnitHealthLower;
+	int SaverUnitCapacityUpper, SaverUnitCapacityLower;
+
 	int AlienPowerUpper,    AlienPowerLower;
 	int AlienHealthUpper,   AlienHealthLower;
 	int AlienCapacityUpper, AlienCapacityLower;
@@ -25,7 +29,7 @@ class UnitGenerator
 	int numberGEN(int min, int max);
 public:
 	UnitGenerator(Game* game);
-	void ReadParameters(int ,int , int , int ,int,int , int, int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
+	void ReadParameters(int ,int ,int , int , int , int ,int ,int , int , int ,int,int , int, int , int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int ,int,int);
 	void GenerateEarth();
 	void GenerateAlien();
 	void GenerateSaverUnits();
