@@ -153,9 +153,9 @@ void LinkedQueue<T>::print() const
 	Node<T>* temp = frontPtr;
 	while (temp) {
 		T item = temp->getItem();
-		if (item)
-			cout << item;
-		else cout << "null";
+
+		cout << item;
+
 		temp = temp->getNext();
 		if (temp) {
 			cout << ", ";

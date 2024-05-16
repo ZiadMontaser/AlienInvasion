@@ -1,6 +1,5 @@
 #include "UnitGenerator.h"
 #include <iostream>
-//#include <algorithm>
 #include <fstream>
 #include <string>
 #include <cstdlib>
@@ -9,12 +8,9 @@
 
 using namespace std;
 
-ofstream logger;
-
 int UnitGenerator::numberGEN(int min, int max)
 {
 	int num = (rand() % (max - min + 1)) + min;
-	logger << num << endl;
 	return  num ;
 }
 
@@ -23,9 +19,6 @@ UnitGenerator::UnitGenerator(Game* game) {
 
 	int random = time(0);
 	srand(random);
-
-
-	logger.open("logs.txt");
 }
 
 void UnitGenerator::ReadParameters(int NumberOfUnits,

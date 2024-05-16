@@ -33,7 +33,7 @@ void EarthGunnery::Attack() {
 	}
 
 	if (pGame->GetUIMode() == UIMode::Interactive) {
-		cout << "EG " << GetID() << " ";
+		cout << "EG " << GetID() << " Shoots ";
 		pGame->GetAlienArmy()->PrintArenaList();
 	}
 	pGame->GetAlienArmy()->RestoreAliveUnits();

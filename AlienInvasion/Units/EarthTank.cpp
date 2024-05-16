@@ -36,7 +36,7 @@ void EarthTank::Attack()
 	}
 
 	if (pGame->GetUIMode() == UIMode::Interactive) {
-		cout << "ET " << GetID() << " ";
+		cout << "ET " << GetID() << " Shoots ";
 		pGame->GetAlienArmy()->PrintArenaList();
 	}
 	pGame->GetAlienArmy()->RestoreAliveUnits();

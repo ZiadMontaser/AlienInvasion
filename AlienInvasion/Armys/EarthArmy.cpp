@@ -150,7 +150,7 @@ void EarthArmy::infectionspread()
 			if (notinfected.peek(toinf) && isPreyFound) {
 				inf->infectSoldier(toinf);
 				if(pGame->GetUIMode() == UIMode::Interactive)
-					std::cout << CSI"33m" << u8"🤒 ES " << toinf << "caught infection from ES " << inf;
+					std::cout << CSI"33m" << u8"🤒 ES " << toinf << CSI"33m" << "caught infection from ES " << inf << CSI"0m" << endl;
 			}
 			while (temp4.dequeue(toinf))
 				notinfected.enqueue(toinf);

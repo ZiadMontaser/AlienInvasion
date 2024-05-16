@@ -9,3 +9,11 @@ void main() {
 	while (true);
 
 }
+
+// Earth strong
+// Alien Strong
+// Draw 
+
+// Earth semi strong
+// Alien semi strong
+// Gen = 0

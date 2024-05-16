@@ -120,8 +120,12 @@ void Game::StartSimulation() {
 			cout << '\n' << "Press enter to continue..." << endl << endl;
 
 			int delay = 0;
-			while (_getch() != ENTER)
-				delay++;
+			char v;
+			while (true){
+				v = _getch();
+				if (v == ENTER) break;
+				if(v == 109) PlaySound(nullptr, nullptr, 0);
+			}
 		}
 
 		currentTimeStep++;
@@ -215,11 +219,11 @@ void Game::AnimateLogo() {
 	}
 }
 
-void Game::PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode) {
-	if (focusMode != FocusMode::ModeSelection) setcursor(true);
-
+void Game::PrintMainMenue(string* files, int n, int selected, UIMode mode, FocusMode focusMode) {
+	setcursor(false);
 	setcolor(FOREGROUND_YELLOW);
 	gotoXY(0, 0);
+
 	cout << R"(
   ____  _      ____    ___  ____       ____  ____   __ __   ____  _____ ____  ___   ____  
  /    || |    |    |  /  _]|    \     |    ||    \ |  |  | /    |/ ___/|    |/   \ |    \ 
@@ -230,57 +234,72 @@ void Game::PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focu
 |__|__||_____||____||_____||__|__|    |____||__|__|  \_/  |__|__| \___||____|\___/ |__|__|                                                                  
 )";
 
-	setcolor(FOREGROUND_BLUE);
-	cout << "Input File Name: ";
-	setcolor(FOREGROUND_WHITE);
-	cout << file + "                        " << endl;
-	setcolor(FOREGROUND_BLUE);
-	cout << "Output File Name: ";
-	setcolor(FOREGROUND_WHITE);
-	cout << ofile + "                        " << endl;
 
+	cout << CSI"34mInput file (automaticaly imported): " << CSI"0m" << endl;
 
-	if (focusMode == FocusMode::InFileInput) {
-		gotoXY(17, 9);
+	for (size_t i = 0; i < n; i++)
+	{
+		cout << (selected == i ? CSI"33m> " : "  ") << files[i].substr(0, files[i].find('.'))  << CSI"0m" << endl;
 	}
-	else if (focusMode == FocusMode::OutFileInput) {
-		gotoXY(18, 10);
-	}
+
 
 	if (focusMode == FocusMode::ModeSelection) {
 		setcursor(false);
 		setcolor(FOREGROUND_BLUE);
-		cout << "Simulation mode:" << endl;
-		setcolor(mode == UIMode::Interactive ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
-		cout << (mode == UIMode::Interactive ? ">" : " ") << " Interactive" << endl;
-		setcolor(mode == UIMode::Silent ? FOREGROUND_YELLOW : FOREGROUND_WHITE);
-		cout << (mode == UIMode::Silent ? ">" : " ") << " Silent" << endl;
+		cout << "Simulation mode:" << CSI"0m" << endl;
+		cout << (mode == UIMode::Interactive ? CSI"33m> " : "  ") << "Interactive" << CSI"0m" << endl;
+		cout << (mode == UIMode::Silent      ? CSI"33m> " : "  ") << "Silent"      << CSI"0m" << endl;
 	}
 }
+namespace fs = std::experimental::filesystem;
 
 void Game::HandleUI() {
 	AnimateLogo();
 	SetConsoleOutputCP(CP_UTF8);
+	
+	LinkedQueue<string> filesQueue;
+	system("dir /n /b examples > temp");
+	ifstream names("temp");
+	string line;
+	while (getline(names, line))
+	{
+		string ex = line.substr(line.find('.') + 1, 2);
+		if(ex == "ai")
+			filesQueue.enqueue(line);
+	}
 
-	string file  = "(testfile.txt)";
-	string ofile = "(output.txt)";
-	PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
+	names.close();
+	system("rm temp");
 
+	string* files = new string[filesQueue.getCount()];
+	int i = 0;
+	while (!filesQueue.isEmpty())
+	{
+		string temp;
+		filesQueue.dequeue(temp);
+		files[i++] = temp;
+	}
 
-	PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
-	cin >> file;
-
-	PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
-	cin >> ofile;
-
-
-
-	file = file.empty() ? "testfile.txt" : file + ".txt";
-	inputFileDir = file;
-	ofile = ofile.empty() ? "output.txt" : ofile + ".txt";
-	outputFileDir = ofile;
-
+	int filesCount = i - 1;
+	int selected = 0;
+	
 	char val = 0;
+	do {
+		if (val == KEY_UP) {
+			selected--;
+			selected = max(selected, 0);
+		}
+		else if (val == KEY_DOWN) {
+			selected++;
+			selected = min(selected, filesCount - 1);
+		}
+
+		PrintMainMenue(files, i - 1, selected, UIMode::None, FocusMode::InFileInput);
+	} while ((val = _getch()) != ENTER);
+
+	inputFileDir = "examples\\" + files[selected];
+	outputFileDir = "examples\\output_" + files[selected].substr(0, files[selected].find('.')) + ".text";
+
 	int modeIndex = 0;
 	do {
 		if (val == KEY_UP) {
@@ -292,7 +311,7 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		PrintMainMenue(file, ofile, (UIMode)modeIndex, FocusMode::ModeSelection);
+		PrintMainMenue(files, i -1 , selected, (UIMode)modeIndex, FocusMode::ModeSelection);
 	} while ((val = _getch()) != ENTER);
 	uiMode = (UIMode)modeIndex;
 }
@@ -334,7 +353,7 @@ void Game::ReadinputFile(UnitGenerator& generator)
 
 	fstream inputfile;
 
-	inputfile.open(("examples\\" + inputFileDir).c_str(), ios::in);
+	inputfile.open(inputFileDir.c_str(), ios::in);
 	if (inputfile.is_open()) {
 
 		int temp;
@@ -426,7 +445,7 @@ void Game::outfile()
 	double EDf = 0, EDb = 0, EDd = 0;
 	double ADf = 0, ADb = 0, ADd = 0;
 
-	outfile.open(("examples\\" + outputFileDir).c_str(), ios::out);
+	outfile.open(outputFileDir.c_str(), ios::out);
 	if (outfile.is_open())
 	{
 		outfile << "Total Simulation steps: " << currentTimeStep << endl;

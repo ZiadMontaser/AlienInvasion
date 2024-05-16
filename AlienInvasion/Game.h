@@ -20,8 +20,9 @@ enum class FocusMode {
 	ModeSelection
 };
 enum class UIMode {
-	Interactive = 0,
-	Silent = 1
+	Interactive ,
+	Silent,
+	None
 };
 enum EndBattle {
 	DRAW,
@@ -63,7 +64,7 @@ public:
 	// UI functions
 	void HandleUI();
 	void AnimateLogo();
-	void PrintMainMenue(string file, string ofile, UIMode mode, FocusMode focusMode);
+	void PrintMainMenue(string* files, int n, int selected, UIMode mode, FocusMode focusMode);
 
 	void Print() const;
 	void PrintSilentMessages() const;
