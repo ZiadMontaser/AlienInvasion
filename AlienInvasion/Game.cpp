@@ -9,6 +9,8 @@
 #include "UnitGenerator.h"
 #include "UI_helpers.h"
 
+#pragma comment(lib,"winmm.lib")
+
 #define ENTER 13
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -51,6 +53,7 @@ void Game::StartSimulation() {
 		if (earthArmy->GetInfectionPercentage() >= InfectionThreshold) {
 
 			earthArmy->SetEmergency(true);
+			playsound = true;
 		}
 		else if (earthArmy->GetInfectedCount() == 0) {
 			earthArmy->SetEmergency(false);
@@ -59,6 +62,11 @@ void Game::StartSimulation() {
 
 		if (earthArmy->EmergencyState() == true) {
 			generator.GenerateSaverUnits();
+
+			if (uiMode == UIMode::Interactive && playsound ) {
+				PlaySound(TEXT("Saver_units_entry.wav") , NULL , SND_FILENAME|SND_ASYNC);
+			}
+				playsound = false;
 		}
 
 		if (uiMode == UIMode::Interactive) {

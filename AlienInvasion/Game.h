@@ -42,6 +42,8 @@ class Game
 	int InfectionThreshold;
 	int currentTimeStep = 0;
 
+
+	bool playsound = false;
 public:
 	Game();
 
