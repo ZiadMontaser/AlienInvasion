@@ -207,10 +207,10 @@ void UnitGenerator::GenerateSaverUnits() {
 	int JoinTime = pGame->GetTimeStamp();
 	
 		pGame->GetEarthArmy()->AddSaverUnit(new EarthSaverUnit(
-			pGame, LastIDallied, numberGEN(EarthHealthLower, EarthHealthUpper),
+			pGame, LastIDallied, numberGEN(SaverUnitHealthLower, SaverUnitHealthUpper),
 			JoinTime,
-			numberGEN(EarthPowerLower, EarthPowerUpper),
-			numberGEN(EarthCapacityLower, EarthCapacityUpper))
+			numberGEN(SaverUnitPowerLower, SaverUnitPowerUpper),
+			numberGEN(SaverUnitCapacityLower, SaverUnitCapacityUpper))
 		);
 		LastIDallied++;
 		
