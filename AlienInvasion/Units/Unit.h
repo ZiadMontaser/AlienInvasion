@@ -4,6 +4,9 @@
 #include <cmath>
 #include <iostream>
 //#include "../Game.h"
+
+
+
 class Game;
 
 enum UnitType
@@ -35,8 +38,8 @@ protected:
 
 	/// Times
 	int joinTime;
+	int AttackedTime = -1;
 	int DeathTime;
-	int AttackedTime;
 
 public:
 	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :MaxHealth(health)
@@ -65,13 +68,13 @@ public:
 	bool IsDead() { return health <= 0; }
 
 	void SetDeathTime(int T) { DeathTime = T; }
-	void SetAttackedTime(int T) { AttackedTime = T; }
+	void SetAttackedTime(int T);
 
 	int GetDeathTime() const { return DeathTime; }
 	int getJoinTime() const { return joinTime; }
 	int getAttackedTime() const { return AttackedTime; }
 	int getAttackDelay() const { return AttackedTime - joinTime; }
-	int getDestructDelay() const { return DeathTime - joinTime; };
+	int getDestructDelay() const { return DeathTime - AttackedTime; };
 	int getBattleTime() const { return DeathTime - joinTime; }
 
 	bool IsImmune() const { return isImune; }

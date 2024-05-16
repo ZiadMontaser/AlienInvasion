@@ -1,4 +1,4 @@
-#include "Monester.h"
+﻿#include "Monester.h"
 #include "EarthSoldier.h"
 #include "EarthTank.h"
 #include "../Game.h"
@@ -7,6 +7,8 @@ void Monester::Attack()
 	EarthSoldier* Sunit = nullptr;
 	EarthTank* Tunit = nullptr;
 	EarthSaverUnit* Sv = NULL;
+	LinkedQueue<EarthSoldier*> infectedList;
+
 	int remaincap = attackCapacity % 2;
 	for (int i = 0; i < attackCapacity / 2; i++)
 	{
@@ -15,8 +17,8 @@ void Monester::Attack()
 		if (Sunit) {
 			int prob = rand() % 100;
 			if (prob <= infectionProb) {
+				if(!Sunit->IsInfected()) infectedList.enqueue(Sunit);
 				Sunit->Infect();
-				cout << CSI"32m" << "ES " << Sunit->GetID() << " got infected by " << "AM " << id  << CSI"0m" << endl;;
 			}
 			else
 				Sunit->Damage(health, attackPower);
@@ -78,6 +80,11 @@ void Monester::Attack()
 	{
 		cout << "AM " << GetID() << " Shoots: ";
 		pGame->GetEarthArmy()->PrintArenaList();
+
+		if (!infectedList.isEmpty()) {
+			cout << u8"❗ " << CSI"33m" << "AM " << this << CSI"33m" << " tryed to infect " << CSI"0m";
+			infectedList.print();
+		}
 	}
 	pGame->GetEarthArmy()->RestoreAliveUnits();
 }

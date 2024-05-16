@@ -8,6 +8,7 @@
 
 #include "UnitGenerator.h"
 #include "UI_helpers.h"
+#include <filesystem>
 
 #pragma comment(lib,"winmm.lib")
 
@@ -43,7 +44,7 @@ void Game::StartSimulation() {
 	ReadinputFile(generator);
 
 	if (uiMode == UIMode::Silent) PrintSilentMessages();
-
+	bool wasInEmergency = false;
 	while (true)
 	{
 		generator.GenerateEarth();
@@ -53,20 +54,26 @@ void Game::StartSimulation() {
 		if (earthArmy->GetInfectionPercentage() >= InfectionThreshold) {
 
 			earthArmy->SetEmergency(true);
-			playsound = true;
 		}
 		else if (earthArmy->GetInfectedCount() == 0) {
 			earthArmy->SetEmergency(false);
 			earthArmy->RemoveReinforcement();
+			
+			wasInEmergency = false;
 		}
 
 		if (earthArmy->EmergencyState() == true) {
 			generator.GenerateSaverUnits();
 
-			if (uiMode == UIMode::Interactive && playsound ) {
+			if (wasInEmergency) {
+				PlaySound(nullptr, nullptr, 0);
+			}
+
+			if (uiMode == UIMode::Interactive && !wasInEmergency ) {
 				PlaySound(TEXT("Saver_units_entry.wav") , NULL , SND_FILENAME|SND_ASYNC);
 			}
-				playsound = false;
+
+			wasInEmergency = true;
 		}
 
 		if (uiMode == UIMode::Interactive) {
@@ -89,13 +96,13 @@ void Game::StartSimulation() {
 			switch (endbattle)
 			{
 			case EARTHWON:
-				cout << "Earth Army Won\n";
+				cout << CSI"34m" << WIN_MSG;
 				break;
 			case ALIENWON:
-				cout << "Alien Army Won\n";
+				cout << CSI"31m" << LOSE_MSG;
 				break;
 			case DRAW:
-				cout << "Battle Ended with Draw\n";
+				cout << CSI"31m" << "Battle Ended with Draw\n";
 				break;
 			}
 			break;
@@ -113,7 +120,7 @@ void Game::StartSimulation() {
 			cout << '\n' << "Press enter to continue..." << endl << endl;
 
 			int delay = 0;
-			while (_getch() != ENTER || delay < 1)
+			while (_getch() != ENTER)
 				delay++;
 		}
 
@@ -185,7 +192,7 @@ bool Game::CanAttack()
  //   UI functions  //
 /////////////////////
 void Game::AnimateLogo() {
-	///PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
 	ifstream logoFile("Resources/Animations/logo.txt");
 	string imported[15];
@@ -259,26 +266,13 @@ void Game::HandleUI() {
 	string ofile = "(output.txt)";
 	PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
 
-	char val = _getch();
-	if (val != ENTER) {
-		file = "";
-		PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
-		cin >> file;
-	}
-	else {
-		file = "testfile";
-	}
+
+	PrintMainMenue(file, ofile, uiMode, FocusMode::InFileInput);
+	cin >> file;
 
 	PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
-	val = _getch();
-	if (val != ENTER) {
-		ofile = "";
-		PrintMainMenue(file, ofile, uiMode, FocusMode::OutFileInput);
-		cin >> ofile;
-	}
-	else {
-		ofile = "output";
-	}
+	cin >> ofile;
+
 
 
 	file = file.empty() ? "testfile.txt" : file + ".txt";
@@ -286,6 +280,7 @@ void Game::HandleUI() {
 	ofile = ofile.empty() ? "output.txt" : ofile + ".txt";
 	outputFileDir = ofile;
 
+	char val = 0;
 	int modeIndex = 0;
 	do {
 		if (val == KEY_UP) {
@@ -339,7 +334,7 @@ void Game::ReadinputFile(UnitGenerator& generator)
 
 	fstream inputfile;
 
-	inputfile.open(inputFileDir.c_str(), ios::in);
+	inputfile.open(("examples\\" + inputFileDir).c_str(), ios::in);
 	if (inputfile.is_open()) {
 
 		int temp;
@@ -431,7 +426,7 @@ void Game::outfile()
 	double EDf = 0, EDb = 0, EDd = 0;
 	double ADf = 0, ADb = 0, ADd = 0;
 
-	outfile.open(outputFileDir.c_str(), ios::out);
+	outfile.open(("examples\\" + outputFileDir).c_str(), ios::out);
 	if (outfile.is_open())
 	{
 		outfile << "Total Simulation steps: " << currentTimeStep << endl;
@@ -464,8 +459,12 @@ void Game::outfile()
 				AdDestrCount++;
 			else if (dynamic_cast<Monester*>(temp))
 				AmDestrCount++;
-			outfile << temp->GetDeathTime() << "\t" << temp->GetID() << "\t" << temp->getJoinTime() << "\t" << temp->getAttackedTime()
-				<< "\t" << temp->getDestructDelay() << "\t" << temp->getBattleTime() << "\n";
+			outfile << temp->GetDeathTime() << "\t"
+					<< temp->GetID() << "\t"
+					<< temp->getJoinTime() << "\t"
+					<< (dynamic_cast<HealUnit*>(temp)? "NaN" : to_string(temp->getAttackDelay())) << "\t"
+					<< (dynamic_cast<HealUnit*>(temp)? "NaN" : to_string(temp->getDestructDelay())) << "\t"
+					<< (dynamic_cast<HealUnit*>(temp)? "NaN" : to_string(temp->getBattleTime())) << "\n";
 		}
 		outfile << "\n=============================================================\n";
 		double Es_total = EsDestrCount + earthArmy->GetSoldiersCount() + earthArmy->GetSoldierCountinUML();

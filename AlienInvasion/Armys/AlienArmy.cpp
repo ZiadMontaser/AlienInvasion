@@ -167,14 +167,14 @@ void AlienArmy::Print() const {
 
 	cout << Soldiers.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " AS ";
+	cout << CSI"35m" << " AS " << CSI"0m";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 
 	Soldiers.print();
 
 	cout << Count_Monesters << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " AM ";
+	cout << CSI"35m" << " AM " << CSI"0m";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	cout << "[";
 	for (int i = 0; i < Count_Monesters; i++) {
@@ -186,7 +186,7 @@ void AlienArmy::Print() const {
 
 	cout << Drones.getCount() << half_tab;
 	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " AD ";
+	cout << CSI"35m" << " AD " << CSI"0m";
 	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Drones.print();
 

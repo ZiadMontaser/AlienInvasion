@@ -25,6 +25,8 @@ void Unit::Heal(double HUpower, double HUhealth)
 	}
 }
 
+void Unit::SetAttackedTime(int T) { AttackedTime = (AttackedTime == -1) ? T : AttackedTime; }
+
 void Unit::Infect() {
 	if (!isInfected && !isImune) pGame->GetEarthArmy()->ReportInfectedUnit(this);
 	isInfected = !isImune;

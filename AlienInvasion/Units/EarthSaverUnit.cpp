@@ -22,4 +22,5 @@ void EarthSaverUnit::Attack() {
 void EarthSaverUnit::KILL()
 {
 	pGame->ReportDeadUnit(this);
+	DeathTime = pGame->GetTimeStamp();
 }

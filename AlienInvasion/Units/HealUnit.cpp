@@ -31,7 +31,6 @@ void HealUnit::Attack() {
                 heals = true; 
                 if (ToHeal->IsInfected()) {
                     ToHeal->TreatInfection();
-                    pGame->GetEarthArmy()->ReportTreatedUnit(ToHeal);
                 }
                 else {
                     ToHeal->Heal(attackPower, health);
@@ -49,7 +48,7 @@ void HealUnit::Attack() {
 
     if (heals) {
         if (pGame->GetUIMode() == UIMode::Interactive) {
-            cout << "EHU " << GetID() << " Heals💊 ";
+            cout << CSI"33m" << u8"💊 EHU " << GetID() << " Heals " << CSI"0m";
             TempHealList.print();
         }
 
@@ -84,4 +83,5 @@ void HealUnit::Attack() {
 void HealUnit::KILL()
 {
     pGame->ReportDeadUnit(this);
+    DeathTime = pGame->GetTimeStamp();
 }

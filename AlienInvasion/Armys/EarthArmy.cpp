@@ -1,4 +1,4 @@
-#include "EarthArmy.h"
+﻿#include "EarthArmy.h"
 #include <iostream>
 #include <Windows.h>
 #include <iomanip>
@@ -137,6 +137,8 @@ void EarthArmy::infectionspread()
 		int infectprob = rand() % 100;
 		if (infectprob <= INFECTION_PROB)
 		{
+			int num_of_not_infected = GetSoldiersCount() - GetInfectedCount();
+			if (!num_of_not_infected) break;
 			int toinfectran = rand() % (GetSoldiersCount() - GetInfectedCount());
 			EarthSoldier* toinf;
 			bool isPreyFound = false;
@@ -147,10 +149,12 @@ void EarthArmy::infectionspread()
 			}
 			if (notinfected.peek(toinf) && isPreyFound) {
 				inf->infectSoldier(toinf);
-				std::cout << CSI"32mES " << toinf->GetID() << "caught infection from ES " << inf->GetID();
+				if(pGame->GetUIMode() == UIMode::Interactive)
+					std::cout << CSI"33m" << u8"🤒 ES " << toinf << "caught infection from ES " << inf;
 			}
 			while (temp4.dequeue(toinf))
 				notinfected.enqueue(toinf);
+
 		}
 	}
 	EarthSoldier* sols;
@@ -295,7 +299,7 @@ void EarthArmy::RestoreAliveUnits() {
 	}
 }
 
-
+#define DISPLAY_COLOR 36;
 void EarthArmy::Print() const {
 	string half_tab = "\t\b\b\b\b\b";
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -306,42 +310,30 @@ void EarthArmy::Print() const {
 	int totalSoldierCount = Soldiers.getCount() + soldierUnitMaintenanceList.getCount();
 	cout << "Infection Status: " << (totalSoldierCount ? (totalInfectedCount * 100 / totalSoldierCount) : 0 )<< "%" << endl;
 	cout << Soldiers.getCount() << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " ES  ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE); 
+	cout << CSI"36m" << " ES  " << CSI"0m";
 	Soldiers.print();
 
 	cout << Tanks.getCount() << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " ET  ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << CSI"36m ET  " << CSI"0m";
 	Tanks.print();
 
 	cout << Gunnery.getCount() << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " EG  ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << CSI"36m" << " EG  " << CSI"0m";
 	Gunnery.print();
 
 	cout << healUnits.getCount() << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " EHU ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << CSI"36m" << " EHU " << CSI"0m";
 	healUnits.print();
 
 
 
 	cout << endl;
 	cout << (soldierUnitMaintenanceList.getCount() + tankUnitMaintenanceList.getCount()) << half_tab;
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << " UML ES ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << CSI"36m" << " UML ES " << CSI"0m";
 	soldierUnitMaintenanceList.print();
 
 	cout << "\t";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-	cout << "ET ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << CSI"36m" << "ET " << CSI"0m";
 	tankUnitMaintenanceList.print();
 	cout << endl;
 
@@ -351,9 +343,7 @@ void EarthArmy::Print() const {
 		cout << "===========" << "Allied Army Alive Units" << "===========" << endl;
 
 		cout << AlliedArmy.getCount() << half_tab;
-		SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-		cout << " SU ";
-		SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+		cout << CSI"36m" << " SU " << CSI"0m";
 		AlliedArmy.print();
 	}cout << endl;
 }
