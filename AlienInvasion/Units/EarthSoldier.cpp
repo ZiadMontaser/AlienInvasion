@@ -31,7 +31,6 @@ void EarthSoldier::Attack() {
 		pGame->GetEarthArmy()->RestoreAliveUnits();
 	}
 	else {
-
 		pGame->GetAlienArmy()->RestoreAliveUnits();
 	}
 }
