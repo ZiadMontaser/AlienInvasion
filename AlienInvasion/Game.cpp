@@ -38,6 +38,7 @@ UIMode Game::GetUIMode() const {
 ////////////////////////
 
 void Game::StartSimulation() {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 
 	UnitGenerator generator(this);
