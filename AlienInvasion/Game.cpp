@@ -196,7 +196,7 @@ bool Game::CanAttack()
  //   UI functions  //
 /////////////////////
 void Game::AnimateLogo() {
-	PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	//PlaySound(TEXT("Resources/Audio/background.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
 	ifstream logoFile("Resources/Animations/logo.txt");
 	string imported[15];
@@ -269,7 +269,7 @@ void Game::HandleUI() {
 	}
 
 	names.close();
-	system("rm temp");
+	//system("rm temp");
 
 	string* files = new string[filesQueue.getCount()];
 	int i = 0;
@@ -291,14 +291,14 @@ void Game::HandleUI() {
 		}
 		else if (val == KEY_DOWN) {
 			selected++;
-			selected = min(selected, filesCount - 1);
+			selected = min(selected, filesCount);
 		}
 
-		PrintMainMenue(files, i - 1, selected, UIMode::None, FocusMode::InFileInput);
+		PrintMainMenue(files, i, selected, UIMode::None, FocusMode::InFileInput);
 	} while ((val = _getch()) != ENTER);
 
 	inputFileDir = "examples\\" + files[selected];
-	outputFileDir = "examples\\output_" + files[selected].substr(0, files[selected].find('.')) + ".text";
+	outputFileDir = "examples\\output_" + files[selected].substr(0, files[selected].find('.')) + ".txt";
 
 	int modeIndex = 0;
 	do {
@@ -311,7 +311,7 @@ void Game::HandleUI() {
 			modeIndex = min(modeIndex, 1);
 		}
 
-		PrintMainMenue(files, i -1 , selected, (UIMode)modeIndex, FocusMode::ModeSelection);
+		PrintMainMenue(files, i , selected, (UIMode)modeIndex, FocusMode::ModeSelection);
 	} while ((val = _getch()) != ENTER);
 	uiMode = (UIMode)modeIndex;
 }

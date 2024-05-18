@@ -258,7 +258,7 @@ int EarthArmy::GetSoldiersCount() const {
 }
 
 void EarthArmy::ReportInfectedUnit(Unit* unit) {
-	if (unit && unit->IsInfected()) totalInfectedLifeTime++;
+	if (unit) totalInfectedLifeTime++;
 }
 
 void EarthArmy::ReportTreatedUnit(Unit* unit)
