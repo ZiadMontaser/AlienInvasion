@@ -8,5 +8,5 @@ public:
 		Unit(game, id, health, GUNNERY, joinTime, attackPower, attackCapacity) {}
 
 
-	void Attack() {} /// to do 
+	void Attack(); /// to do 
 };

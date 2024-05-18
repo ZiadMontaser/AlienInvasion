@@ -2,13 +2,17 @@
 #include "../DataStructures/LinkedQueue.h"
 #include <cstdlib>
 #include <time.h>
+#include <string>
+#include "../Game.h"
 
 AlienSoldier* AlienArmy::GetSoldier() {
 	AlienSoldier* value = nullptr;
 	if (Soldiers.dequeue(value)) {
-	ArenaList.push(value);
-	return value;
-}
+		if (value)
+		value->SetAttackedTime(pGame->GetTimeStamp());
+		ArenaList.push(value);
+		return value;
+	}
 	return NULL;
 }
 
@@ -18,11 +22,29 @@ Monester* AlienArmy::GetMonester()
 		return nullptr;
 
 	srand(time(NULL));
-	int index = (rand() % (Count_Monesters + 1));
+	int index = (rand() % (Count_Monesters));
 	
 	Monester* Chosen = Monesters[index];
+	if (Chosen)
+		Chosen->SetAttackedTime(pGame->GetTimeStamp());
+	Monesters[index] = Monesters[Count_Monesters - 1];
+	Monesters[Count_Monesters] = nullptr;
+	if(Chosen) ArenaList.push(Chosen);
+
 	Count_Monesters--;
 
+
+	return Chosen;
+}
+
+Monester* AlienArmy::GetMonesterTofight()
+{
+	if (Count_Monesters == 0)
+		return nullptr;
+
+	srand(time(NULL));
+	int index = (rand() % (Count_Monesters));
+	Monester* Chosen = Monesters[index];
 
 	return Chosen;
 }
@@ -30,8 +52,12 @@ Monester* AlienArmy::GetMonester()
 Drone* AlienArmy::GetdroneFront()
 {
 	Drone* Chosen = nullptr;
-	if (Drones.dequeue(Chosen))
-	return Chosen;
+	if (Drones.dequeue(Chosen)) {
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
 	return NULL;
 
 	
@@ -40,8 +66,13 @@ Drone* AlienArmy::GetdroneFront()
 Drone* AlienArmy::GetdroneBack()
 {
 	Drone* Chosen = nullptr;
-	if (Drones.dequeueback(Chosen))
-	return Chosen;
+	if (Drones.dequeueback(Chosen)) {
+		if (Chosen)
+			Chosen->SetAttackedTime(pGame->GetTimeStamp());
+		ArenaList.push(Chosen);
+		return Chosen;
+	}
+
 	return NULL;
 }
 
@@ -58,63 +89,94 @@ void AlienArmy::AddMonester(Monester* M){
 	Monesters[Count_Monesters++] = M;
 
 }
+#include "../Game.h"
 
 void AlienArmy::AddDrone(Drone* D)
 {
 	if (!D) return;
-	std::cout << "Added Drone" << endl;
 	Drones.enqueue(D);
+
 	//Cap_Drones++;
 }
 
 void AlienArmy::Attack() {
+	
+	// Soldier Attack
+	AlienSoldier* soldier = nullptr;
+	Soldiers.peek(soldier);
+	if (soldier) {
+		soldier->Attack();
+	}
 
+	// Drone Attack
+	Drone* frontDrone = nullptr;
+	Drone* backDrone = nullptr;
+	Drones.peek(frontDrone);
+	Drones.Rear(backDrone);
+	if (backDrone != frontDrone)
+	{
+		if (frontDrone)
+			frontDrone->Attack();
+		if (backDrone)
+			backDrone->Attack();
+	}
+	
+	// Monster Attack
+	Monester* M = nullptr;
+	M = GetMonesterTofight();
+	if (M)
+		M->Attack();
 }
 
-int AlienArmy::GetSoldiersCount() const {
-	return Soldiers.getCount();
+int AlienArmy::GetSoldiersCount() const { return Soldiers.getCount(); }
+int AlienArmy::GetMonstersCount() const { return Count_Monesters; }
+int AlienArmy::GetDroneCount()	  const { return Drones.getCount(); }
+
+int AlienArmy::GetAlienCount()
+{
+	return GetSoldiersCount() + GetDroneCount() + GetMonstersCount();
 }
 
 void AlienArmy::RestoreAliveUnits() {
 	while (!ArenaList.isEmpty()) {
-		Unit* unit;
+		Unit* unit = nullptr;
 		ArenaList.pop(unit);
+		if (unit->IsDead()) continue;
+		
+		AlienSoldier* soldier;
+		Monester* monester;
+		Drone* drone;
 
-		if (unit->GetHealth() <= 0) continue;
+		if (soldier = dynamic_cast<AlienSoldier*>(unit)) {
+			AddSoldier(soldier);
 
-		switch (unit->GetType())
-		{
-		case UnitType::ALIEN_SOLDIER:{ //O(n)
-				LinkedQueue<AlienSoldier*> temp;
-				while (!Soldiers.isEmpty()) {
-					AlienSoldier* value;
-					Soldiers.dequeue(value);
-					temp.enqueue(value);
-				}
+		}else if (monester = dynamic_cast<Monester*>(unit)) {
+			AddMonester(monester);
 
-				Soldiers.enqueue((AlienSoldier*)unit);
-
-				while (!temp.isEmpty()) {
-					AlienSoldier* value;
-					temp.dequeue(value);
-					Soldiers.enqueue(value);
-				}
-
-				break;
-			}
-		default:
-			break;
+		}else if (drone = dynamic_cast<Drone*>(unit)) {
+			AddDrone(drone);
 		}
 	}
 }
 
 void AlienArmy::Print() const {
+	string half_tab = "\t\b\b\b\b\b";
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	cout << "===========" << "Alien Army Alive Units" << "===========" << endl;
 
-	cout << Soldiers.getCount() << " AS ";
+	cout << Soldiers.getCount() << half_tab;
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << CSI"35m" << " AS " << CSI"0m";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+
 	Soldiers.print();
 
-	cout << Count_Monesters << " AM [";
+	cout << Count_Monesters << half_tab;
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << CSI"35m" << " AM " << CSI"0m";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
+	cout << "[";
 	for (int i = 0; i < Count_Monesters; i++) {
 		cout << Monesters[i];
 		if (i != Count_Monesters - 1)
@@ -122,7 +184,10 @@ void AlienArmy::Print() const {
 	}
 	cout << "]" << endl;
 
-	cout << Drones.getCount() << " AD ";
+	cout << Drones.getCount() << half_tab;
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+	cout << CSI"35m" << " AD " << CSI"0m";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_WHITE);
 	Drones.print();
 
 	cout << endl;

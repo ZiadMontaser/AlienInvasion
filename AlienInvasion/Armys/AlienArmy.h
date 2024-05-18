@@ -14,8 +14,9 @@
 class AlienArmy
 {
 public:
+	Game* pGame;
 	LinkedQueue<AlienSoldier*> Soldiers;
-	Monester* Monesters[1000];
+	Monester* Monesters[10000];
 	DoublyEndedQueue<Drone*> Drones;
 
 	ArrayStack<Unit*> ArenaList;
@@ -27,12 +28,13 @@ public:
 	
 
 public:
-	AlienArmy() {
+	AlienArmy(Game *game):pGame(game) {
 		for (int i = 0; i < 1000; i++)
 			Monesters[i] = NULL;
 	}
 	AlienSoldier* GetSoldier();
 	Monester* GetMonester();
+	Monester* GetMonesterTofight();
 	Drone* GetdroneFront();
 	Drone* GetdroneBack();
 
@@ -41,12 +43,15 @@ public:
 	void AddDrone(Drone* D);
 
 	int GetSoldiersCount() const;
-
+	int GetMonstersCount() const;
+	int GetDroneCount() const;
+	int GetAlienCount();
 	void Attack();
 
 	void RestoreAliveUnits();
 
 	void Print() const;
+	void PrintArenaList() const { ArenaList.print(); };
 };
 
 #endif // !ALIEN_ARMY_H

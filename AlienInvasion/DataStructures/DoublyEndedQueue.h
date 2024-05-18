@@ -23,9 +23,11 @@ public:
 		if (Todelete != NULL) {
 			backentry = Todelete->getItem();
 			backPtr = Todelete->getPrev();
-
+			
 			if (Todelete == frontPtr)	 // Special case: last node in the queue
 				backPtr = frontPtr = nullptr;
+
+			if(backPtr) backPtr->setNext(nullptr);
 			delete Todelete;
 			count--;
 			return true;
@@ -34,12 +36,20 @@ public:
 		else
 			return false;
 	}
+	template <typename T>
+	bool Rear(T &back)
+	{
+		if (LinkedQueue<T>::isEmpty())
+			return false;
+		back = backPtr->getItem();
+		return true;
+	}
 
 	template <typename T>
 	bool enqueuefront(const T& toaddfront) {
 
 		Node<T>* ToAdd = new Node<T>(toaddfront);
-
+		ToAdd->setNext(nullptr);
 		if (backPtr == nullptr) {
 			backPtr = ToAdd;
 			frontPtr = ToAdd;

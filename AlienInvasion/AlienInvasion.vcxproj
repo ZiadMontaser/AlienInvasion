@@ -35,7 +35,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -92,6 +92,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,6 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI_helpers.h" />
+    <ClInclude Include="Units\EarthSaverUnit.h" />
+    <ClInclude Include="Units\HealUnit.h" />
     <ClInclude Include="UnitGenerator.h" />
     <ClInclude Include="Units\AlienSoldier.h" />
     <ClInclude Include="Armys\AlienArmy.h" />
@@ -160,15 +164,26 @@
     <ClInclude Include="Units\Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Units\Drones.cpp" />
+    <ClCompile Include="Units\EarthSaverUnit.cpp" />
+    <ClCompile Include="Units\HealUnit.cpp" />
     <ClCompile Include="UnitGenerator.cpp" />
     <ClCompile Include="Units\AlienSoldier.cpp" />
     <ClCompile Include="Armys\AlienArmy.cpp" />
     <ClCompile Include="Armys\EarthArmy.cpp" />
+    <ClCompile Include="Units\EarthGunnery.cpp" />
     <ClCompile Include="Units\EarthSoldier.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Units\EarthTank.cpp" />
+    <ClCompile Include="Units\Monester.cpp" />
     <ClCompile Include="Units\Unit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\background.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Animations\logo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

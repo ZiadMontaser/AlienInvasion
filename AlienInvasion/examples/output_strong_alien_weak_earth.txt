@@ -1,0 +1,51 @@
+Total Simulation steps: 40
+Td	ID	Tj	Df	Dd	Db
+0	0	0	0	0	0
+0	2	0	0	0	0
+0	1	0	0	0	0
+
+=============================================================
+
+Alien Army Won The Battle
+
+=============================================================
+
+Earth Statistics:
+ES Count-> 0
+ET Count-> 1
+EG Count-> 2
+Heal Units -> 0
+
+There is no Earth Soldiers
+EG_destructed:EG_total-> 100%
+ET_destructed:ET_total-> 100%
+
+Infection states: 
+Total Infected Units : 0
+Infection Percentage : 0%
+
+
+Total Destructed Earth Units : Total Earth Units-> 100%
+Total Units in UML : Total Earth Units->0%
+
+Healed Units : Total Earth Units-> 0%
+
+Average of Df-> 0
+Average of Db-> 0
+Average of Dd-> 0
+total Db = 0
+=============================================================
+
+Alien Statistics:
+AS Count-> 80
+AD Count-> 42
+AM Count-> 1
+
+AS_destructed:AS_total-> 0%
+AD_destructed:AD_total-> 0%
+AM_destructed:AM_total-> 0%
+
+Total Destructed Alien Units : Total Alien Units-> 0%
+
+There is no destructed Alien Army
+total Db = 0

@@ -72,6 +72,15 @@
     <ClInclude Include="Units\Drones.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Units\HealUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\EarthSaverUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -101,5 +110,26 @@
     <ClCompile Include="Units\EarthTank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Units\EarthGunnery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\HealUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\Monester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\Drones.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\EarthSaverUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Audio\background.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Animations\logo.txt" />
   </ItemGroup>
 </Project>

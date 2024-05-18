@@ -16,7 +16,7 @@ class LinkedQueue:public QueueADT<T>
 public :
 	Node<T>* backPtr;
 	Node<T>* frontPtr;
-	int count = 0;
+	long long count = 0;
 
 public :
 	LinkedQueue();	
@@ -83,6 +83,7 @@ bool LinkedQueue<T>::enqueue(const T& newEntry)
 	Node<T>* PrevNode = backPtr;
 	backPtr = newNodePtr;// New node is the last node now
 	backPtr->setPrev(PrevNode);
+	backPtr->setNext(nullptr);
 	count++;
 	return true;
 } // end enqueue
@@ -99,7 +100,7 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool LinkedQueue<T>::dequeue(T& frntEntry)
+bool LinkedQueue<T>::dequeue(T &frntEntry)
 {
 	if (isEmpty())
 		return false;
@@ -152,9 +153,9 @@ void LinkedQueue<T>::print() const
 	Node<T>* temp = frontPtr;
 	while (temp) {
 		T item = temp->getItem();
-		if (item)
-			cout << item;
-		else cout << "null";
+
+		cout << item;
+
 		temp = temp->getNext();
 		if (temp) {
 			cout << ", ";

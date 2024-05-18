@@ -4,13 +4,18 @@
 #include <cmath>
 #include <iostream>
 //#include "../Game.h"
+
+
+
 class Game;
 
 enum UnitType
 {
-	EARTH_SOLDIER,
-	TANK,
+	TANK = 0,
+	EARTH_SOLDIER = 1,
 	GUNNERY,
+	SAVERUNIT,
+	HEALUNIT,
 	ALIEN_SOLDIER,
 	MONSTER,
 	DRONE,
@@ -23,13 +28,22 @@ protected:
 	UnitType type;
 	int id;
 	double health;
-	int joinTime;
 	int attackPower;
 	int attackCapacity;
+	const int MaxHealth;
+	bool isInfected = false;
+	bool isImune = false;
 
+
+
+	/// Times
+	int joinTime;
+	int AttackedTime = -1;
+	int DeathTime;
 
 public:
-	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) {
+	Unit(Game* game, int id, double health, UnitType type, int joinTime, double attackPower, int attackCapacity) :MaxHealth(health)
+	{
 
 		pGame = game;
 		this->id = id;
@@ -38,18 +52,35 @@ public:
 		this->joinTime = joinTime;
 		this->attackPower = attackPower;
 		this->attackCapacity = attackCapacity;
-
 	}
 
 	virtual void Attack() = 0;
 
 	void Damage(double attackerHealth, double attackerPower);
-
+	void Heal(double HUpower, double Huhealth);
 	UnitType GetType() { return type; };
 	int GetID() { return id; };
 	double GetHealth() { return health; };
 	double GetPower() { return attackPower; };
 	int GetCapacity() { return attackCapacity; };
+	double GetMaxHealth() { return MaxHealth; }
+
+	bool IsDead() { return health <= 0; }
+
+	void SetDeathTime(int T) { DeathTime = T; }
+	void SetAttackedTime(int T);
+
+	int GetDeathTime() const { return DeathTime; }
+	int getJoinTime() const { return joinTime; }
+	int getAttackedTime() const { return AttackedTime; }
+	int getAttackDelay() const { return AttackedTime - joinTime; }
+	int getDestructDelay() const { return DeathTime - AttackedTime; };
+	int getBattleTime() const { return DeathTime - joinTime; }
+
+	bool IsImmune() const { return isImune; }
+	bool IsInfected() const { return isInfected; }
+	void Infect();
+	void TreatInfection();
 };
 
 std::ostream& operator<<(std::ostream& out, Unit* unit);

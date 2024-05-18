@@ -1,17 +1,16 @@
 #include "UnitGenerator.h"
 #include <iostream>
-//#include <algorithm>
 #include <fstream>
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include "Game.h"
 
 using namespace std;
 
 int UnitGenerator::numberGEN(int min, int max)
 {
 	int num = (rand() % (max - min + 1)) + min;
-
 	return  num ;
 }
 
@@ -22,70 +21,66 @@ UnitGenerator::UnitGenerator(Game* game) {
 	srand(random);
 }
 
-void UnitGenerator::ReadParameters() 
+void UnitGenerator::ReadParameters(int NumberOfUnits,
+	int es, int et, int eg, int ehu,
+	int as, int am, int ad,
+	int prob,
+	int infectionProb,
+	int earthPowerLower,
+	int earthPowerUpper,
+	int earthHealthLower,
+	int earthHealthUpper,
+	int earthCapacityLower,
+	int earthCapacityUpper,
+	int alienPowerLower,
+	int alienPowerUpper,
+	int alienHealthLower,
+	int alienHealthUpper,
+	int alienCapacityLower,
+	int alienCapacityUpper,
+    int saverunitpowerlower,
+	int saverunitpowerupper,
+	int saverunithealthlower,
+	int saverunithealthupper,
+	int saverunitcapacitylower,
+	int saverunitcapacityupper)
 {
-	string Filename = "testfile.txt";
-
-#ifndef _DEBUG
-	cout << "Please enter the file name you would like to use for unit Generation: ";
-	cin >> Filename;
-#endif // DEBUG
-
-	fstream inputfile ;
-	
-	inputfile.open(Filename.c_str(), ios::in);
-	if (inputfile.is_open()) {
-
-		int temp;
-
-		inputfile >> numberOfUnits;
-		inputfile >> ES >> ET >> EG;
-		inputfile >> AS >> AM >> AD;
-		inputfile >> Prob;
-
-		inputfile >> temp;
-		EarthPowerLower = abs(temp);
-		inputfile >> temp;
-		EarthPowerUpper = abs(temp);
-
-
-		inputfile >> temp;
-		EarthHealthLower = abs(temp);
-		inputfile >> temp;
-		EarthHealthUpper = abs(temp);
-
-
-		inputfile >> temp;
-		EarthCapacityLower = abs(temp);
-		inputfile >> temp;
-		EarthCapacityUpper = abs(temp);
-
-
-		
-		inputfile >> temp;
-		AlienPowerLower = abs(temp);
-		inputfile >> temp;
-		AlienPowerUpper = abs(temp);
-
-		inputfile >> temp;
-		AlienHealthLower = abs(temp);
-		inputfile >> temp;
-		AlienHealthUpper = abs(temp);
-
-		inputfile >> temp;
-		AlienCapacityLower = abs(temp);
-		inputfile >> temp;
-		AlienCapacityUpper = abs(temp);
-
-
-		//cout << AlienCapacityLower << endl << AlienHealthUpper;
+	this->numberOfUnits = NumberOfUnits;
+	this->ES = es;
+	this->ET = et;
+	this->EG = eg;
+	this->EHU = ehu;
+	this->AS = as;
+	this->AM = am;
+	this->AD = ad;
+	this->Prob = prob;
+	this->InfectionProb = infectionProb;
+	this->EarthPowerLower = earthPowerLower;
+	this->EarthPowerUpper = earthPowerUpper;
+	this->EarthHealthLower = earthHealthLower;
+	this->EarthHealthUpper = earthHealthUpper;
+	this->EarthCapacityLower = earthCapacityLower;
+	this->EarthCapacityUpper = earthCapacityUpper;
+	this->AlienPowerLower = alienPowerLower;
+	this->AlienPowerUpper = alienPowerUpper;
+	this->AlienHealthLower = alienHealthLower;
+	this->AlienHealthUpper = alienHealthUpper;
+	this->AlienCapacityLower = alienCapacityLower;
+	this->AlienCapacityUpper = alienCapacityUpper;
+    this->SaverUnitPowerLower = saverunitpowerlower;
+	this->SaverUnitPowerUpper = saverunitpowerupper;
+	this->SaverUnitHealthLower = saverunithealthlower;
+	this->SaverUnitHealthUpper = saverunithealthupper;
+	this->SaverUnitCapacityLower = saverunitcapacitylower;
+	this->SaverUnitCapacityUpper = saverunitcapacityupper;
 
 	}
 
-}
+
 
 void UnitGenerator::GenerateEarth()
 {
+	int JoinTime = pGame->GetTimeStamp();
 	
 	int canadd = numberGEN(1, 100);
 
@@ -95,7 +90,7 @@ void UnitGenerator::GenerateEarth()
 
 		while (added < numberOfUnits) {
 			int unittoadd = numberGEN(1, 100);
-
+			
 			if (unittoadd <= ES) {
 
 				/// add solider
@@ -103,7 +98,7 @@ void UnitGenerator::GenerateEarth()
 
 				pGame->GetEarthArmy()->AddSoldier(new EarthSoldier(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime,
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
@@ -115,18 +110,30 @@ void UnitGenerator::GenerateEarth()
 
 				pGame->GetEarthArmy()->AddTank(new EarthTank(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
 			}
-			else {
+			else if (unittoadd <= (ES+ET+EG)) {
 
 				/// add gunnery
 
 				pGame->GetEarthArmy()->AddGunnery(new EarthGunnery(
 					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
+					numberGEN(EarthPowerLower, EarthPowerUpper),
+					numberGEN(EarthCapacityLower, EarthCapacityUpper))
+				);
+			}
+
+			else {
+
+				///add healunit
+
+				pGame->GetEarthArmy()->AddHealUnit(new HealUnit(
+					pGame, LastIDearth, numberGEN(EarthHealthLower, EarthHealthUpper),
+					JoinTime, 
 					numberGEN(EarthPowerLower, EarthPowerUpper),
 					numberGEN(EarthCapacityLower, EarthCapacityUpper))
 				);
@@ -139,9 +146,12 @@ void UnitGenerator::GenerateEarth()
 		return;
 }
 
+
+
 void UnitGenerator::GenerateAlien()
 {
-	
+	int JoinTime = pGame->GetTimeStamp();
+
 	int canadd = numberGEN(1, 100);
 
 	if (canadd <= Prob) {
@@ -157,7 +167,7 @@ void UnitGenerator::GenerateAlien()
 				/// add solider
 				pGame->GetAlienArmy()->AddSoldier(new AlienSoldier(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
 					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);
@@ -168,16 +178,16 @@ void UnitGenerator::GenerateAlien()
 
 				pGame->GetAlienArmy()->AddMonester(new Monester(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
-					numberGEN(AlienCapacityLower, AlienCapacityUpper))
+					numberGEN(AlienCapacityLower, AlienCapacityUpper), InfectionProb)
 				);
 			}
 			else {
 
 				pGame->GetAlienArmy()->AddDrone(new Drone(
 					pGame, LastIDaliens, numberGEN(AlienHealthLower, AlienHealthUpper),
-					0, /// this is the jointime for now 
+					JoinTime, 
 					numberGEN(AlienPowerLower, AlienPowerUpper),
 					numberGEN(AlienCapacityLower, AlienCapacityUpper))
 				);
@@ -188,5 +198,22 @@ void UnitGenerator::GenerateAlien()
 	}
 	else
 		return;
+}
+
+
+void UnitGenerator::GenerateSaverUnits() {
+
+	
+	int JoinTime = pGame->GetTimeStamp();
+	
+		pGame->GetEarthArmy()->AddSaverUnit(new EarthSaverUnit(
+			pGame, LastIDallied, numberGEN(SaverUnitHealthLower, SaverUnitHealthUpper),
+			JoinTime,
+			numberGEN(SaverUnitPowerLower, SaverUnitPowerUpper),
+			numberGEN(SaverUnitCapacityLower, SaverUnitCapacityUpper))
+		);
+		LastIDallied++;
+		
+	
 }
 

@@ -1,0 +1,13 @@
+infection.ai
+input.ai
+moderate_earth_moderate_alien.ai
+moderate_earth_weak_alien.ai
+output_infection.txt
+output_moderate_earth_moderate_alien.txt
+output_moderate_earth_weak_alien.txt
+output_strong_alien_weak_earth.txt
+output_strong_earth_weak_alien.txt
+output_weak_earth_moderate_alien.txt
+strong_alien_weak_earth.ai
+strong_earth_weak_alien.ai
+weak_earth_moderate_alien.ai

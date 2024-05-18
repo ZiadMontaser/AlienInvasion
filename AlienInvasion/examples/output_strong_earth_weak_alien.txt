@@ -1,0 +1,106 @@
+Total Simulation steps: 41
+Td	ID	Tj	Df	Dd	Db
+1	2001	0	1	0	1
+1	2002	0	1	0	1
+1	2000	0	1	0	1
+1	2003	0	1	0	1
+4	2006	4	0	0	0
+4	2004	4	0	0	0
+4	2007	4	0	0	0
+4	2005	4	0	0	0
+7	2010	7	0	0	0
+7	2008	7	0	0	0
+7	2011	7	0	0	0
+7	2009	7	0	0	0
+10	2014	10	0	0	0
+10	2012	10	0	0	0
+10	2015	10	0	0	0
+10	2013	10	0	0	0
+13	2018	13	0	0	0
+13	2016	13	0	0	0
+13	2019	13	0	0	0
+13	2017	13	0	0	0
+16	2022	16	0	0	0
+16	2020	16	0	0	0
+16	2023	16	0	0	0
+16	2021	16	0	0	0
+19	2026	19	0	0	0
+19	2024	19	0	0	0
+19	2027	19	0	0	0
+19	2025	19	0	0	0
+22	2030	22	0	0	0
+22	2028	22	0	0	0
+22	2031	22	0	0	0
+22	2029	22	0	0	0
+25	2034	25	0	0	0
+25	2032	25	0	0	0
+25	2035	25	0	0	0
+25	2033	25	0	0	0
+28	2038	28	0	0	0
+28	2036	28	0	0	0
+28	2039	28	0	0	0
+28	2037	28	0	0	0
+31	2042	31	0	0	0
+31	2040	31	0	0	0
+31	2043	31	0	0	0
+31	2041	31	0	0	0
+34	2046	34	0	0	0
+34	2044	34	0	0	0
+34	2047	34	0	0	0
+34	2045	34	0	0	0
+37	2050	37	0	0	0
+37	2048	37	0	0	0
+37	2051	37	0	0	0
+37	2049	37	0	0	0
+40	2054	40	0	0	0
+40	2052	40	0	0	0
+40	2055	40	0	0	0
+40	2053	40	0	0	0
+
+=============================================================
+
+Earth Army Won The Battle
+
+=============================================================
+
+Earth Statistics:
+ES Count-> 43
+ET Count-> 43
+EG Count-> 26
+Heal Units -> 0
+
+ES_destructed:ES_total-> 0%
+EG_destructed:EG_total-> 0%
+ET_destructed:ET_total-> 0%
+
+Infection states: 
+Total Infected Units : 0
+Infection Percentage : 0%
+
+
+Total Destructed Earth Units : Total Earth Units-> 0%
+Total Units in UML : Total Earth Units->0%
+
+Healed Units : Total Earth Units-> 0%
+
+there no destructed earth army
+total Db = 0
+=============================================================
+
+Alien Statistics:
+AS Count-> 15
+AD Count-> 13
+AM Count-> 28
+
+AS_destructed:AS_total-> 100%
+AD_destructed:AD_total-> 100%
+AM_destructed:AM_total-> 100%
+
+Total Destructed Alien Units : Total Alien Units-> 100%
+
+Average of Df-> 0.0714286
+Average of Db-> 0.0714286
+Average of Dd-> 0
+
+Df / Db = 100%
+Dd / Db = 0%
